@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>New FIAS methodology | Migration of Fishery processed production Statistical Processes into the SWS</title>
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="New FIAS methodology | Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="New FIAS methodology | Migration of Fishery processed production Statistical Processes into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+
+
+<meta name="date" content="2019-10-22">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="migration-actors.html">
+<link rel="next" href="fias-processed-production-in-sws-proposed-workflow.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
+<li><a href="migration-actors.html#migration-actors"><strong>Migration actors</strong></a></li>
+<li><a href="new-fias-methodology.html#new-fias-methodology"><strong>New FIAS methodology</strong></a></li>
+<li class="chapter" data-level="1" data-path="fias-processed-production-in-sws-proposed-workflow.html"><a href="fias-processed-production-in-sws-proposed-workflow.html"><i class="fa fa-check"></i><b>1</b> <strong>FIAS processed production in SWS: proposed workflow</strong></a></li>
+<li class="chapter" data-level="2" data-path="sws-resources.html"><a href="sws-resources.html"><i class="fa fa-check"></i><b>2</b> <strong>SWS resources</strong></a><ul>
+<li class="chapter" data-level="2.1" data-path="sws-resources.html"><a href="sws-resources.html#code-lists"><i class="fa fa-check"></i><b>2.1</b> <strong>Code lists</strong></a></li>
+<li class="chapter" data-level="2.2" data-path="sws-resources.html"><a href="sws-resources.html#data-tables-and-datasets"><i class="fa fa-check"></i><b>2.2</b> <strong>Data tables and datasets</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ProcProd.html"><a href="ProcProd.html"><i class="fa fa-check"></i><b>3</b> <strong>Processed production data workflow</strong></a><ul>
+<li class="chapter" data-level="3.1" data-path="ProcProd.html"><a href="ProcProd.html#data-collection-and-data-entry-processes"><i class="fa fa-check"></i><b>3.1</b> <strong>Data collection and data entry processes</strong></a></li>
+<li class="chapter" data-level="3.2" data-path="ProcProd.html"><a href="ProcProd.html#data-imputation-and-validation-processes"><i class="fa fa-check"></i><b>3.2</b> <strong>Data imputation and validation processes</strong></a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ProcProd.html"><a href="ProcProd.html#export-approach"><i class="fa fa-check"></i><b>3.2.1</b> Export approach</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ProcProd.html"><a href="ProcProd.html#primary-production-approach"><i class="fa fa-check"></i><b>3.2.2</b> Primary production approach</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ProcProd.html"><a href="ProcProd.html#ensemble-method-approach"><i class="fa fa-check"></i><b>3.2.3</b> Ensemble method approach</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>3.3</b> <strong>SWS objects and the shiny application</strong></a><ul>
+<li class="chapter" data-level="3.3.1" data-path="ProcProd.html"><a href="ProcProd.html#datatables"><i class="fa fa-check"></i><b>3.3.1</b> Datatables</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="ProcProd.html"><a href="ProcProd.html#application-goal-and-structure"><i class="fa fa-check"></i><b>3.4</b> <strong>Application goal and structure</strong></a><ul>
+<li class="chapter" data-level="3.4.1" data-path="ProcProd.html"><a href="ProcProd.html#national-mapping-tab"><i class="fa fa-check"></i><b>3.4.1</b> National mapping tab</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ProcProd.html"><a href="ProcProd.html#export-approach-tab"><i class="fa fa-check"></i><b>3.4.2</b> Export approach tab</a></li>
+<li class="chapter" data-level="3.4.3" data-path="ProcProd.html"><a href="ProcProd.html#primary-prod.-approach-tab"><i class="fa fa-check"></i><b>3.4.3</b> Primary Prod. approach tab</a></li>
+<li class="chapter" data-level="3.4.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>3.4.4</b> Summary and check mappings tabs</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>4</b> <strong>The Processed production imputation shiny R code</strong></a><ul>
+<li class="chapter" data-level="4.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>4.1</b> <strong>‘global.R’ file</strong></a></li>
+<li class="chapter" data-level="4.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>4.2</b> <strong>‘ui.R’ file</strong></a></li>
+<li class="chapter" data-level="4.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>4.3</b> <strong>‘server.R’ file</strong></a><ul>
+<li class="chapter" data-level="4.3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#export-approach-tab-1"><i class="fa fa-check"></i><b>4.3.1</b> Export approach tab</a></li>
+<li class="chapter" data-level="4.3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#primary-production-approach-tab"><i class="fa fa-check"></i><b>4.3.2</b> Primary production approach tab</a></li>
+<li class="chapter" data-level="4.3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#summary-tab"><i class="fa fa-check"></i><b>4.3.3</b> Summary tab</a></li>
+<li class="chapter" data-level="4.3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#update-mapping-process"><i class="fa fa-check"></i><b>4.3.4</b> Update mapping process</a></li>
+<li class="chapter" data-level="4.3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#imputing-new-values-and-saving-changes-into-the-sws"><i class="fa fa-check"></i><b>4.3.5</b> Imputing new values and saving changes into the SWS</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#functionsExp"><i class="fa fa-check"></i><b>4.4</b> <strong>‘external_functions.R’ file</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>5</b> <strong>The aggregation module</strong></a><ul>
+<li class="chapter" data-level="5.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>5.1</b> <strong>The code</strong></a></li>
+<li class="chapter" data-level="5.2" data-path="Aggregation.html"><a href="Aggregation.html#final-remarks"><i class="fa fa-check"></i><b>5.2</b> <strong>Final remarks</strong></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Fishery processed production Statistical Processes into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="new-fias-methodology" class="section level1 unnumbered">
+<h1><strong>New FIAS methodology</strong></h1>
+<p>The book focuses on SWS statistical processes and only recalls old methodology if useful to understand the new methodology. However, FIAS documents describing the old methodology can be found in the shared folder of the SWS (<a href="https://unfao.sharepoint.com/sites/tssws/Shared%20Documents/Forms/AllItems.aspx?viewid=07492829%2Dae8e%2D4338%2Dbc40%2D97411da985e8&amp;id=%2Fsites%2Ftssws%2FShared%20Documents%2F03%2E%20Statistical%20Documentation%2F02%2E%20Statistical%20Processes%2F09%2E%20FIAS%2FFIAS%20%E2%80%93%20Commodities%2FFIAS%20Team%20Documentation">https://unfao.sharepoint.com/sites/tssws/Shared%20Documents/Forms/AllItems.aspx?viewid=07492829%2Dae8e%2D4338%2Dbc40%2D97411da985e8&amp;id=%2Fsites%2Ftssws%2FShared%20Documents%2F03%2E%20Statistical%20Documentation%2F02%2E%20Statistical%20Processes%2F09%2E%20FIAS%2FFIAS%20%E2%80%93%20Commodities%2FFIAS%20Team%20Documentation</a>).</p>
+<p>## <strong>Data Collection</strong> {-}</p>
+<p>The fisheries commodities production covers quantities of preserved and processed fishery and aquaculture commodities produced from domestic production as well as from imported raw materials.</p>
+<p>Data include:</p>
+<ol style="list-style-type: decimal">
+<li><p>the quantities of preserved and processed fishery commodities domestically from nominal catches of fish, crustaceans, molluscs, other aquatic invertebrates and aquatic animals taken for commercial, industrial and subsistence purposes, by all types of fishing units operating in freshwater and marine areas; aquaculture production; imported raw material.</p></li>
+<li><p>the output of preserved or processed fishery and aquaculture commodities produced on board of factoryships and by fishers and fish farmers’ families as domestic activities, e.g. drying, salting, smoking, etc.</p></li>
+<li><p>the preserved and processed fishery commodities produced on board of domestic fish factoryships and fishing craft from the reporting country or area, even when landed directly in foreign ports.</p></li>
+</ol>
+<p>Data do not include:</p>
+<ol style="list-style-type: decimal">
+<li><p>Fishery commodities produced on board of foreign fish factoryships or fishing craft and landed directly in domestic ports as already preserved or processed (i.e. no processing is done after landing).</p></li>
+<li><p>“Fish, live”, “Fish fresh or chilled unprocessed”, “Live crustaceans”, “Live molluscs”, “Fresh unpeeled crustaceans” and “Fresh unshucked molluscs”, as these items cannot be considered to be either preserved or processed products.</p></li>
+<li><p>Products derived from aquatic mammals, frogs, crocodiles, aquatic plants including seaweed, corals, sponges, pearls and fish leather.</p></li>
+</ol>
+<p>The annual period used is the calendar year (1 January - 31 December) with the exception of few countries or areas which use a split-year in their reporting procedures. Exception list:</p>
+<p>Bangladesh: Year ending 30 June</p>
+<p>India: Year beginning April</p>
+<p>Islamic Republic of Iran: Year beginning 20-23 March</p>
+<p>Myanmar[^2]: Year beginning April</p>
+<p>Nepal: Year ending 30 June</p>
+<p>Pakistan: Year ending 30 June</p>
+<p>Saudi Arabia: Islamic lunar (Hegira)</p>
+<p>[^2] Only exports</p>
+<p>Data on the quantities of fishery commodities produced and on imports and exports, are expressed in tonnes and refer to the net weight of the commodities, so excluding the weight of the container and of any liquid added for preservation or flavour. The production element code used for the data is the ‘<span class="math inline">\(5510\)</span>’.</p>
+<p>Countries are classified according to the UN M49.</p>
+<p>Commodities data are classified according to the FAO’s International Standard Statistical Classification of Fishery Commodities (ISSCFC). ISSCFC has been developed by FAO for the collection of fishery and aquaculture commodities statistics. It covers products derived from fish, crustaceans, molluscs and other aquatic animals, plants and residues. This classification is based on the structure of the United Nations Standard International Trade Classification (SITC), with additional codes. In the ISSCFC, fisheries and aquaculture commodities are classified according to the species and to the degree of processing undergone. The latest version of the FAO ISSCFC classification is available at: <a href="http://www.fao.org/3/a-bt967e.pdf" class="uri">http://www.fao.org/3/a-bt967e.pdf</a></p>
+<p>Three classification masterfiles are maintained. Currently they are in Access:</p>
+<ol style="list-style-type: decimal">
+<li><p>YBKlang</p></li>
+<li><p>HS Masterfile</p></li>
+<li><p>EUCN Masterfile</p></li>
+</ol>
+<p>YBKlang is the main Masterfile.</p>
+<p>The flags used for raw data are:</p>
+<ul>
+<li><p>( , -) for official data</p></li>
+<li><p>(M, -) for missing data for closed series</p></li>
+<li><p>(O, -) for missing data not reported by the country and not to be imputed</p></li>
+</ul>
+<p>All flags follow the SDMX standards.</p>
+<p>Data also come with other information that will be listed in the <code>processed_prod_national_detail_raw</code> datatable description.</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="migration-actors.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="fias-processed-production-in-sws-proposed-workflow.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

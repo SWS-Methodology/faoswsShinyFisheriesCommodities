@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Fishery processed production Statistical Processes into the SWS</title>
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Migration of Fishery processed production Statistical Processes into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+
+
+<meta name="date" content="2019-10-23">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+
+<link rel="next" href="ProcProd.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a><ul>
+<li><a href="index.html#migration-actors"><strong>Migration actors</strong></a></li>
+<li><a href="index.html#new-fias-methodology"><strong>New FIAS methodology</strong></a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Data Collection</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fias-processed-production-in-sws-proposed-workflow"><i class="fa fa-check"></i>FIAS processed production in SWS: proposed workflow</a></li>
+</ul></li>
+<li><a href="index.html#sws-resources"><strong>SWS resources</strong></a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-lists"><i class="fa fa-check"></i>Code lists</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#data-tables-and-datasets"><i class="fa fa-check"></i>Data tables and datasets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="ProcProd.html"><a href="ProcProd.html"><i class="fa fa-check"></i><b>1</b> <strong>Processed production data workflow</strong></a><ul>
+<li class="chapter" data-level="1.1" data-path="ProcProd.html"><a href="ProcProd.html#data-collection-and-data-entry-processes"><i class="fa fa-check"></i><b>1.1</b> <strong>Data collection and data entry processes</strong></a></li>
+<li class="chapter" data-level="1.2" data-path="ProcProd.html"><a href="ProcProd.html#shiny"><i class="fa fa-check"></i><b>1.2</b> <strong>Data imputation and validation processes</strong></a><ul>
+<li class="chapter" data-level="1.2.1" data-path="ProcProd.html"><a href="ProcProd.html#export-approach"><i class="fa fa-check"></i><b>1.2.1</b> Export approach</a></li>
+<li class="chapter" data-level="1.2.2" data-path="ProcProd.html"><a href="ProcProd.html#primary-production-approach"><i class="fa fa-check"></i><b>1.2.2</b> Primary production approach</a></li>
+<li class="chapter" data-level="1.2.3" data-path="ProcProd.html"><a href="ProcProd.html#ensemble-method-approach"><i class="fa fa-check"></i><b>1.2.3</b> Ensemble method approach</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.3</b> <strong>SWS objects and the shiny application</strong></a><ul>
+<li class="chapter" data-level="1.3.1" data-path="ProcProd.html"><a href="ProcProd.html#datatables"><i class="fa fa-check"></i><b>1.3.1</b> Datatables</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="ProcProd.html"><a href="ProcProd.html#application-goal-and-structure"><i class="fa fa-check"></i><b>1.4</b> <strong>Application goal and structure</strong></a><ul>
+<li class="chapter" data-level="1.4.1" data-path="ProcProd.html"><a href="ProcProd.html#national-mapping-tab"><i class="fa fa-check"></i><b>1.4.1</b> National mapping tab</a></li>
+<li class="chapter" data-level="1.4.2" data-path="ProcProd.html"><a href="ProcProd.html#export-approach-tab"><i class="fa fa-check"></i><b>1.4.2</b> Export approach tab</a></li>
+<li class="chapter" data-level="1.4.3" data-path="ProcProd.html"><a href="ProcProd.html#primary-prod.-approach-tab"><i class="fa fa-check"></i><b>1.4.3</b> Primary Prod. approach tab</a></li>
+<li class="chapter" data-level="1.4.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>1.4.4</b> Summary and check mappings tabs</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The Processed production imputation shiny R code</strong></a><ul>
+<li class="chapter" data-level="2.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>2.1</b> <strong>‘global.R’ file</strong></a></li>
+<li class="chapter" data-level="2.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>2.2</b> <strong>‘ui.R’ file</strong></a></li>
+<li class="chapter" data-level="2.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>2.3</b> <strong>‘server.R’ file</strong></a><ul>
+<li class="chapter" data-level="2.3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#export-approach-tab-1"><i class="fa fa-check"></i><b>2.3.1</b> Export approach tab</a></li>
+<li class="chapter" data-level="2.3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#primary-production-approach-tab"><i class="fa fa-check"></i><b>2.3.2</b> Primary production approach tab</a></li>
+<li class="chapter" data-level="2.3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#summary-tab"><i class="fa fa-check"></i><b>2.3.3</b> Summary tab</a></li>
+<li class="chapter" data-level="2.3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#update-mapping-process"><i class="fa fa-check"></i><b>2.3.4</b> Update mapping process</a></li>
+<li class="chapter" data-level="2.3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#imputing-new-values-and-saving-changes-into-the-sws"><i class="fa fa-check"></i><b>2.3.5</b> Imputing new values and saving changes into the SWS</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#functionsExp"><i class="fa fa-check"></i><b>2.4</b> <strong>‘external_functions.R’ file</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>3</b> <strong>The aggregation module</strong></a><ul>
+<li class="chapter" data-level="3.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>3.1</b> <strong>The code</strong></a></li>
+<li class="chapter" data-level="3.2" data-path="Aggregation.html"><a href="Aggregation.html#final-remarks"><i class="fa fa-check"></i><b>3.2</b> <strong>Final remarks</strong></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Fishery processed production Statistical Processes into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Migration of Fishery processed production Statistical Processes into the SWS</h1>
+<p class="author"><em>Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)</em></p>
+<p class="date"><em>2019-10-23</em></p>
+</div>
+<div id="introduction" class="section level1 unnumbered">
+<h1><strong>Introduction</strong></h1>
+<p>FAO Fisheries and Aquaculture Department is migrating its statistical processes into the Corporate Statistical Working System (SWS). This online book documents the significant steps that have been taken so far concerning this migration. The document describes the main institutional actors involved in the migration as well as the FIAS - SWS resources (<strong>code lists</strong>, <strong>datasets</strong>, <strong>data tables</strong>) that have been created to support the SWS plugins (R modules) to meet technical unit requirements. Furthermore, the SWS plugins and shiny applications are presented in the form of chapters providing a detailed description of their workflows as well as results.</p>
+<div class="rmdnote">
+<p>
+<strong>IMPORTANT:</strong> Use the <strong>Chrome browser</strong> to have a correct visualization of HTML outputs in this online document.
+</p>
+</div>
+<div id="migration-actors" class="section level2 unnumbered">
+<h2><strong>Migration actors</strong></h2>
+<p>Any migration into the SWS requires the interaction between at least three actors:</p>
+<ol style="list-style-type: decimal">
+<li>The <strong>technical unit</strong> interested in automating either some or all its analytical processes in the SWS. The technical unit can be treated as client demanding services from the counterparts responsible for the implementation of its data and statistical assets in the SWS. Therefore, a successful FIAS - SWS migration depends on the coordination between the technical division and other parts. In the FIAS - SWS migration framework the technical unit is called FIAS and is represented by:</li>
+</ol>
+<ul>
+<li><strong>Stefania Vannuccini</strong> <em>Senior Fishery Officer, FIAS</em></li>
+<li><strong>Adrienne Egger</strong> <em>Fishery Officer, FIAS</em></li>
+<li><strong>Barbara Senfter</strong> <em>Statistical clerk, FIAS</em></li>
+<li><strong>Thomas Berger</strong> <em>Statistician, FIAS</em></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>The <strong>ESS - Methodological Innovation Team</strong> (ESS - SWS) responsible for the implementation and documentation of the required statistical processes. From the ESS - SWS team the focal points for FIAS - SWS process migration are:</li>
+</ol>
+<ul>
+<li><strong>Charlotte Taglioni</strong> <em>Statistician (ESSD)</em></li>
+<li><strong>Carola Fabi</strong> <em>Statistician (ESSD)</em></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>The <strong>CIO - SWS</strong> the <strong>primary backend and frontend maintainer of the SWS</strong> and responsible for the implementation and documentation of non-statistical processes (IT infrastructure). The CIO - SWS team have as interlocutors:</li>
+</ol>
+<ul>
+<li><strong>Enrico Anello</strong> <em>Full Stack Developer (CIO)</em></li>
+<li><strong>John Rowell</strong> <em>Information Technology Officer (CIO)</em></li>
+<li><strong>Matteo Terrinoni</strong> <em>Lead Front End developer (CIO)</em></li>
+</ul>
+</div>
+<div id="new-fias-methodology" class="section level2 unnumbered">
+<h2><strong>New FIAS methodology</strong></h2>
+<p>The book focuses on SWS statistical processes and only recalls old methodology if useful to understand the new one. However, FIAS documents describing the old methodology can be found in the <a href="https://unfao.sharepoint.com/sites/tssws/Shared%20Documents/Forms/AllItems.aspx?viewid=07492829%2Dae8e%2D4338%2Dbc40%2D97411da985e8&amp;id=%2Fsites%2Ftssws%2FShared%20Documents%2F03%2E%20Statistical%20Documentation%2F02%2E%20Statistical%20Processes%2F09%2E%20FIAS%2FFIAS%20%E2%80%93%20Commodities%2FFIAS%20Team%20Documentation">shared folder</a> of the SWS.</p>
+<div id="data-collection" class="section level3 unnumbered">
+<h3>Data Collection</h3>
+<p>The fisheries commodities production covers quantities of preserved and processed fishery and aquaculture commodities produced from domestic production as well as from imported raw materials.</p>
+<p>Data include:</p>
+<ol style="list-style-type: decimal">
+<li><p>the quantities of preserved and processed fishery commodities domestically from nominal catches of fish, crustaceans, molluscs, other aquatic invertebrates and aquatic animals taken for commercial, industrial and subsistence purposes, by all types of fishing units operating in freshwater and marine areas; aquaculture production; imported raw material.</p></li>
+<li><p>the output of preserved or processed fishery and aquaculture commodities produced on board of factoryships and by fishers and fish farmers’ families as domestic activities, e.g. drying, salting, smoking, etc.</p></li>
+<li><p>the preserved and processed fishery commodities produced on board of domestic fish factoryships and fishing craft from the reporting country or area, even when landed directly in foreign ports.</p></li>
+</ol>
+<p>Data do not include:</p>
+<ol style="list-style-type: decimal">
+<li><p>Fishery commodities produced on board of foreign fish factoryships or fishing craft and landed directly in domestic ports as already preserved or processed (i.e. no processing is done after landing).</p></li>
+<li><p>“Fish, live”, “Fish fresh or chilled unprocessed”, “Live crustaceans”, “Live molluscs”, “Fresh unpeeled crustaceans” and “Fresh unshucked molluscs”, as these items cannot be considered to be either preserved or processed products.</p></li>
+<li><p>Products derived from aquatic mammals, frogs, crocodiles, aquatic plants including seaweed, corals, sponges, pearls and fish leather.</p></li>
+</ol>
+<p>The annual period used is the calendar year (1 January - 31 December) with the exception of few countries or areas which use a split-year in their reporting procedures. Exception list:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Bangladesh: Year ending 30 June</p></li>
+<li><p>India: Year beginning April</p></li>
+<li><p>Islamic Republic of Iran: Year beginning 20-23 March</p></li>
+<li><p>Myanmar<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>: Year beginning April</p></li>
+<li><p>Nepal: Year ending 30 June</p></li>
+<li><p>Pakistan: Year ending 30 June</p></li>
+<li><p>Saudi Arabia: Islamic lunar (Hegira)</p></li>
+</ol>
+<p>Data on the quantities of fishery commodities produced and on imports and exports, are expressed in tonnes and refer to the net weight of the commodities, so excluding the weight of the container and of any liquid added for preservation or flavor. The production element code used for the data is the <span class="math inline">\(5510\)</span>.</p>
+<p>Countries are classified according to the <strong>UN M49</strong>.</p>
+<p>Commodities data are classified according to the FAO’s International Standard Statistical Classification of Fishery Commodities (ISSCFC). ISSCFC has been developed by FAO for the collection of fishery and aquaculture commodities statistics. It covers products derived from fish, crustaceans, molluscs and other aquatic animals, plants and residues. This classification is based on the structure of the United Nations Standard International Trade Classification (SITC), with additional codes. In the ISSCFC, fisheries and aquaculture commodities are classified according to the species and to the degree of processing undergone. The <a href="http://www.fao.org/3/a-bt967e.pdf">latest version</a> of the FAO ISSCFC classification is available.</p>
+<p>Three classification master files are maintained. Currently they are in Access:</p>
+<ol style="list-style-type: decimal">
+<li><p>YBKlang</p></li>
+<li><p>HS Masterfile</p></li>
+<li><p>EUCN Masterfile</p></li>
+</ol>
+<p>YBKlang is the main Masterfile.</p>
+<p>The flags used for raw data are:</p>
+<ul>
+<li><p>( , -) for official data</p></li>
+<li><p>(M, -) for missing data for closed series</p></li>
+<li><p>(O, -) for missing data not reported by the country and not to be imputed</p></li>
+</ul>
+<p>All flags follow the SDMX standards.</p>
+<p>Data also come with other information that will be listed in the <code>processed_prod_national_detail_raw</code> data table description.</p>
+</div>
+<div id="fias-processed-production-in-sws-proposed-workflow" class="section level3 unnumbered">
+<h3>FIAS processed production in SWS: proposed workflow</h3>
+<p>Figure <a href="index.html#fig:WFpp">.</a> represents the essential points of the overall workflow for processed production data.</p>
+<div class="figure"><span id="fig:WFpp"></span>
+<img src="img/WorkflowPP.png" alt=" Workflow for processed production data." width="100%" />
+<p class="caption">
+Figure .:  Workflow for processed production data.
+</p>
+</div>
+<p>The first part of data collection and data entry is entirely performed by FIAS unit; the second part of data imputation and validation uses the ‘ad-hoc’ shiny application described in paragraph <a href="ProcProd.html#shiny">1.2</a>; the third part is an R-plugin to be run on the SWS.</p>
+</div>
+</div>
+<div id="sws-resources" class="section level2 unnumbered">
+<h2><strong>SWS resources</strong></h2>
+<p>SWS resources are R modules, data tables, data sets, and code lists. Data tables are typically used as auxiliary data to help R modules to achieve their goals, often a long-format four-to-six dimensional data set. The statistical domains in SWS, through code/reference lists, define the dimensions of the datasets. Therefore, datasets are primarily used to store code list - referenced values as either input and output in the SWS.</p>
+<p>Because of the semi-standardized code list the questionnaire use to collect them, fishery processed production data are initially stored in data tables and migrated to a dataset only at the end of the process. The only dataset involved in the FIAS processed production is the Commodity dataset which has the dimensions listed in the description below.</p>
+<div id="code-lists" class="section level3 unnumbered">
+<h3>Code lists</h3>
+<p>Code lists, also called reference lists in SWS parlance, are the dimensions making up the data sets that are designed by the user to store analytical results from SWS modules. Some dimensions are statistical-domain-specific and are defined by the technical unit to reflect its needs regarding data collection, processing, and dissemination while meeting FAO standards. Each data set dimension has a set of codes and their associated descriptions. Thus, code lists serve to the purpose of standardization, visualization, and metadata by associating standardized codes to standardized names in the SWS data set outputs. A typical SWS compliant data set has, therefore, the following dimensions/reference lists:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Geographic area</strong>. Representing a spatial scale the information is measured at. For example, countries, territories, regional aggregates, regional special groups aggregates, global aggregates. In SWS, the geographic area dimension used by FIAS data sets is named <strong>geographicAreaM49_fi</strong>. The dimension is specific for FIAS unit as it was initially decided and confirmed in a meeting held on April 10, 2019.</p></li>
+<li><p><strong>Items</strong>. Those one wants to take a measurement from. For example, commodities, commodity groups, land use types, species, etc. The FIAS - SWS framework item code/reference for commodities is named <strong>measuredItemISSCFC</strong>.</p></li>
+<li><p><strong>Elements</strong>. Often representing a measurement that can be taken across different items. For example, area, production, share. In SWS, the element dimension/code list used by FIAS dataset is named <strong>measuredElement</strong>.</p></li>
+<li><p><strong>Time</strong> (the time unit the data is displayed for: year, months, etc). In SWS, the time dimension used by FIAS data sets is named <strong>timePointYears</strong>.</p></li>
+<li><p><strong>Flag</strong> (A standardized label indicating origin and/or nature of a number in the data set, e.g. <blank> (Official number)). In SWS, the flag dimension used by FIAS data sets is named <strong>flagObservationStatus</strong>. Please check the <a href="http://intranet.fao.org/statistics_coordination_portal/standards_for_quality_compliance/">OCS statistical standards</a> and the <a href="http://intranet.fao.org/fileadmin/user_upload/scp/Standards_for_quality_compliance/SSS1_Flags.pdf">flags document</a> to understand the flagObservationStatus rational and obtain the description of flags.</p></li>
+<li><p><strong>Method</strong> (A standardized label indicating method utilized to obtain a number in the data set. In SWS, the method dimension used by FIAS data sets is named <strong>flagMethod</strong>. Please check the <a href="http://intranet.fao.org/statistics_coordination_portal/standards_for_quality_compliance/">OCS statistical standards</a> and the <a href="http://intranet.fao.org/fileadmin/user_upload/scp/Standards_for_quality_compliance/SSS1_Flags.pdf">flags document</a> to understand the flagMethod rational and obtain the description of flags. –&gt;</p></li>
+</ol>
+</div>
+<div id="data-tables-and-datasets" class="section level3 unnumbered">
+<h3>Data tables and datasets</h3>
+<p>Data tables are mainly used to store information helping R modules to output analytical results. Information in data tables can be of a number of types. For example, conversion factors, arithmetic formulas, mapping between flags, mapping between international classifications, etc. Exceptionally, data are stored in data tables because of the initial codelist used by the FIAS unit to collect data. In SWS hierarchy, all data tables reside in a given statistical domain. In the FIAS - SWS migration framework, the data tables are in <strong>Fisheries Commodities</strong> domain. Below is a list of current available and filled data tables in the Fisheries Commodities domain:</p>
+<ul>
+<li><p><strong>processed_prod_national_detail_raw</strong> (SWS identifier: <code>processed_prod_national_detail_raw</code>): where data are initially uploaded by the FIAS unit.</p></li>
+<li><p><strong>processed_prod_national_detail_imputed</strong> (SWS identifier: <code>processed_prod_national_detail_imputed</code>): where raw (data from questionnaires) and estimated data are stored before being aggregated into the Commodity dataset.</p></li>
+<li><p><strong>ISSCFC Mapping - Export approach</strong> (SWS identifier: <code>isscfc_mapping_export_approach</code>): mapping table used to apply an imputation method approach based on export data.</p></li>
+<li><p><strong>ISSCFC Mapping - Primary Prod Approach</strong> (SWS identifier: <code>isscfc_mapping_prod_approach</code>): mapping table used to apply an imputation method approach based on primary production data.</p></li>
+</ul>
+<p>Datasets in the SWS are interchangeably used as module inputs/outputs and are composed by dimensions (aka reference/code lists). Because SWS datasets contain code lists following international standards as dimensions, there is little space for variation of dimension names across SWS datasets for the sake of standardization. In the FIAS - SWS framework for processed production, the dataset is:</p>
+<ul>
+<li><strong>Commodities (total)</strong> (SWS identifier: <code>commodities_total</code>): containing all Fishery commodities from production and trade data.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>Only exports<a href="index.html#fnref1">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="ProcProd.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
