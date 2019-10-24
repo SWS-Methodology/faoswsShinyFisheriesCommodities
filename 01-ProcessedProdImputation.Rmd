@@ -156,6 +156,26 @@ The data tables used for the export and primary production approaches have the f
 | selection | Species included or not in the mapping |
 | type |  If mapping is automatic or provided by FIAS unit |
 
+The two next datatables are temporarly used to map species and commodities to the correspondent ISSCAAP group. Once the SWS and the EBX5 (Data management software) are integrated and communicate effectively, these datatable should be replaced by the direct pull of the information from EBX5.
+Meanwhile, these datatables should be updated in case new species or commodities are included.
+
+|**map_asfis**| |
+|:-------------------------------:|---------------------------------------------------|
+| *Dimension id* | *Description* |
+|ics | International Classification for Standards for fishery products|
+|isscaap | International Standard Statistical Classification for Aquatic Animals and Plants group|
+| asfis | List of Species for Fishery Statistics Purposes |
+| description | English name of the species |
+
+|**fishery_item_mapping**| |
+|:-------------------------------:|---------------------------------------------------|
+| *Dimension id* | *Description* |
+| isscaap|  International Standard Statistical Classification for Aquatic Animals and Plants group|
+|isscfc |FAO International Standard Statistical Classification of Fishery Commodities|
+|ics | International Classification for Standards for fishery products |
+|conversion_factors | factors to convert the commodity in weight primary equivalent|
+
+
 
 
 ## **Application goal and structure**

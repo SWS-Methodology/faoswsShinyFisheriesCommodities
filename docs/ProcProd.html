@@ -25,7 +25,7 @@
 <meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
 
 
-<meta name="date" content="2019-10-23">
+<meta name="date" content="2019-10-24">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -386,6 +386,75 @@ If there are additional external information the expert has to help imputing the
 <tr class="even">
 <td align="center">type</td>
 <td>If mapping is automatic or provided by FIAS unit</td>
+</tr>
+</tbody>
+</table>
+<p>The two next datatables are temporarly used to map species and commodities to the correspondent ISSCAAP group. Once the SWS and the EBX5 (Data management software) are integrated and communicate effectively, these datatable should be replaced by the direct pull of the information from EBX5. Meanwhile, these datatables should be updated in case new species or commodities are included.</p>
+<table>
+<colgroup>
+<col width="39%" />
+<col width="60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"><strong>map_asfis</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><em>Dimension id</em></td>
+<td><em>Description</em></td>
+</tr>
+<tr class="even">
+<td align="center">ics</td>
+<td>International Classification for Standards for fishery products</td>
+</tr>
+<tr class="odd">
+<td align="center">isscaap</td>
+<td>International Standard Statistical Classification for Aquatic Animals and Plants group</td>
+</tr>
+<tr class="even">
+<td align="center">asfis</td>
+<td>List of Species for Fishery Statistics Purposes</td>
+</tr>
+<tr class="odd">
+<td align="center">description</td>
+<td>English name of the species</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col width="39%" />
+<col width="60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"><strong>fishery_item_mapping</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><em>Dimension id</em></td>
+<td><em>Description</em></td>
+</tr>
+<tr class="even">
+<td align="center">isscaap</td>
+<td>International Standard Statistical Classification for Aquatic Animals and Plants group</td>
+</tr>
+<tr class="odd">
+<td align="center">isscfc</td>
+<td>FAO International Standard Statistical Classification of Fishery Commodities</td>
+</tr>
+<tr class="even">
+<td align="center">ics</td>
+<td>International Classification for Standards for fishery products</td>
+</tr>
+<tr class="odd">
+<td align="center">conversion_factors</td>
+<td>factors to convert the commodity in weight primary equivalent</td>
 </tr>
 </tbody>
 </table>
