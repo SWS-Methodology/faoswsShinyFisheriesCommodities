@@ -25,7 +25,7 @@
 <meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
 
 
-<meta name="date" content="2019-10-23">
+<meta name="date" content="2019-11-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -82,7 +82,7 @@
 <li class="chapter" data-level="1.2.2" data-path="ProcProd.html"><a href="ProcProd.html#primary-production-approach"><i class="fa fa-check"></i><b>1.2.2</b> Primary production approach</a></li>
 <li class="chapter" data-level="1.2.3" data-path="ProcProd.html"><a href="ProcProd.html#ensemble-method-approach"><i class="fa fa-check"></i><b>1.2.3</b> Ensemble method approach</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.3</b> <strong>SWS objects and the shiny application</strong></a><ul>
+<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.3</b> <strong>SWS objects and the Shiny application</strong></a><ul>
 <li class="chapter" data-level="1.3.1" data-path="ProcProd.html"><a href="ProcProd.html#datatables"><i class="fa fa-check"></i><b>1.3.1</b> Datatables</a></li>
 </ul></li>
 <li class="chapter" data-level="1.4" data-path="ProcProd.html"><a href="ProcProd.html#application-goal-and-structure"><i class="fa fa-check"></i><b>1.4</b> <strong>Application goal and structure</strong></a><ul>
@@ -92,7 +92,7 @@
 <li class="chapter" data-level="1.4.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>1.4.4</b> Summary and check mappings tabs</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The Processed production imputation shiny R code</strong></a><ul>
+<li class="chapter" data-level="2" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The Processed production imputation Shiny R code</strong></a><ul>
 <li class="chapter" data-level="2.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>2.1</b> <strong>‘global.R’ file</strong></a></li>
 <li class="chapter" data-level="2.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>2.2</b> <strong>‘ui.R’ file</strong></a></li>
 <li class="chapter" data-level="2.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>2.3</b> <strong>‘server.R’ file</strong></a><ul>
@@ -106,7 +106,7 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>3</b> <strong>The aggregation module</strong></a><ul>
 <li class="chapter" data-level="3.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>3.1</b> <strong>The code</strong></a></li>
-<li class="chapter" data-level="3.2" data-path="Aggregation.html"><a href="Aggregation.html#final-remarks"><i class="fa fa-check"></i><b>3.2</b> <strong>Final remarks</strong></a></li>
+<li class="chapter" data-level="3.2" data-path="Aggregation.html"><a href="Aggregation.html#practical-tips-and-final-remarks"><i class="fa fa-check"></i><b>3.2</b> <strong>Practical tips and final remarks</strong></a></li>
 </ul></li>
 </ul>
 
@@ -135,10 +135,10 @@
 <li><pre><code>Else, keep the ranking used for N, O, M.</code></pre></li>
 </ol>
 <p>The ranking used for flag is in increasing order ‘M’, ‘O’, ‘N’, ‘’, ‘X’, ‘T’, ‘E’, ‘I’, meaning that ‘I’ is the strongest and ‘M’ the weakest in case of aggregation.</p>
-<p>Because the first part of the workflow in the Statistical Working System (SWS) only involves data tables and does not use dataset, all the ISSCFC codes in the data table <code>processed_prod_national_detail_imputed</code> need a check. If all the codes are correct and exist in the ‘measuredItemISSCFC’ dimension they can be introduced into the Commodity dataset. The SWS only populates a dataset if all the codes exist in the dataset dimension.</p>
+<p>Because the first part of the workflow in the Statistical Working System (SWS) only involves data tables and does not use datasets, all the ISSCFC codes in the data table <code>processed_prod_national_detail_imputed</code> need a check. If all the codes are correct and exist in the ‘measuredItemISSCFC’ dimension they can be introduced into the Commodity dataset. The SWS only populates a dataset if all the codes exist in the dataset dimension.</p>
 <div id="the-code" class="section level2">
 <h2><span class="header-section-number">3.1</span> <strong>The code</strong></h2>
-<p>The aggregation plugin ‘<code>fi_ProcProd2CommodityDB</code>’ can be applied to a session or to the all dataset and, more precisely, the parameters allow the user to choose between session or all countries and between session years or all years.</p>
+<p>The aggregation plugin ‘<code>fi_ProcProd2CommodityDB</code>’ can be applied to a session or to the whole dataset. The parameters at the beginning of the process enable the user to choose between session country(ies) or all countries and between session years or all years.</p>
 <pre><code>##&#39; # National processed production aggregation process for the Fishery commodity database
 ##&#39;
 ##&#39; **Author: Charlotte Taglioni**
@@ -237,7 +237,7 @@ setnames(procprod, c(&quot;geographicaream49_fi&quot;, &quot;measuredelement&quo
            &quot;flagMethod&quot;, &quot;approach&quot;))
 
 message(&#39;fi_ProcProd2CommodityDB: Processed production datat loaded&#39;)</code></pre>
-<p>Once the parameters have been selected and the data loaded all the columns that do not correspond to a dimension of the Commodity dataset are dropped. The ISSCFC codes check is performed and data aggregation process starts.</p>
+<p>Once the parameters have been selected and the data loaded, all the columns that do not correspond to a dimension of the Commodity dataset are dropped. The ISSCFC codes check is performed and data aggregation process starts.</p>
 <pre><code># Take columns of interest
 dataFile &lt;- procprod[ , .(geographicAreaM49_fi, measuredElement, timePointYears, 
                           measuredItemISSCFC, Value, flagObservationStatus, flagMethod)]
@@ -349,9 +349,41 @@ paste0(&quot;ISSCFC commodity aggregation completed successfully!!! &quot;,
 </code></pre>
 <p>The last part of the plugin sends an email to the user and reporting the number of values written, updated or discarded in the Commodity dataset.</p>
 </div>
-<div id="final-remarks" class="section level2">
-<h2><span class="header-section-number">3.2</span> <strong>Final remarks</strong></h2>
-<p>In principle, after this plugin has run, the Commodity dataset is complete. This follows from the complete commodity workflow that requires trade data to be validated, aggregated and saved into the Commodity dataset before starting the processed production data process. Once the processed production data have been aggregated and saved into the Commodity dataset the process is complete and all the data should be ready for use.</p>
+<div id="practical-tips-and-final-remarks" class="section level2">
+<h2><span class="header-section-number">3.2</span> <strong>Practical tips and final remarks</strong></h2>
+<p>The first step is the Commodity dataset query figures <a href="Aggregation.html#fig:query">3.1</a> and <a href="Aggregation.html#fig:query2">3.2</a>.</p>
+<div class="figure"><span id="fig:query"></span>
+<img src="img/query.PNG" alt=" Commodity dataset query." width="100%" />
+<p class="caption">
+Figure 3.1:  Commodity dataset query.
+</p>
+</div>
+<div class="figure"><span id="fig:query2"></span>
+<img src="img/query2.PNG" alt=" Commodity dataset query. Choosing dataset and dimensions" width="100%" />
+<p class="caption">
+Figure 3.2:  Commodity dataset query. Choosing dataset and dimensions
+</p>
+</div>
+<p>Once the session is open the plugin can be run selecting the ‘Run plugin button’ (figure <a href="Aggregation.html#fig:run">3.3</a>), choosing the ‘fi_ProcProd2CommodityDB’ plugin (figure <a href="Aggregation.html#fig:plugin">3.4</a>) and selecting the parameters (figure <a href="Aggregation.html#fig:parameters">3.5</a>)</p>
+<div class="figure"><span id="fig:run"></span>
+<img src="img/run.PNG" alt=" Run plugin" width="100%" />
+<p class="caption">
+Figure 3.3:  Run plugin
+</p>
+</div>
+<div class="figure"><span id="fig:plugin"></span>
+<img src="img/plugin.PNG" alt=" Selecting the fi_ProcProd2CommodityDB plugin." width="100%" />
+<p class="caption">
+Figure 3.4:  Selecting the fi_ProcProd2CommodityDB plugin.
+</p>
+</div>
+<div class="figure"><span id="fig:parameters"></span>
+<img src="img/parameters.png" alt=" Selecting parameters and running the plugin." width="100%" />
+<p class="caption">
+Figure 3.5:  Selecting parameters and running the plugin.
+</p>
+</div>
+<p>After the plugin has run data have to be saved (‘Save to dataset’ button) and the Commodity dataset is complete with both processed production and trade data (the workflow requires trade data to be validated, aggregated and saved into the Commodity dataset before starting the processed production data process). Once the processed production data have been aggregated and saved into the Commodity dataset the process is complete and all the data are ready for use.</p>
 
 </div>
 </div>

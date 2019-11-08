@@ -14,10 +14,10 @@ iii.	Else, keep the ranking used for N, O, M.
 
 The ranking used for flag is in increasing order 'M', 'O', 'N', ' ', 'X', 'T', 'E', 'I', meaning that 'I' is the strongest and 'M' the weakest in case of aggregation.
 
-Because the first part of the workflow in the Statistical Working System (SWS) only involves data tables and does not use dataset, all the ISSCFC codes in the data table `processed_prod_national_detail_imputed` need a check. If all the codes are correct and exist in the 'measuredItemISSCFC' dimension they can be introduced into the Commodity dataset. The SWS only populates a dataset if all the codes exist in the dataset dimension.
+Because the first part of the workflow in the Statistical Working System (SWS) only involves data tables and does not use datasets, all the ISSCFC codes in the data table `processed_prod_national_detail_imputed` need a check. If all the codes are correct and exist in the 'measuredItemISSCFC' dimension they can be introduced into the Commodity dataset. The SWS only populates a dataset if all the codes exist in the dataset dimension.
 
 ## **The code**
-The aggregation plugin '`fi_ProcProd2CommodityDB`' can be applied to a session or to the all dataset and, more precisely, the parameters allow the user to choose between session or all countries and between session years or all years. 
+The aggregation plugin '`fi_ProcProd2CommodityDB`' can be applied to a session or to the whole dataset. The parameters at the beginning of the process enable the user to choose between session country(ies) or all countries and between session years or all years. 
 
 ```
 ##' # National processed production aggregation process for the Fishery commodity database
@@ -120,7 +120,7 @@ setnames(procprod, c("geographicaream49_fi", "measuredelement", "timepointyears"
 message('fi_ProcProd2CommodityDB: Processed production datat loaded')
 ```
 
-Once the parameters have been selected and the data loaded all the columns that do not correspond to a dimension of the Commodity dataset are dropped. The ISSCFC codes check is performed and data aggregation process starts.
+Once the parameters have been selected and the data loaded, all the columns that do not correspond to a dimension of the Commodity dataset are dropped. The ISSCFC codes check is performed and data aggregation process starts.
 
 
 ```
@@ -247,6 +247,30 @@ paste0("ISSCFC commodity aggregation completed successfully!!! ",
 
 The last part of the plugin sends an email to the user and reporting the number of values written, updated or discarded in the Commodity dataset.
 
-## **Final remarks**
+## **Practical tips and final remarks**
 
-In principle, after this plugin has run, the Commodity dataset is complete. This follows from the complete commodity workflow that requires trade data to be validated, aggregated and saved into the Commodity dataset before starting the processed production data process. Once the processed production data have been aggregated and saved into the Commodity dataset the process is complete and all the data should be ready for use.
+The first step is the Commodity dataset query figures \@ref(fig:query) and \@ref(fig:query2).
+
+```{r  query, echo=FALSE, out.width="100%", fig.cap=' Commodity dataset query.'}
+knitr::include_graphics("img/query.png")
+```
+
+```{r  query2, echo=FALSE, out.width="100%", fig.cap=' Commodity dataset query. Choosing dataset and dimensions'}
+knitr::include_graphics("img/query2.png")
+```
+
+Once the session is open the plugin can be run selecting the 'Run plugin button' (figure \@ref(fig:run)), choosing the 'fi_ProcProd2CommodityDB' plugin (figure \@ref(fig:plugin)) and selecting the parameters (figure \@ref(fig:parameters))
+
+```{r  run, echo=FALSE, out.width="100%", fig.cap=' Run plugin'}
+knitr::include_graphics("img/run.png")
+```
+
+```{r  plugin, echo=FALSE, out.width="100%", fig.cap=' Selecting the fi_ProcProd2CommodityDB plugin.'}
+knitr::include_graphics("img/plugin.png")
+```
+
+```{r  parameters, echo=FALSE, out.width="100%", fig.cap=' Selecting parameters and running the plugin.'}
+knitr::include_graphics("img/parameters.png")
+```
+
+After the plugin has run data have to be saved ('Save to dataset' button) and the Commodity dataset is complete with both processed production and trade data (the workflow requires trade data to be validated, aggregated and saved into the Commodity dataset before starting the processed production data process). Once the processed production data have been aggregated and saved into the Commodity dataset the process is complete and all the data are ready for use.

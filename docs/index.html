@@ -25,7 +25,7 @@
 <meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
 
 
-<meta name="date" content="2019-10-24">
+<meta name="date" content="2019-11-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -82,7 +82,7 @@
 <li class="chapter" data-level="1.2.2" data-path="ProcProd.html"><a href="ProcProd.html#primary-production-approach"><i class="fa fa-check"></i><b>1.2.2</b> Primary production approach</a></li>
 <li class="chapter" data-level="1.2.3" data-path="ProcProd.html"><a href="ProcProd.html#ensemble-method-approach"><i class="fa fa-check"></i><b>1.2.3</b> Ensemble method approach</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.3</b> <strong>SWS objects and the shiny application</strong></a><ul>
+<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.3</b> <strong>SWS objects and the Shiny application</strong></a><ul>
 <li class="chapter" data-level="1.3.1" data-path="ProcProd.html"><a href="ProcProd.html#datatables"><i class="fa fa-check"></i><b>1.3.1</b> Datatables</a></li>
 </ul></li>
 <li class="chapter" data-level="1.4" data-path="ProcProd.html"><a href="ProcProd.html#application-goal-and-structure"><i class="fa fa-check"></i><b>1.4</b> <strong>Application goal and structure</strong></a><ul>
@@ -92,7 +92,7 @@
 <li class="chapter" data-level="1.4.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>1.4.4</b> Summary and check mappings tabs</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The Processed production imputation shiny R code</strong></a><ul>
+<li class="chapter" data-level="2" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The Processed production imputation Shiny R code</strong></a><ul>
 <li class="chapter" data-level="2.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>2.1</b> <strong>‘global.R’ file</strong></a></li>
 <li class="chapter" data-level="2.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>2.2</b> <strong>‘ui.R’ file</strong></a></li>
 <li class="chapter" data-level="2.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>2.3</b> <strong>‘server.R’ file</strong></a><ul>
@@ -106,7 +106,7 @@
 </ul></li>
 <li class="chapter" data-level="3" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>3</b> <strong>The aggregation module</strong></a><ul>
 <li class="chapter" data-level="3.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>3.1</b> <strong>The code</strong></a></li>
-<li class="chapter" data-level="3.2" data-path="Aggregation.html"><a href="Aggregation.html#final-remarks"><i class="fa fa-check"></i><b>3.2</b> <strong>Final remarks</strong></a></li>
+<li class="chapter" data-level="3.2" data-path="Aggregation.html"><a href="Aggregation.html#practical-tips-and-final-remarks"><i class="fa fa-check"></i><b>3.2</b> <strong>Practical tips and final remarks</strong></a></li>
 </ul></li>
 </ul>
 
@@ -128,11 +128,11 @@
 <div id="header">
 <h1 class="title">Migration of Fishery processed production Statistical Processes into the SWS</h1>
 <p class="author"><em>Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)</em></p>
-<p class="date"><em>2019-10-24</em></p>
+<p class="date"><em>2019-11-08</em></p>
 </div>
 <div id="introduction" class="section level1 unnumbered">
 <h1><strong>Introduction</strong></h1>
-<p>FAO Fisheries and Aquaculture Department is migrating its statistical processes into the Corporate Statistical Working System (SWS). This online book documents the significant steps that have been taken so far concerning this migration. The document describes the main institutional actors involved in the migration as well as the FIAS - SWS resources (<strong>code lists</strong>, <strong>datasets</strong>, <strong>data tables</strong>) that have been created to support the SWS plugins (R modules) to meet technical unit requirements. Furthermore, the SWS plugins and shiny applications are presented in the form of chapters providing a detailed description of their workflows as well as results.</p>
+<p>FAO Fisheries and Aquaculture Department is migrating its statistical processes into the Corporate Statistical Working System (SWS). This online book documents the significant steps that have been taken so far concerning this migration. The document describes the main institutional actors involved in the migration as well as the FIAS - SWS resources (<strong>code lists</strong>, <strong>datasets</strong>, <strong>data tables</strong>) that have been created to support the SWS plugins (R modules) to meet technical unit requirements. Furthermore, the SWS plugins and Shiny applications are presented in the form of chapters providing a detailed description of their workflows as well as results.</p>
 <div class="rmdnote">
 <p>
 <strong>IMPORTANT:</strong> Use the <strong>Chrome browser</strong> to have a correct visualization of HTML outputs in this online document.
@@ -222,7 +222,7 @@
 Figure .:  Workflow for processed production data.
 </p>
 </div>
-<p>The first part of data collection and data entry is entirely performed by FIAS unit; the second part of data imputation and validation uses the ‘ad-hoc’ shiny application described in paragraph <a href="ProcProd.html#shiny">1.2</a>; the third part is an R-plugin to be run on the SWS.</p>
+<p>The first part of data collection and data entry is entirely performed by FIAS unit; the second part of data imputation and validation uses the ‘ad-hoc’ Shiny application described in paragraph <a href="ProcProd.html#shiny">1.2</a>; the third part is an R-plugin to be run on the SWS.</p>
 </div>
 </div>
 <div id="sws-resources" class="section level2 unnumbered">
@@ -249,8 +249,6 @@ Figure .:  Workflow for processed production data.
 <li><p><strong>processed_prod_national_detail_imputed</strong> (SWS identifier: <code>processed_prod_national_detail_imputed</code>): where raw (data from questionnaires) and estimated data are stored before being aggregated into the Commodity dataset.</p></li>
 <li><p><strong>ISSCFC Mapping - Export approach</strong> (SWS identifier: <code>isscfc_mapping_export_approach</code>): mapping table used to apply an imputation method approach based on export data.</p></li>
 <li><p><strong>ISSCFC Mapping - Primary Prod Approach</strong> (SWS identifier: <code>isscfc_mapping_prod_approach</code>): mapping table used to apply an imputation method approach based on primary production data.</p></li>
-<li><p><strong>ASFIS - ICS - ISSCAAP map</strong> (SWS identifier: <code>map_asfis</code>): mapping connecting the Asfis alphacodes to ISSCAAP groups.</p></li>
-<li><p><strong>SUA item mapping table</strong> (SWS identifier: <code>fishery_item_mapping</code>): mapping connecting the ISSCFC codes to ISSCAAP groups.</p></li>
 </ul>
 <p>Datasets in the SWS are interchangeably used as module inputs/outputs and are composed by dimensions (aka reference/code lists). Because SWS datasets contain code lists following international standards as dimensions, there is little space for variation of dimension names across SWS datasets for the sake of standardization. In the FIAS - SWS framework for processed production, the dataset is:</p>
 <ul>

@@ -12,7 +12,7 @@ description: "This online book describes the migration of the statistical proces
 
 # **Introduction** {-}
 
-FAO Fisheries and Aquaculture Department is migrating its statistical processes into the Corporate Statistical Working System (SWS). This online book documents the significant steps that have been taken so far concerning this migration. The document describes the main institutional actors involved in the migration as well as the FIAS - SWS resources (**code lists**, **datasets**, **data tables**) that have been created to support the SWS plugins (R modules) to meet technical unit requirements. Furthermore, the SWS plugins and shiny applications are presented in the form of chapters providing a detailed description of their workflows as well as results.  
+FAO Fisheries and Aquaculture Department is migrating its statistical processes into the Corporate Statistical Working System (SWS). This online book documents the significant steps that have been taken so far concerning this migration. The document describes the main institutional actors involved in the migration as well as the FIAS - SWS resources (**code lists**, **datasets**, **data tables**) that have been created to support the SWS plugins (R modules) to meet technical unit requirements. Furthermore, the SWS plugins and Shiny applications are presented in the form of chapters providing a detailed description of their workflows as well as results.  
 
 ```{block , type='rmdnote'}
 **IMPORTANT:**
@@ -122,7 +122,7 @@ Figure \@ref(fig:WFpp) represents the essential points of the overall workflow f
 knitr::include_graphics("img/WorkflowPP.png")
 ```
 
-The first part of data collection and data entry is entirely performed by FIAS unit; the second part of data imputation and validation uses the 'ad-hoc' shiny application described in paragraph \@ref(shiny); the third part is an R-plugin to be run on the SWS.
+The first part of data collection and data entry is entirely performed by FIAS unit; the second part of data imputation and validation uses the 'ad-hoc' Shiny application described in paragraph \@ref(shiny); the third part is an R-plugin to be run on the SWS.
 
 ## **SWS resources**  {-}
 
@@ -160,10 +160,6 @@ Data tables are mainly used to store information helping R modules to output ana
 - **ISSCFC Mapping - Export approach** (SWS identifier: `isscfc_mapping_export_approach`): mapping table used to apply an imputation method approach based on export data.
 
 - **ISSCFC Mapping - Primary Prod Approach** (SWS identifier: `isscfc_mapping_prod_approach`): mapping table used to apply an imputation method approach based on primary production data.
-
-- **ASFIS - ICS - ISSCAAP map** (SWS identifier: `map_asfis`): mapping connecting the Asfis alphacodes to ISSCAAP groups. 
-
-- **SUA item mapping table** (SWS identifier: `fishery_item_mapping`): mapping connecting the ISSCFC codes to ISSCAAP groups.
 
 Datasets in the SWS are interchangeably used as module inputs/outputs and are composed by dimensions (aka reference/code lists). Because SWS datasets contain code lists following international standards as dimensions, there is little space for variation of dimension names across SWS datasets for the sake of standardization. In the FIAS - SWS framework for processed production, the dataset is: 
 

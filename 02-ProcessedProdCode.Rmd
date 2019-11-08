@@ -1,18 +1,18 @@
-# **The Processed production imputation shiny R code** {#ProcProdcode}
+# **The Processed production imputation Shiny R code** {#ProcProdcode}
 
 
-The following paragraphs report the code used for the R shiny application available at <http://hqlprsws1.hq.un.fao.org:3838/shinyFisheriesCommodities/>.
-The shiny application used for processed production imputation and validation is a rather simple one. It contains the standard three shiny files (`global`, `ui` and `server`) plus a `.Rmd` file containing a brief app description and another file containing functions used in the shiny (`external_functions.R`). The application directly connects, pulls and modifies data and other information from  the Statistical Working System (SWS).
+The code used for the R Shiny application is available at <http://hqlprsws1.hq.un.fao.org:3838/shinyFisheriesCommodities/>.
+The Shiny application used for processed production imputation and validation is a rather simple one. It contains the three standard Shiny files (`global`, `ui` and `server`) plus a `.Rmd` file containing a brief app description and another file containing functions used in the Shiny (`external_functions.R`). The application directly connects, pulls and modifies data and other information from  the Statistical Working System (SWS).
 
-The following paragraphs contain the code as visible in the folder in the shiny server and in the shared drive (`R:/shiny-app/shinyFisheriesCommodities`).
+The following paragraphs contain the code as visible in the folder in the Shiny server and in the shared drive (`R:/shiny-app/shinyFisheriesCommodities`).
 
 ## **'global.R' file**
 
-The `global.R` file first lists the path access the needed packages listed. There are then four paragraphs:
+The `global.R` file first lists the path access the needed packages. There are then four paragraphs:
 
 - Token QA: it contains the 'token' and other information to connect to the SWS.
 
-- Get the M49 countries from dimension: here commands pull the `geographicAreaM49_fi` dimension from the SWS, replace characters not readable by shiny with the function `replaceforeignchars` and build the object containing country codes and country labels visualized in the shiny.
+- Get the M49 countries from dimension: here commands pull the `geographicAreaM49_fi` dimension from the SWS, replace characters not readable by Shiny with the function `replaceforeignchars` and build the object containing country codes and country labels visualized in the Shiny.
 
 - Mappings: here species and commodity mappings are loaded.
 
@@ -86,7 +86,7 @@ id_prod <- NULL
 
 ## **'ui.R' file**
 
-The `ui.R` file contains the interface structure of the shiny app with the outputs of the `server.R` file. Each `tabPanel` functions is a tab containing different objects (buttons, graphs, table).
+The `ui.R` file contains the interface structure of the Shiny app with the outputs of the `server.R` file. Each `tabPanel` functions is a tab containing different objects (buttons, graphs, table).
 
 Only one button is defined in this file and it is the 'country button' which uses the list created in the `global` file.
 
@@ -221,10 +221,10 @@ fluidPage(
 
 ## **'server.R' file**
 
-The `server.R` file is the longest and most complex file as it contains all the operations for the right functioning of the shiny app.
+The `server.R` file is the longest and most complex file as it contains all the operations for the right functioning of the Shiny app.
 
-Firstly two reactive value objects are created to store the datasets pulled from the SWS and the mappings for the export and primary production based approaches.
-The data table containing the raw data (`processed_prod_national_detail_raw`) is loaded for the chosen country, the encoding is checked and adapted with both formal and substantial operations:in the first category there are column names turning into compatible names for datasets, flag class turning from character to an ordered factor class and years are confirmed as character class. As substantial operation there is the '`expandYear`' function which creates cells for missing data and the '`removeNoInfo`' function which remove series with no useful information. Note that both functions belong to the `faoswsProcessing` package but the '`expandYear`' function is also present in the `external_functions.R` file as it is an updated version of the function not yet released. The original and modified versions of raw data are stored in the data table prepared in the '`rv_data`' object.
+First, two reactive value objects are created to store the datasets pulled from the SWS and the mapping tables for the export and primary production based approaches.
+The data table containing the raw data (`processed_prod_national_detail_raw`) is loaded for the chosen country, the encoding is checked and adapted with both formal and substantial operations:in the first category there are column names turning into compatible names for datasets, flag class turning from character to an ordered factor class and years are confirmed as character class. As substantial operation there is the '`expandYear`' function which creates cells for missing data and the '`removeNoInfo`' function which remove series with no information. Note that both functions belong to the `faoswsProcessing` package but the '`expandYear`' function is also present in the `external_functions.R` file as it is an updated version of the function not yet released. The original and modified versions of raw data are stored in the data table prepared in the '`rv_data`' object.
 
 ```
 function(input, output) { 
@@ -344,7 +344,7 @@ function(input, output) {
 Before the user has access to the year button the app checks if the user has selected a country and if there are data for the selected country. If the country has not been selected then the message shown is 'Please choose a country.'. And if there are no data for the country the message is 'Processed production data not available for this country. Choose another country.' will appear. The imputation year button is then defined sorting the years available for the chosen country in decreasing order.
 After the imputation year, the starting year button is defined in the same way as the imputation year but it is restricted to be less than the imputation year. 
 Note that the imputation year is the year for which the imputation will be performed, the imputation can only be performed for one year at the time. The start year chosen only allows to check the time series.
-Once the start year is chosen, the imputed data table with processed production data is loaded (`processed_prod_national_detail_imputed`) and the same formal operation as in the raw table are performed. The imputed table is also merged with the raw table to compare values. The remarks field is updated according to the raw data table as the imputed can only replicate it for this field. For values, if the value in the raw table is missing then the value in the imputed table is kept. If the value in the raw table is not NA then raw value is kept. Flags are changed accordingly. If the data in the year before the chosen imputation year is missing, i.e. flagged (O, -), then the imputation year value is imputed as (0, O, -) and not (NA, M, u), i.e. to be imputed. This is relevant for the next button, i.e. the 'missing' button.
+Once the start year is chosen, the imputed data table with processed production data is loaded (`processed_prod_national_detail_imputed`) and the same formal operation as in the raw table are performed. The imputed table is also merged with the raw table to compare values. The remarks field is updated according to the raw data table, the imputed data table only inherits this field. If the data value in the raw table is missing then the value in the imputed table is kept. If the value in the raw table is not NA then raw value is kept. Flags are changed accordingly. If the data in the year before the chosen imputation year is missing, i.e. flagged (O, -), then the imputation year value is imputed as (0, O, -) and not as to be imputed (NA, M, u). This is relevant for the next button, i.e. the 'missing' button.
 With the 'missing' button the user is enabled to choose what data category to visualize. The user has three choices "Yes", "No" and "Not to impute". This choice influences the list of commodities the user visualizes when clicking the commodity button. For the commodity button a list with codes and labels is created (`commodity_label`) with the available commodities in the imputed table of processed production and the ISSCFC map. The list shown depends on the missing button choice. If the missing button value is 'Yes' then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have flags (M, u). If the missing button value is 'No' then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have observation flags different from 'M', 'O' or 'Q'. If the missing button value is 'Not to impute' then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have flags (M, -) or (O, -).
 
 ```
@@ -595,7 +595,7 @@ With the 'missing' button the user is enabled to choose what data category to vi
 
 
 The following code chunk contains the first tab. The imputed table is recalled, the column order and names are changed and displayed.
-There is then the '`check_new_items`' button that compares the ISSCFC and the Scheda codes contained in the processed production raw table and those in the initial processed production imputed table. If an ISSCFC code or a Scheda code found in the raw table is not found in the imputed table it means there is a new commodity that was not present for the country before the last year. Clicking the button the user sees the messages. 
+There is the '`check_new_items`' button that compares the ISSCFC and the scheda codes contained in the processed production raw table and those in the initial processed production imputed table. If an ISSCFC code or a Scheda code found in the raw table is not found in the imputed table it means there is a new commodity that was not present for the country before the last year. Clicking the button the user sees the messages. 
 
 ```
 #-- First tab showing imputed table----
@@ -673,7 +673,7 @@ There is then the '`check_new_items`' button that compares the ISSCFC and the Sc
 ```
 
 In order to complete the preparation part of the app, the part of the 'Global production' and 'Commodity (total)' datasets involved in the computations are loaded, followed by the data table of the export approach mapping. From the 'Global production' dataset all the data for the country and time series selected are loaded. Column names are then adapted and data are aggregated by the '`fisheriesCatchArea`' variable (data for the same area are summed and the lowest observation flag is assigned to the cell); from the 'Commodity (total)' datasets only export data ('5910' code) for the mapped commodities are selected for the country and time series selected. Note that both datasets when loaded are accompanied by a progress bar. 
-The export mapping data table is also loaded for the selected country and a copy with dataset compatible column name is made. A check for duplicates is included but not for the user (these checks are performed in the next tabs).
+The export mapping data table is also loaded for the selected country and a copy with dataset compatible column names is made. A check for duplicates is included but not for the user (these checks are performed in the next tabs).
 
 ```
   #-- Get commodity and global production datasets ----
@@ -781,14 +781,13 @@ The export mapping data table is also loaded for the selected country and a copy
 
 ```
 
-The following code chunks refer to the export approach tab.
 
 ### Export approach tab
 
 After recalling the chosen commodity and the needed data a first check is performed. If there is no mapping for the chosen country then the app shows the message 'Export approach not applicable. No available mapping for the chosen country.'.
 Once all the parameters have been retrieved the data are filtered by the chosen parameters.
 Other checks are made to see if the chosen time series is available. If the series is not available or only few years out of the chosen ones are available then messages are displayed and the user has to choose a different series.
-The data from the imputed processed production and the commodity dataset are merged through the export approach mapping table. Before the merge the three objects are filtered in order to select only the needed rows: the processed production table is filtered by country, years and Scheda selected; the mapping table rows selected are those corresponding to the ISSCFC (production) code corresponding to the selected Scheda for the country and the period selected is the one corresponding to the selected year; the commodity dataset selected contains only non-missing export data (i.e. observation flag different from 'O', 'M', 'Q' and code '5910') for the country selected and the commodity listed in the mapping table (ISSCFC export). The function then returns the whole merged data tables and the one to display in the shiny tab which has commodity description and ordered columns.
+The data from the imputed processed production and the commodity dataset are merged through the export approach mapping table. Before the merge, the three objects are filtered in order to select only the needed rows: the processed production table is filtered by country, years and Scheda selected; the mapping table rows selected are those corresponding to the ISSCFC (production) code corresponding to the selected Scheda for the country and the period selected is the one corresponding to the selected year; the commodity dataset selected contains only non-missing export data (i.e. observation flag different from 'O', 'M', 'Q' and code '5910') for the country selected and the commodity listed in the mapping table (ISSCFC export). The function then returns the whole merged data tables and the one to display in the Shiny tab which has commodity description and ordered columns.
 
 ```
 #-- Export method approach ----
@@ -908,7 +907,7 @@ The data from the imputed processed production and the commodity dataset are mer
   })
 
 ```
-The next code chunk include the '`rhandsontable`' object needed to modify the table shown at the top of the tab to change the export mapping, the button to select the ratio used to calculate the missing data (keep the 'Original data', use the 'Average ratio' or choose a 'Manual ratio'). If the manual ratio is chosen then a panel is shown to insert the value.
+The next code chunk includes the '`rhandsontable`' object needed to modify the table shown at the top of the tab to change the export mapping and the button to select the ratio used to calculate the missing data (keep the 'Original data', use the 'Average ratio' or choose a 'Manual ratio'). If the manual ratio is chosen then a panel is shown to insert the value.
 
 ```
 #-- Export selection table
@@ -956,7 +955,7 @@ The next code chunk include the '`rhandsontable`' object needed to modify the ta
   })
 
 ```
-The table containing value of processed production, exports and ratio for the time series selected and the average values can now be built. First all the needed datasets and parameters are recalled as well as the table were mapping modification can have been performed and the output of the `isscfc_check_reac` containing the needed table. Checks for new commodities in the production and export columns are performed so to have all commodities included in the mapping. The old and the new data are compared and the missing values are inserted. Old and new data are then bound together and manual inputs are checked. The function `export_imputation2` is applied to build the table shown in the middle of the export tab. The function is described in the \@ref(functionsExp) paragraph.
+The table containing value of processed production, exports and ratio for the time series selected and the average values can now be built. First, all the needed datasets and parameters are recalled along with the table where mapping modification can have been performed and the output of the `isscfc_check_reac` containing the needed table. Checks for new commodities in the production and export columns are performed so to have all commodities included in the mapping. The old and the new data are compared and the missing values are inserted. Old and new data are then bound together and manual inputs are checked. The function `export_imputation2` is applied to build the table shown in the middle of the export tab. The function is described in the \@ref(functionsExp) paragraph.
 
 ```
 #-- Create table with potentially imputable value ----
@@ -1065,7 +1064,7 @@ The table containing value of processed production, exports and ratio for the ti
   })
 ```
 
-The same process applies to create the ggplot showing the time series for both the processed production and the export figures.
+The same process applies to create the plot (*ggplot*) showing the time series for both the processed production and the export figures.
 
 ```
 #-- Export approach plot ----
@@ -1180,7 +1179,9 @@ The same process applies to create the ggplot showing the time series for both t
 
 ```
 
-At the beginning and at the end of the process the user can use the 'Check mapping' button to check mapping consistency. The following checks are performed and for each inconsistency a message is shown. If no inconsistency arises then the message shown is 'The current mapping is consistent.'. Each check is described in the code comments.
+At the beginning and at the end of the process the user can use the 'Check mapping' button to check mapping consistency. The following checks are performed and for each inconsistency a message is shown. If no inconsistency arises then the message shown is 'The current mapping is consistent.'. 
+
+Each check is described in the code comments:
 
 ```
 #-- Check export mapping ----
@@ -1570,8 +1571,8 @@ The chunks for the modified table, the ratio choice button and the manual ratio 
 
 ```
 
-In order to create the table to calculate the missing value firstly the data, the parameters and the previously compiled tables are recalled. A validation of the codes (ISSCFC and Asfis) inserted is performed and if the codes inserted are not valid a message is displayed and the user would not be able to continue if the invalid codes are not changed. Note the checks is only based on the ISSCFC or Asfis codes in the mapping table `map_isscfc` and `map_asfis` present in the SWS. Also a check on the ISSCAAP group is performed. The ISSCAAP group inserted by the user must be the one the species belongs to.
-After the first checks the data are updated with the new mapping and data, and the missing cells are filled. With the new data table (`full_updated`) and the missing data check, the table with the time series for the primary production, processed production and ratio is built through the function '`primaryprod_imputation2`' presented in paragraph \@ref(functionsExp).
+In order to create the table to calculate the missing value firstly the data, the parameters and the previously compiled tables are recalled. A validation of the codes (ISSCFC and Asfis) inserted is performed and, if the codes inserted are not valid, a message is displayed and the user would not be able to continue if the invalid codes are not changed. Note the checks are only based on the ISSCFC or Asfis codes in the mapping table `map_isscfc` and `map_asfis` present in the SWS. Also a check on the ISSCAAP group is performed. The ISSCAAP group inserted by the user must be the one the species belongs to.
+After the first checks, the data are updated with the new mapping and data, and the missing cells are filled. With the new data table (`full_updated`) and the missing data checks, the table with the time series for the primary production, processed production and ratio is built through the function '`primaryprod_imputation2`' presented in paragraph \@ref(functionsExp).
 
 ```
  # Create table with potentially imputable value
@@ -1974,8 +1975,8 @@ As in the export approach tab, a 'Check mapping' button is inserted and it perfo
 
 ### Summary tab
 
-The summary tab shows the results of the previous two tables and the result of the ensemble approach method, along with the plot of the results the user can choose. 
-Once the data and parameters are recalled the code makes sure all the variables are assigned even if one or both the approaches have not been applied. If there is no result for the approach selected (export or primary production) NA value is assigned to the variable. This only avoids error in the following lines. Then observation and method flags are combined to run the ensemble approach on the chosen data. The function used is '`method_imputation`' and is described in paragraph \@ref(functionsExp). After the model value has been estimated and assigned to a variable the same is done with the original value in the raw data table (whether it is NA or not). Then all the possible approaches are listed and the button to choose among the values is built (`radioGroupButtons` function). The possibility to insert a manual value is also included and needs the manual button (`out_btn_manual`).
+The summary tab shows the results of the previous two tabs and the result of the ensemble approach method, along with the plot of the three results. 
+Once the data and parameters are recalled, the code makes sure all the variables are assigned even if one or both the approaches have not been applied. If there is no result for the approach selected (export or primary production) 'NA' value is assigned to the variable. This is to avoids errors in the following lines. Observation and method flags are combined to run the ensemble approach on the chosen data. The function used to generate the ensemble method value is '`method_imputation`' and it is described in paragraph \@ref(functionsExp). After the model value has been estimated and assigned to a variable, the same is done with the original value in the raw data table (whether it is NA or not). Then all the possible approaches are listed and the button to choose among the values is built (`radioGroupButtons` function). The possibility to insert a manual value is also included and corresponds to the manual button (`out_btn_manual`).
 
 ```
   ##-- Summary ----
@@ -2067,7 +2068,7 @@ Once the data and parameters are recalled the code makes sure all the variables 
 
 ```
 
-A very similar code defines the plot to display all the possible value that can be imputed. The time series shown is taken from the primary production tab series.
+A very similar code defines the plot to display all the possible values that can be imputed. The time series shown is taken from the primary production tab series.
 
 ```
   # Plot
@@ -2182,7 +2183,7 @@ A very similar code defines the plot to display all the possible value that can 
 ### Update mapping process
 
 The updating process of the mapping tables is similar for the export and the primary production mappings. 
-For the export mapping, once the parameters and data have been recalled. The new mapping appearing in the first table of the export tab is compared with the corresponding chunk of the original mapping table (selected country, production commodities included in the new mapping, last available period). Four cases are considered in the mapping change: (i) if nothing changes the table stays the same; (ii) if rows are added (or removed) to the original mapping then they are added (or `Selection` cell turned to `FALSE`); (iii) if the mapping changes for the same period already existing the `Selection` and `type` variables are compared and the updated is chosen if available. If a row has been deleted then the `Selection` value is turned into `FALSE`; (iv) in all the remaining cases, i.e. the mapping is completely new, the previous corresponding mapping gets the end_year variable changed from 'LAST' to the year before the imputation year, and the new mapping is bound to the old mapping. The old mapping is replaced in the reactive value data and at the end of the process a window opens informing the user of the update.  
+For the export mapping, once the parameters and data have been recalled, the new mapping appearing in the first table of the export tab is compared with the corresponding chunk of the original mapping table (selected country, production commodities included in the new mapping, last available period). Four cases are considered in the mapping change: (i) if nothing changes the table stays the same; (ii) if rows are added (or removed) to the original mapping then they are added with `Selection` cell turned to `FALSE`; (iii) if the mapping changes for a period already existing, the `Selection` and `type` variables are compared and the latest is chosen. If a row has been deleted then the `Selection` value is turned into `FALSE`; (iv) in all the remaining cases, i.e. the mapping is completely new, the previous corresponding mapping gets the end_year variable changed from 'LAST' to the year before the imputation year, and the new mapping is bound to the old mapping. The old mapping is replaced in the reactive value data and at the end of the process a window opens informing the user of the update.  
 
 ```
   ##-- Update export mapping ----
@@ -2456,7 +2457,7 @@ Also the primary production mapping approach considers four update cases: (i) if
 
 ### Imputing new values and saving changes into the SWS
 
-In order to update the `processed_prod_national_detail_imputed` data table the input approach has to be identified ('approach_number') and the imputed value assigned to the variable 'imput_value'. The right flag has to be assigned according to the approach chosen, and the new data table built merging the old data table with the new one ('newImputedData'). The data table in the SWS can now be updated along with the imputed data table stored in the app. With this second update the user can see the new value directly in the shiny without reloading it.
+In order to update the `processed_prod_national_detail_imputed` data table the input approach has to be identified ('approach_number') and the imputed value assigned to the variable 'imput_value'. The right flag has to be assigned according to the approach chosen, and the new data table built merging the old data table with the new one ('newImputedData'). The data table in the SWS can now be updated along with the imputed data table stored in the app. With this second update the user can see the new value directly in the Shiny without reloading it.
 
 ```
  ##-- Impute value ----
@@ -2588,7 +2589,7 @@ In order to update the `processed_prod_national_detail_imputed` data table the i
 
 ```
 
-To save the new mapping a new `reactiveValues` object is created to store the new tables both for the export and the primary production approach. A `reactive` object is created where the export mapping (in the current status, i.e. updated if there has been any update or original if not) is recalled. This object is then used by a `renderDataTable` object that shows the mapping table to the user in a dedicated tab ('Check mapping export approach'). Note that this was a `renderRHandsontable` that could have been modified by the user (commented line '`editable = TRUE`'). The code could be changed once the `rhandsontable` package version is updated. Once the user has checked the data table the changes can be performed also in the SWS by clicking the button 'Save mapping in SWS'. Clicking the button the initial export mapping data table ('map_prod_exp0') is deleted from the data table in SWS (the whole mapping for the country is deleted) and the new mapping saved in the `mapping_rv` object replaces it. The data table is also updated in the other mapping object for shiny computation purpose without having the user reloading the shiny. A window then shows up informing the user the mapping has been updated.
+To save the new mapping a new `reactiveValues` object is created to store the new tables, both for the export and the primary production approach. A `reactive` object is created where the export mapping (in the current status, i.e. updated or original) is recalled. This object is then used by a `renderDataTable` object that shows the mapping table to the user in a dedicated tab ('Check mapping export approach'). Note that this was a `renderRHandsontable` that could have been modified by the user (commented line '`editable = TRUE`'). The code could be changed once the `rhandsontable` package version is updated. Once the user has checked the data table the changes can be performed also in the SWS by clicking the button 'Save mapping in SWS'. Clicking the button the initial export mapping data table ('map_prod_exp0') is deleted from the data table in SWS (the whole mapping for the country is deleted) and the new mapping saved in the `mapping_rv` object replaces it. The data table is also updated in the other mapping object for Shiny computation purpose without having the user reloading the Shiny. A window then shows up informing the user the mapping has been updated.
 
 ```
 ##-- Save export mapping ----
@@ -2951,7 +2952,7 @@ from to
 }
 ```
 
-The `export_imputation` function aims to create the second reactive table in the export tab. The first step is to aggregate export commodities to compute the commodity processed production. Aggregation is performed by: "geographicAreaM49_fi", "Scheda", "measuredItemISSCFC", "timePointYears", "Value_prod", "flagObservationStatus_prod", "flagMethod_prod". Then for each year the ratio between the aggregate export and the processed production data available is computed. Average values are computed for ratio, processed production and export and added to the table. The value calculated for the chosen missing figure depends on the variables: if neither a manual input nor the original data (i.e. the value is actually missing) is available then the value is calculated multiplying the average aggregate export by the average ratio and the ratio is set equal to NA. If the value is not missing then it is shown in the table and the ratio for the imputation year is calculated with actual data. If a manual ratio is inserted, the aggregate export is multiplied by this ratio and the result is set as processed production estimate and the ratio is the manual ratio inserted. After this flags are inserted next to each figure and column and row names are set.
+The `export_imputation` function aims to create the second reactive table in the export tab. The first step is to aggregate export commodities to compute the commodity processed production. Aggregation is performed by: "geographicAreaM49_fi", "Scheda", "measuredItemISSCFC", "timePointYears", "Value_prod", "flagObservationStatus_prod", "flagMethod_prod". Then for each year the ratio between the aggregate export and the processed production data available is computed. Average values are computed for ratio, processed production and export and added to the table. The value calculated for the chosen missing figure depends on the variables: if neither a manual input nor the original data is available, the value is calculated multiplying the average aggregate export by the average ratio and the ratio is set equal to NA. If the value is not missing then it is shown in the table and the ratio for the imputation year is calculated with actual data. If a manual ratio is inserted, the aggregate export is multiplied by this ratio and the result is set as processed production estimate and the ratio is the manual ratio inserted. Afterwards, flags are inserted next to each figure and column and row names are set.
 
 ```
 #-- Export approach function ----
@@ -3152,7 +3153,7 @@ primaryprod_imputation1 <- function(commodityDB, globalProduction, procprod, # D
 }
 
 ```
-As the one for the export approach, the second function of the primary production approach aims to build the second reactive table in the primary production approach tab. First of all the data table produced in the previous function (`primaryprod_imputation1`) are aggregated by: "geographicAreaM49_fi", "timePointYears", "measuredElement", "Scheda", "Value_ProcessedProd", "flagObservationStatus_ProcessedProd", "flagMethod_ProcessedProd". When considering primary production, along with the '`Selection`' variable there is also the '`Ratio`' variable to consider. This last variable allows for the primary production of a species to be split among different products. As with the `export_imputation` function the ratios, the average values and the estimated values are calculated and the table is built with flags.
+As the one for the export approach, the second function of the primary production approach aims to build the second reactive table in the primary production approach tab. First of all, the data table produced in the previous function (`primaryprod_imputation1`) is aggregated by: "geographicAreaM49_fi", "timePointYears", "measuredElement", "Scheda", "Value_ProcessedProd", "flagObservationStatus_ProcessedProd", "flagMethod_ProcessedProd". When considering primary production, along with the '`Selection`' variable, there is also the '`Ratio`' variable to consider. This last variable allows for the primary production of a species to be split among different products. As with the `export_imputation` function, the ratios, the average values and the estimated values are calculated and the table is built with flags.
 
 ```
 ##-- Second function primary production approach ----
@@ -3277,7 +3278,7 @@ primaryprod_imputation2 <- function(full_prod, cdb_prod_isscaap, # Datasets
 
 ```
 
-The following functions computes the ensemble method figures for the missing value chosen. First some operations on the processed production data table are performed and the imputation parameters are prepared so to suit the `imputeVariable` function. Then the `removeInfo` function identifies the series that have to be imputed and, conversely, those that do not contain enough information. The `imputeVariable` function is then run and the value is returned by the function. 
+The following functions computes the ensemble method figure for the missing value chosen. First some operations on the processed production data table are performed and the imputation parameters are prepared so to suit the `imputeVariable` function; then, the `removeInfo` function identifies the series that have to be imputed; eventually the `imputeVariable` function is run and the value is returned by the function. 
 
 ```
 ##-- Ensemble model imputation method ----
