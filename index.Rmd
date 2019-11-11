@@ -161,6 +161,10 @@ Data tables are mainly used to store information helping R modules to output ana
 
 - **ISSCFC Mapping - Primary Prod Approach** (SWS identifier: `isscfc_mapping_prod_approach`): mapping table used to apply an imputation method approach based on primary production data.
 
+- **ASFIS - ICS - ISSCAAP map** (SWS identifier: `map_asfis`): mapping connecting the Asfis alphacodes to ISSCAAP groups.
+
+- **SUA item mapping table** (SWS identifier: `fishery_item_mapping`): mapping connecting the ISSCFC codes to ISSCAAP groups.
+
 Datasets in the SWS are interchangeably used as module inputs/outputs and are composed by dimensions (aka reference/code lists). Because SWS datasets contain code lists following international standards as dimensions, there is little space for variation of dimension names across SWS datasets for the sake of standardization. In the FIAS - SWS framework for processed production, the dataset is: 
 
 - **Commodities (total)** (SWS identifier: `commodities_total`): containing all Fishery commodities from production and trade data.
