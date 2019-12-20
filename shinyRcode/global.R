@@ -4,6 +4,7 @@
               .libPaths()))
 
 suppressMessages({
+library(dplyr)
 library(data.table)
 library(DT)
 library(faosws)
@@ -21,10 +22,28 @@ source('external_functions.R')
 
 #-- Token QA ----
 
-R_SWS_SHARE_PATH = "Z:"
-SetClientFiles("/srv/shiny-server/shinyFisheriesCommodities")
-GetTestEnvironment(baseUrl = "https://hqlqasws1.hq.un.fao.org:8181/sws",
-                   token = "04fc0c00-a4f3-4640-bee6-49a906863095")
+#-- Token QA ----
+if(CheckDebug()){
+  
+  library(faoswsModules)
+  SETTINGS = ReadSettings("sws.yml")
+  
+  ## If you're not on the system, your settings will overwrite any others
+  R_SWS_SHARE_PATH = SETTINGS[["share"]]
+  
+  ## Define where your certificates are stored
+  SetClientFiles(SETTINGS[["certdir"]])
+  
+  ## Get session information from SWS. Token must be obtained from web interface
+  GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+                     token = '27ded447-71ec-413b-bcd4-87669ac20c70')
+  
+}
+
+# R_SWS_SHARE_PATH = "Z:"
+# SetClientFiles("/srv/shiny-server/shinyFisheriesCommodities")
+# GetTestEnvironment(baseUrl = "https://hqlqasws1.hq.un.fao.org:8181/sws",
+#                    token = "04fc0c00-a4f3-4640-bee6-49a906863095")
 
 #-- Get the M49 countries from dimension ----
 
@@ -36,7 +55,7 @@ M49$description <- replaceforeignchars(M49$description)
 country_input <-  sort(sprintf("%s - %s", M49$description, as.numeric(M49$code)))
 country_input <- data.table(label = country_input, code = sub(" ", "", sub(".*-", "", 
                                                                            country_input)))
-country_input <- rbind(data.table(label = "Select country", code = "-"), country_input)
+country_input <- rbind(data.table(label = "", code = "-"), country_input)
 
 #-- Mappings ----
 

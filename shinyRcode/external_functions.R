@@ -1,8 +1,43 @@
+#-- myAggregate by Thomas Berger to aggregate Capture and Aqualculture data ----
+
+myAggregate<- function(quantity, flag) {
+  if (length(quantity) == 1) {
+    # for a single observation, just use the flag
+    return (as.character(flag))
+  }
+  
+  # for more than 1 observation: aggregate by flags
+  agg1 <- aggregate(quantity, by=list(flag), FUN=sum)
+  # agg1 has 2 variables: group, num
+  
+  # order by quantity, largest quantity first
+  agg1 <- agg1[ order(-agg1[,2]), ]
+  
+  
+  # if the total quantity>0 and the flag of te largest value is 'E' or '' then use it
+  if (sum(quantity)>0  & (agg1[1,1] == "E" | agg1[1,1] == "" | agg1[1,1] == "I")) {
+    return (as.character(agg1[1,1]))
+  }
+  
+  # if there is a single "N" use it (takes precedence)
+  if (nrow(agg1[agg1[,1] == "N",])>0) {
+    return("N")
+  }
+  
+  # if there is one "M" use it
+  if (nrow(agg1[agg1[,1] == "M",])>0) {
+    return("M")
+  }
+  
+  # otherwise it's ' '
+  return("")
+}
+
+
 #-- expandYear function ----
 # This function is sourced from this loca file instead of the proper package faoswsProcessing
 # because of recent updates not yet included in the CRAN version of the faoswsProcessing package.
 # This file should disappear once faoswsProcessing is up-to-date in the CRAN
-
 expandYear <- function (data, areaVar = "geographicAreaM49", elementVar = "measuredElement", 
                         itemVar = "measuredItemCPC", yearVar = "timePointYears", 
                         valueVar = "Value", obsflagVar = "flagObservationStatus", 

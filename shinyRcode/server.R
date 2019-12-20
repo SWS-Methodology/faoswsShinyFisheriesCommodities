@@ -436,25 +436,127 @@ function(input, output) {
     sel_country <- country_input[country_input$label == input$btn_country, code]
     sel_years <- input$btn_start_year:input$btn_year
     sel_isscfc <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, isscfc]
-    
+
     if(input$btn_commodity != ""){
       ## Get Global production
-      KeyGlobal <- DatasetKey(domain = "Fisheries", dataset = "fi_global_production", dimensions = list(
-        geographicAreaM49_fi = Dimension(name = "geographicAreaM49_fi", keys = sel_country), # GetCodeList("Fisheries", "fi_global_production","geographicAreaM49_fi" )[,code]),
-        fisheriesAsfis = Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "fi_global_production","fisheriesAsfis" )[,code]),
-        fisheriesCatchArea = Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "fi_global_production","fisheriesCatchArea" )[,code]),
-        measuredElement = Dimension(name = "measuredElement", keys = c("FI_001")),
-        timePointYears = Dimension(name = "timePointYears", keys =  as.character(sel_years) )))
+      # KeyGlobal <- DatasetKey(domain = "Fisheries", dataset = "fi_global_production", dimensions = list(
+      #   geographicAreaM49_fi = Dimension(name = "geographicAreaM49_fi", keys = sel_country), # GetCodeList("Fisheries", "fi_global_production","geographicAreaM49_fi" )[,code]),
+      #   fisheriesAsfis = Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "fi_global_production","fisheriesAsfis" )[,code]),
+      #   fisheriesCatchArea = Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "fi_global_production","fisheriesCatchArea" )[,code]),
+      #   measuredElement = Dimension(name = "measuredElement", keys = c("FI_001")),
+      #   timePointYears = Dimension(name = "timePointYears", keys =  as.character(sel_years) )))
+      
+      # Now getting capture and aquaculture frome production and merging
+      
       withProgress(message = 'Global production data loading in progress',
                    value = 0, {
                      
-                     Sys.sleep(0.25)
-                     incProgress(0.25)
+                     Sys.sleep(0.15)
+                     incProgress(0.15)
+                  
+                     dim1 = Dimension(name = "geographicAreaM49_fi", keys = sel_country) # GetCodeList("Fisheries", "aqua", "geographicAreaM49_fi")$code)
+                     dim2 = Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "aqua", "fisheriesAsfis")$code)
+                     dim3 = Dimension(name = "fisheriesProductionSource", keys = GetCodeList("Fisheries", "aqua", "fisheriesProductionSource")$code)
+                     dim4 = Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "aqua", "fisheriesCatchArea")$code)
+                     dim5 = Dimension(name = "measuredElement", keys = "FI_001")
+                     dim6 = Dimension(name = "timePointYears", keys = as.character(sel_years)) # GetCodeList("Fisheries", "aqua", "timePointYears")$code) 
+                     key1 <- DatasetKey(domain = "Fisheries", dataset = "aqua", dimensions = list(dim1, dim2, dim3, dim4, dim5, dim6))
+                     aqua_quantity <- GetData(key1)
                      
-                     globalProduction <- GetData(KeyGlobal)
-                     Sys.sleep(0.75)
+                     Sys.sleep(0.35)
+                     incProgress(0.35)
+                     #[1] "geographicAreaM49_fi" "fisheriesAsfis"       "fisheriesCatchArea"   "measuredElement"     
+                     #[5] "timePointYears"   
+                     dim1 = Dimension(name = "geographicAreaM49_fi", keys = sel_country) #  GetCodeList("Fisheries", "capture", "geographicAreaM49_fi")$code)
+                     dim2 = Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "capture", "fisheriesAsfis")$code)
+                     dim4 = Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "capture", "fisheriesCatchArea")$code)
+                     dim5 = Dimension(name = "measuredElement", keys = "FI_001")
+                     dim6 = Dimension(name = "timePointYears", keys = as.character(sel_years)) # GetCodeList("Fisheries", "aqua", "timePointYears")$code) 
+                     key2 <- DatasetKey(domain = "Fisheries", dataset = "capture", dimensions = list(dim1, dim2, dim4, dim5, dim6))
+                     cap_quantity <- GetData(key2)
+                     
+                     Sys.sleep(0.55)
+                     incProgress(0.55)
+                     
+                     dim5 = Dimension(name = "measuredElement", keys = "FI_002")
+                     key2 <- DatasetKey(domain = "Fisheries", dataset = "capture", dimensions = list(dim1, dim2, dim4, dim5, dim6))
+                     cap_numbers <- GetData(key2)
+                     
+                     Sys.sleep(0.65)
+                     incProgress(0.65)
+                     
+                     dim1 = Dimension(name = "geographicAreaM49_fi", keys = GetCodeList("Fisheries", "fi_global_production", "geographicAreaM49_fi")$code)
+                     dim2 = Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "fi_global_production", "fisheriesAsfis")$code)
+                     dim4 = Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "fi_global_production", "fisheriesCatchArea")$code)
+                     dim5 = Dimension(name = "measuredElement", keys = c("FI_001", "FI_002"))
+                     dim6 = Dimension(name = "timePointYears", keys = GetCodeList("Fisheries", "fi_global_production", "timePointYears")$code) 
+                     key1 <- DatasetKey(domain = "Fisheries", dataset = "fi_global_production", dimensions = list(dim1, dim2, dim4, dim5, dim6))
+                     globalprod <- GetData(key1)
+                     
+                     Sys.sleep(0.25)
+                     incProgress(0.85)
+                     
+                     aqua_quantity$flagCurrency <- NULL
+                     aqua_quantity$fisheriesProductionSource <- NULL
+                     
+                     #########################################################################################################
+                     # calculate Global Production (without source)
+                     #########################################################################################################
+                     
+                     globalprod_new <- rbind (aqua_quantity, cap_quantity) 
+                     globalprod_new <- rbind (globalprod_new, cap_numbers)
+                     
+                     Sys.sleep(0.25)
                      incProgress(0.95)
+                     
                    })
+                     
+                   withProgress(message = 'Global production update',
+                                value = 0, {
+                                  
+                                  Sys.sleep(0.10)
+                                  incProgress(0.15)
+                     globalprod_new <- globalprod_new %>% 
+                       group_by(geographicAreaM49_fi,fisheriesAsfis,fisheriesCatchArea,measuredElement,timePointYears) %>% 
+                       summarise(Flag=myAggregate(Value,flagObservationStatus), Quantity=sum(Value))
+                     globalprod_new <- globalprod_new %>% ungroup()
+                     
+                     colnames(globalprod_new)[colnames(globalprod_new)=="Quantity"]  <- "Value"
+                     colnames(globalprod_new)[colnames(globalprod_new)=="Flag"]  <- "flagObservationStatus"
+                     globalprod_new$flagMethod <- ""
+                     
+                     # for aggregated Values>0,status=N is no longer correct
+                     globalprod_new$flagObservationStatus[which(globalprod_new$Value>0 & globalprod_new$flagObservationStatus=='N')] <- ''
+                     Sys.sleep(0.10)
+                     incProgress(0.35)
+                     # order columns
+                     globalprod_new <- globalprod_new[,c('geographicAreaM49_fi','fisheriesAsfis','fisheriesCatchArea','measuredElement','timePointYears','Value','flagObservationStatus','flagMethod') ]
+                     
+                     # remove grouping
+                     globalprod_new <- as.data.table(globalprod_new)
+                     
+                     # wipe existing values
+                     dat <- merge(globalprod[, 1:6, with = FALSE], globalprod_new[, 1:6, , with = FALSE], by = c('geographicAreaM49_fi','fisheriesAsfis','fisheriesCatchArea','measuredElement','timePointYears'), all = TRUE, suffixes = c("_1", ""))
+                     wipe_value <- dat[is.na(dat$Value),]
+                     wipe_value$Value_1  <- NULL
+                     wipe_value$flagObservationStatus <- NA
+                     wipe_value$flagMethod <- NA
+                     wipe_value$flagCurrency <- NULL
+                     wipe_value <- as.data.table(wipe_value)
+                     Sys.sleep(0.10)
+                     incProgress(0.55)
+                     # write NA values back to SWS in order to wipe existing data
+                     if (nrow(wipe_value) > 0) {
+                       globalprod_new <- rbind (globalprod_new, wipe_value)
+                     }
+                     
+                     globalprod_new <- as.data.table(globalprod_new)
+                     globalProduction <- globalprod_new
+                     ########################
+                     # globalProduction <- GetData(KeyGlobal)
+                     Sys.sleep(0.10)
+                     incProgress(0.75)
+                   
       
       # Convert flags into ordinal factor so that simple aggregation is possible
       # The function aggregateObservationFlag is too slow so flag are transformed into factors
@@ -470,15 +572,23 @@ function(input, output) {
                                                 "fisheriesAsfis",
                                                 "measuredElement",
                                                 "timePointYears")]
-      
+      Sys.sleep(0.10)
+      incProgress(0.95)
       setnames(globalProduction, 
                c("ValueAggr", "flagObservationStatusAggr", "flagMethodAggr"),
                c("Value", "flagObservationStatus", "flagMethod"))
       
       globalProduction[ , c("measuredElement"):=NULL]
+                  
+      })
       
-      ## Get export mapping table
+      withProgress(message = 'Commodity data loading in progress',
+                                value = 0, {
+                                  ## Get export mapping table
       whereMap <- paste("geographic_area_m49_fi = '", sel_country, "' ", sep = "") 
+      
+      Sys.sleep(0.10)
+      incProgress(0.15)
       
       map_prod_exp0 <- ReadDatatable('isscfc_mapping_export_approach', readOnly = FALSE, where = whereMap)
       map_prod_exp <- copy(map_prod_exp0)
@@ -500,26 +610,39 @@ function(input, output) {
   
       ##Get Commodity Data
       
-      onlyExport <- '5910'
-      commodity2load <- as.vector(map_prod_exp[measuredItemISSCFC == sel_isscfc, ]$measuredItemISSCFC_exp)
+      onlyExport <- c('5910', '5912')
+      # commodity2load <- as.vector(map_prod_exp[measuredItemISSCFC == sel_isscfc, ]$measuredItemISSCFC_exp)
+      # commodity2load <- as.vector(map_prod_exp$measuredItemISSCFC_exp)
+      Sys.sleep(0.10)
+      incProgress(0.25)
       
       KeyComm <- DatasetKey(domain = "Fisheries Commodities", dataset = "commodities_total", dimensions = list(
         geographicAreaM49_fi = Dimension(name = "geographicAreaM49_fi", keys = sel_country), 
-        measuredItemISSCFC = Dimension(name = "measuredItemISSCFC", keys = commodity2load),
+        measuredItemISSCFC = Dimension(name = "measuredItemISSCFC", keys =  GetCodeList("FisheriesCommodities", 
+                                                                                        "commodities_total",
+                                                                                        "measuredItemISSCFC")$code ),#commodity2load),
         measuredElement = Dimension(name = "measuredElement", keys = onlyExport),
         timePointYears = Dimension(name = "timePointYears", keys = as.character(sel_years) ))) 
-      withProgress(message = 'Commodity data loading in progress',
-                   value = 0, {
+      
                      
-                     Sys.sleep(0.25)
-                     incProgress(0.25)
-                     
+                     Sys.sleep(0.10)
+                     incProgress(0.4)
+                     6
                      commodityDB <- GetData(KeyComm)
                      Sys.sleep(0.75)
                      incProgress(0.95)
                    })
       
       commodityDB$flagObservationStatus <- factor(commodityDB$flagObservationStatus, levels = c('M', 'O', 'N', '', 'X', 'T', 'E', 'I'), ordered = TRUE)
+      
+      
+      commodityDB <- commodityDB[ , list(Value = sum(Value, na.rm = TRUE),
+                                         measuredElement = '5910',
+                                         flagObservationStatus = max(flagObservationStatus),
+                                         flagMethod = "-"),
+                                  by=c("geographicAreaM49_fi",
+                                       "measuredItemISSCFC",
+                                       "timePointYears")]
       
       # Save into the rv_data object so to recall it when needed
       rv_data$globalProduction <- globalProduction
@@ -563,7 +686,9 @@ function(input, output) {
     
     ## Checks
     # Select export commodities linked to the selected commodity to check if there are export data available 
-    commodities2check <- map_prod_exp[ start_year < input$btn_year &
+    map_prod_exp_mod <- copy(map_prod_exp)
+    map_prod_exp_mod <- map_prod_exp_mod[ end_year == 'LAST', end_year := '9999']
+    commodities2check <- map_prod_exp_mod[ start_year <= input$btn_year & input$btn_year < end_year &
                                          measuredItemISSCFC %in% sel_isscfc, ]
     
     commodities2check <-  commodities2check[start_year == max(as.numeric(start_year))]$measuredItemISSCFC_exp
@@ -598,6 +723,7 @@ function(input, output) {
     
     # Mapping chunk needed
     map_prod_exp_filtered <- map_prod_exp[end_year == "LAST" & measuredItemISSCFC %in% sel_isscfc, ]
+    
     # Delete unnecessary columns
     map_prod_exp_filtered[ , c('__id', '__ts') := NULL]
     
@@ -843,6 +969,11 @@ function(input, output) {
       )
     )
     
+    validate(
+      need (all(!is.na(tab_updated[ , .(type, measuredItemISSCFC_exp, timePointYears, measuredItemISSCFC)])),
+            "One of the key mapping information is missing (type, measuredItemISSCFC_exp, timePointYears, measuredItemISSCFC)."
+      )
+    )
     
     # # Fill missing columns and update start and end year. Start year is the year of imputation and end_year is last by default
     # tab_updated <- tab_updated[, c("start_year", "end_year"):= list(input$btn_year, 'LAST')]
@@ -894,13 +1025,14 @@ function(input, output) {
     # Prepare table for plot
     export_out2 <- export_out[, -which(names(export_out) == "Flag"), with = FALSE]
     export_out_aux <- melt(export_out2, 1, variable.name = 'Year')
-    
+
     suppressWarnings(export_out_aux[, Year := as.numeric(as.character(Year))])
     suppressWarnings(export_out_aux[, value := as.numeric(as.character(value))])
     
     ggplot(data = export_out_aux[Stats != 'Ratio'], aes(x = Year, y = value)) +
       geom_line(aes(group = Stats, color = Stats), size = 1) +
       geom_point(aes(color = Stats), size = 2) +
+      scale_color_manual(values=c("blue","red")) +
       labs(y = 'Quantity (in tonnes)', color = '', title = 'Export approach imputation') +
       theme_minimal() +
       theme(legend.position = 'bottom')
@@ -1538,6 +1670,7 @@ function(input, output) {
     ggplot(data = prim_prod_out_aux[Stats != 'Ratio'], aes(x = Year, y = value)) +
       geom_line(aes(group = Stats, color = Stats), size = 1) +
       geom_point(aes(color = Stats), size = 2) +
+      scale_color_manual(values=c("blue","red")) +
       labs(y = 'Quantity (in tonnes)', color = '', title = 'Primary production approach imputation') +
       theme_minimal() +
       theme(legend.position = 'bottom')
@@ -2190,7 +2323,7 @@ function(input, output) {
                                    "id_isscfc", "measureditemisscfc", "id_nationalcode"), 
                             all = TRUE)
     newImputedData$timepointyears <- as.character(newImputedData$timepointyears)
-    newImputedData <- newImputedData[flagMethod != 'u']
+    newImputedData <- newImputedData[flagmethod != 'u']
     # needed as for some reason the merge is not working properly
     setkey(newImputedData)
     newImputedData <- unique(newImputedData)
