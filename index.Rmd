@@ -119,10 +119,10 @@ Data also come with other information that will be listed in the ``processed_pro
 Figure \@ref(fig:WFpp) represents the essential points of the overall workflow for processed production data.
 
 ```{r  WFpp, echo=FALSE, out.width="100%", fig.cap=' Workflow for processed production data.'}
-knitr::include_graphics("img/WorkflowPP.png")
+knitr::include_graphics("img/WorkflowPP1.png")
 ```
 
-The first part of data collection and data entry is entirely performed by FIAS unit; the second part of data imputation and validation uses the 'ad-hoc' Shiny application described in paragraph \@ref(shiny); the third part is an R-plugin to be run on the SWS.
+The first part of data collection and data entry is entirely performed by FIAS unit until data reach the first SWS datatable (questionnaire datatable); the second part of data imputation and validation uses two R-plugins, along with manual intervetion, to avoid unwanted overwriting in the raw datatable and an 'ad-hoc' Shiny application described in paragraph \@ref(shiny); the third part of data aggregation consists of an R-plugin to be run on the SWS.
 
 ## **SWS resources**  {-}
 
@@ -153,13 +153,17 @@ Code lists, also called reference lists in SWS parlance, are the dimensions maki
 
 Data tables are mainly used to store information helping R modules to output analytical results. Information in data tables can be of a number of types. For example, conversion factors, arithmetic formulas, mapping between flags, mapping between international classifications, etc. Exceptionally, data are stored in data tables because of the initial codelist used by the FIAS unit to collect data. In SWS hierarchy, all data tables reside in a given statistical domain. In the FIAS - SWS migration framework, the data tables are in **Fisheries Commodities** domain. Below is a list of current available and filled data tables in the Fisheries Commodities domain:
 
-- **processed_prod_national_detail_raw** (SWS identifier: `processed_prod_national_detail_raw`): where data are initially uploaded by the FIAS unit.
+- **Comm: quest processed_prod_national_detail** (SWS identifier: `processed_prod_national_detail_quest`): where questionnaire data are initially uploaded by the FIAS unit into the SWS.
 
-- **processed_prod_national_detail_imputed** (SWS identifier: `processed_prod_national_detail_imputed`): where raw (data from questionnaires) and estimated data are stored before being aggregated into the Commodity dataset.
+- **Comm: raw processed_prod_national_detail** (SWS identifier: `processed_prod_national_detail_raw`): containing all the older time series plus the reviewed questionnaire data.
 
-- **ISSCFC Mapping - Export approach** (SWS identifier: `isscfc_mapping_export_approach`): mapping table used to apply an imputation method approach based on export data.
+- **Comm: compare processed_prod_national_detail** (SWS identifier: `processed_prod_national_detail_compare`): working datatable where new or conflictign data between the questionnaire and the raw datatable are reviewed by the user.
 
-- **ISSCFC Mapping - Primary Prod Approach** (SWS identifier: `isscfc_mapping_prod_approach`): mapping table used to apply an imputation method approach based on primary production data.
+- **Comm: imputed processed_prod_national_detail** (SWS identifier: `processed_prod_national_detail_imputed`): where raw (data from questionnaires) and estimated data are stored before being aggregated into the Commodity dataset.
+
+- **Comm: ISSCFC Mapping - Export approach** (SWS identifier: `isscfc_mapping_export_approach`): mapping table used to apply an imputation method approach based on export data.
+
+- **Comm: ISSCFC Mapping - Primary Prod Approach** (SWS identifier: `isscfc_mapping_prod_approach`): mapping table used to apply an imputation method approach based on primary production data.
 
 - **ASFIS - ICS - ISSCAAP map** (SWS identifier: `map_asfis`): mapping connecting the Asfis alphacodes to ISSCAAP groups.
 

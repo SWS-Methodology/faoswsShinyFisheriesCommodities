@@ -1,0 +1,240 @@
+# **The raw processed production update R code** {#Rawcode}
+
+The following paragraphs contain the code of the two plugin used to compare the questionnaire and raw data tables ('`processed_prod_national_detail_quest`' and '`processed_prod_national_detail_raw`') and to update the raw data table.
+
+## **Comparison plugin** ('`fi_comparison_quest_raw`')
+
+First of all, the comparison plugin checks the first parameter (Type of comparison). If the comparison is at country level, the plugin checks if country code inserted as second parameter (Country code) is a valid M49 code.
+The questionnaire and the raw data tables are pulled fro the SWS, the whole tables or only the chosen country depending on the parameter, and merged in a new object. Note only years contained in the questionnaire table are selected from the raw table.
+In this new object ('*updating*' in the code), two additional columns are created ('validate_quest' and 'validate_raw') where a boolean variable (0,1) denotes if the questionnaire or the old raw value has to be kept. By default value only present in one of the two datatables are accepted by default, whereas conflicting values have to be checked and chosen manually by the user once the plugin has finished running.
+The resulting table is saved into the '`processed_prod_national_detail_compare`' data table. An email is sent to the user at the end of the plugin.
+
+
+```
+##' # National processed production fishery data update from questionnaires
+##'
+##' **Author: Charlotte Taglioni**
+##'
+##' **Description:**
+##'
+##' This module is designed to read data from the questionnaire and update the datatable 
+##' 'processed_prod_national_detail_raw' the Commodity shiny app read data from. 
+##' 
+##' **Inputs:**
+##'
+##' * Processed prodution datable: processed_prod_national_detail_quest, processed_prod_national_detail_raw
+
+
+
+## Load the library
+suppressMessages({
+  library(faosws)
+  library(sendmailR)
+  library(data.table)
+})
+
+
+# Token QA
+if(CheckDebug()){
+  
+  library(faoswsModules)
+  SETTINGS = ReadSettings("sws.yml")
+  
+  ## If you're not on the system, your settings will overwrite any others
+  R_SWS_SHARE_PATH = SETTINGS[["share"]]
+  
+  ## Define where your certificates are stored
+  SetClientFiles(SETTINGS[["certdir"]])
+  
+  ## Get session information from SWS. Token must be obtained from web interface
+  GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+                     token = SETTINGS[["token"]])
+  
+}
+
+type <- swsContext.computationParams$type # Whole, country
+
+if(type == 'country'){
+  country <- swsContext.computationParams$country # M49 code
+  country <- as.character(country)
+  #Take away spaces (just in case)
+  country <- gsub(' ', '', country)
+  M49 <- GetCodeList("FisheriesCommodities", "commodities_total","geographicAreaM49_fi" )[type == 'country',code]
+  if(!country %in% M49){
+    stop('Invalid country code. Please insert a valid M49 code.')
+  }
+  where <- paste("geographicaream49_fi = '", country, "'", sep = '')
+  quest <- ReadDatatable('processed_prod_national_detail_quest', where = where)
+  raw <- ReadDatatable('processed_prod_national_detail_raw', where = where)
+  table2erase <- ReadDatatable('processed_prod_national_detail_compare', where = where, readOnly = FALSE)
+} else {
+  quest <- ReadDatatable('processed_prod_national_detail_quest')
+  raw <- ReadDatatable('processed_prod_national_detail_raw')
+  table2erase <- ReadDatatable('processed_prod_national_detail_compare', readOnly = FALSE)
+  }
+
+questyear <- unique(quest$timepointyears)
+raw <- raw[timepointyears %in% questyear]
+
+updating <- merge(quest, raw, by = c("geographicaream49_fi",
+                                     "measuredelement",
+                                     "timepointyears",  
+                                     "id_isscfc",            
+                                     "measureditemisscfc",
+                                     "id_nationalcode"), 
+                  all = TRUE, 
+                  suffixes = c('_quest', '_raw'))
+
+# For new data questionnaire data are inserted by default
+newdata <- updating[is.na(quantitymt_raw)]
+newdata <- newdata[ , c('validate_quest', 'validate_raw') := list(1,0)]
+
+# For old data not in the questionnaire anymore they are inserted by default
+olddata <- updating[is.na(quantitymt_quest)]
+olddata <- olddata[ , c('validate_quest', 'validate_raw') := list(0,1)]
+
+# For changed data the choice has to be made
+changes <- updating[quantitymt_quest != quantitymt_raw]
+changes <- changes[ , c('validate_quest', 'validate_raw') := list(0,0)]
+
+# Put together the three tables
+tocheck <- rbind(newdata, olddata)
+tocheck <- rbind(tocheck, changes)
+
+ordercolumns <- c(names(tocheck)[1:6], 
+                  names(tocheck[ , 7:ncol(tocheck), with =FALSE])[order(names(tocheck)[7:length(names(tocheck))])])
+
+setcolorder(tocheck, ordercolumns)
+
+# Save into the comparison table
+changeset <- Changeset('processed_prod_national_detail_compare')
+AddDeletions(changeset, table2erase)
+Finalise(changeset)
+
+changeset <- Changeset('processed_prod_national_detail_compare')
+AddInsertions(changeset, tocheck)
+Finalise(changeset)
+
+## Initiate email
+from = "sws@fao.org"
+to = swsContext.userEmail
+subject = "Compare national processed production datatable updated"
+body = "Data have been properly updated. 
+              Please check 'Comm: processed_prod_national_detail_compare' datatable 
+              and choose what data to accept."
+
+sendmail(from = from, to = to, subject = subject, msg = body)
+
+```
+
+## **Update plugin** (‘`fi_update_raw_dt`’)
+
+The plugin to update the raw data table ('`processed_prod_national_detail_raw`') has the same parameters as the compare plugin. It pulls data from the compare data table ('`processed_prod_national_detail_compare`') and copy the selected columns into the raw table. Columns coming from the questionnaire data table have the suffix '*_quest*' whereas those coming from the raw data table have the suffix '*_raw*'. Once the replacement is done the raw data table is updated and saved. An email is sent to the user at the end of the plugin.
+
+```
+##' # National processed production fishery data update
+##'
+##' **Author: Charlotte Taglioni**
+##'
+##' **Description:**
+##'
+##' This module is designed to read data from the comparison datatable where 
+##' modified data have been approved and update the raw datatable 
+##' 'processed_prod_national_detail_raw' the Commodity shiny app read data from. 
+##' 
+##' **Inputs:**
+##'
+##' * Processed prodution datable: processed_prod_national_detail_compare,
+##'  processed_prod_national_detail_raw
+
+
+
+## Load the library
+suppressMessages({
+  library(faosws)
+  library(sendmailR)
+  library(data.table)
+})
+
+
+# Token QA
+if(CheckDebug()){
+  
+  library(faoswsModules)
+  SETTINGS = ReadSettings("sws.yml")
+  
+  ## If you're not on the system, your settings will overwrite any others
+  R_SWS_SHARE_PATH = SETTINGS[["share"]]
+  
+  ## Define where your certificates are stored
+  SetClientFiles(SETTINGS[["certdir"]])
+  
+  ## Get session information from SWS. Token must be obtained from web interface
+  GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+                     token = SETTINGS[["token"]])
+  
+}
+
+type <- swsContext.computationParams$type # Whole, country
+
+if(type == 'country'){
+  country <- swsContext.computationParams$country # M49 code
+  country <- as.character(country)
+  #Take away spaces (just in case)
+  country <- gsub(' ', '', country)
+  M49 <- GetCodeList("FisheriesCommodities", "commodities_total","geographicAreaM49_fi" )[type == 'country',code]
+  if(!country %in% M49){
+    stop('Invalid country code. Please insert a valid M49 code.')
+  }
+  where <- paste("geographicaream49_fi = '", country, "'", sep = '')
+  raw <- ReadDatatable('processed_prod_national_detail_raw', where = where, readOnly = FALSE)
+  compare <- ReadDatatable('processed_prod_national_detail_compare', where = where)
+} else {
+  raw <- ReadDatatable('processed_prod_national_detail_raw', readOnly = FALSE)
+  compare <- ReadDatatable('processed_prod_national_detail_compare')
+}
+
+updating <- merge(compare, raw, by = c("geographicaream49_fi",
+                                     "measuredelement",
+                                     "timepointyears",  
+                                     "id_isscfc",            
+                                     "measureditemisscfc",
+                                     "id_nationalcode"),
+                  all.x = TRUE)
+
+apply(updating[ , -grepl('quantity', names(updating)), with = F], 2, as.character)
+
+col2save_raw <- names(updating)[grepl('_raw', names(updating))]
+col2update_raw <- gsub('_raw', '', col2save_raw)
+
+updating[validate_raw == TRUE, 
+         col2update_raw := updating[validate_raw == TRUE, 
+                                    col2save_raw, with = FALSE], 
+         with = FALSE]
+
+col2save_quest <- names(updating)[grepl('_quest', names(updating))]
+col2update_quest <- gsub('_quest', '', col2save_quest)
+
+updating[validate_quest == TRUE, 
+         col2update_quest := updating[validate_quest == TRUE, 
+                                    col2save_quest, with = FALSE], 
+         with = FALSE]
+updating[ , validate :=NULL]
+updating <- updating[, names(updating)[!grepl(c('_quest|_raw'), names(updating))], with = FALSE]
+
+# Save into the comparison table
+changeset <- Changeset('processed_prod_national_detail_raw')
+AddModifications(changeset, updating)
+Finalise(changeset)
+
+## Initiate email
+from = "sws@fao.org"
+to = swsContext.userEmail
+subject = "Raw national processed production datatable updated"
+body = "Please check 'Comm: processed_prod_national_detail_raw' datatable to ensure the datatable has been properly updated."
+
+sendmail(from = from, to = to, subject = subject, msg = body)
+
+```
+
+When the two plugins have run the '`processed_prod_national_detail_raw`' data table is ready to be used by the shiny app.

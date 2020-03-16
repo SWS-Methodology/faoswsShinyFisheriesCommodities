@@ -12,8 +12,7 @@ fluidPage(
                        uiOutput('btn_year'),
                        uiOutput('btn_start_year'),
                        uiOutput('btn_missing'),
-                       uiOutput('btn_commodity'),
-                       width = 3
+                       uiOutput('btn_commodity')
                        )
                      ),
     
@@ -88,7 +87,6 @@ fluidPage(
                  fluidPage(
                    fluidRow(
                      column(width = 8, 
-                            uiOutput('out_btn_manual_remark'),
                             plotOutput('gg_methods')),
                      column(width = 6, 
                             actionBttn('btn_imputation', label = 'Impute value',
@@ -97,7 +95,7 @@ fluidPage(
                      )
                    )
                  ),
-        tabPanel("Save Export Mapping", 
+        tabPanel("Check mapping export approach", 
                  br(),
                  actionBttn("save_export_mapping", 
                             label = "Save mapping in SWS",
@@ -107,7 +105,7 @@ fluidPage(
                  br(),
                  DT::dataTableOutput('check_export_mapping_data')
                  ),
-        tabPanel("Save Primary Prod. Mapping", 
+        tabPanel("Check mapping prod approach", 
                  br(),
                  actionBttn("save_prod_mapping", 
                             label = "Save mapping in SWS",
@@ -117,30 +115,12 @@ fluidPage(
                  br(),
                  DT::dataTableOutput('check_prod_mapping_data')
                  ),
-        ## Aggregates panel
-        tabPanel("Data aggregates", value = 'tot_isscfc',
-                 br(),
-                 selectInput(inputId = "btn_total", 
-                             label = 'Aggregation', 
-                             choices = c('', 
-                                         'Grand Total', 
-                                         'Yearbook Total', 
-                                         'Main groups', 
-                                         'ISSCFC Total'), 
-                             selected = NULL),
-                 br(),
-                 
-                 DT::dataTableOutput('aggregates_data'),
-                 br(),
-                 plotOutput('gg_tot_isscfc', width = '80%')
-                 
-        ),
         ## Tab with markdown file presenting the Shiny App
         tabPanel("About",value = "intro",
                  br(),
                  shiny::includeMarkdown("App_description.Rmd")
                  #withMathJax (includeHTML(rmarkdown::render('App_description.Rmd')))
-        )
+                 )
         )
       )
     )

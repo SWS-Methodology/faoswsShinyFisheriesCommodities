@@ -1,7 +1,7 @@
 # packages
  
- # .libPaths( c("/usr/local/lib64/R-3.1.2/library","/work/SWS_R_Share/shiny/Rlib/3.1",
- #              .libPaths()))
+ .libPaths( c("/usr/local/lib64/R-3.1.2/library","/work/SWS_R_Share/shiny/Rlib/3.1",
+              .libPaths()))
 
 suppressMessages({
 library(dplyr)
@@ -23,27 +23,27 @@ source('external_functions.R')
 #-- Token QA ----
 
 #-- Token QA ----
-if(CheckDebug()){
-  
-  library(faoswsModules)
-  SETTINGS = ReadSettings("sws.yml")
-  
-  ## If you're not on the system, your settings will overwrite any others
-  R_SWS_SHARE_PATH = SETTINGS[["share"]]
-  
-  ## Define where your certificates are stored
-  SetClientFiles(SETTINGS[["certdir"]])
-  
-  ## Get session information from SWS. Token must be obtained from web interface
-  GetTestEnvironment(baseUrl = SETTINGS[["server"]],
-                     token = '4e02c6cd-4a3d-47a0-afeb-4af07e9479f4')
-  
-}
+# if(CheckDebug()){
+#   
+#   library(faoswsModules)
+#   SETTINGS = ReadSettings("sws.yml")
+#   
+#   ## If you're not on the system, your settings will overwrite any others
+#   R_SWS_SHARE_PATH = SETTINGS[["share"]]
+#   
+#   ## Define where your certificates are stored
+#   SetClientFiles(SETTINGS[["certdir"]])
+#   
+#   ## Get session information from SWS. Token must be obtained from web interface
+#   GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+#                      token = '27ded447-71ec-413b-bcd4-87669ac20c70')
+#   
+# }
 
-# R_SWS_SHARE_PATH = "Z:"
-# SetClientFiles("/srv/shiny-server/shinyFisheriesCommodities")
-# GetTestEnvironment(baseUrl = "https://hqlqasws1.hq.un.fao.org:8181/sws",
-#                    token = "04fc0c00-a4f3-4640-bee6-49a906863095")
+R_SWS_SHARE_PATH = "Z:"
+SetClientFiles("/srv/shiny-server/shinyFisheriesCommodities")
+GetTestEnvironment(baseUrl = "https://hqlqasws1.hq.un.fao.org:8181/sws",
+                   token = "04fc0c00-a4f3-4640-bee6-49a906863095")
 
 #-- Get the M49 countries from dimension ----
 

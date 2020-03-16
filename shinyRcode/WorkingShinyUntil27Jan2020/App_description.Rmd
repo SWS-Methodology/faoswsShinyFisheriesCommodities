@@ -4,8 +4,6 @@ date: ' '
 output: html_fragment 
 ---
 
-Please note this is an old documentation only partially reliable! Apologies for any inconvenience!
-The documentation will be updated as soon as the final version of the app is validated.
 
 ## Application goal
 

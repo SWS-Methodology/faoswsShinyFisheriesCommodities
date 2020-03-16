@@ -1,0 +1,222 @@
+
+
+
+<div id="application-goal" class="section level2">
+<h2>Application goal</h2>
+<p>This online application based on <code>shiny</code> R package allows to visualize and impute fishery commodities production data at national (semi-standardized) level. An additional step, not included in the app is needed to obtain values at International Standard Statistical Classification of Fishery Commodities (ISSCFC) level.</p>
+<p>The application proposes four different imputation options: <strong>ensemble model</strong> based approach, <strong>export</strong> based approach, <strong>primary production</strong> based approach and the possibility to insert a manual value.</p>
+<p>The ensemble model option is directly provided by the application using an internal R function<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, whereas the three other method are almost entirely customizable by the user.</p>
+<p>Export and primary production based approaches are based on mappings either provided by the technical unit or automatically generated using the reference file YBKlang. These mappings are stored in the Statistical Working System (SWS) as data tables (ISSCFC Mapping - Export Approach, <em>isscfc_mapping_export_approach</em> and ISSCFC Mapping - Primary Prod Approach, <em>isscfc_mapping_prod_approach</em>). Given the semi-standardized nature of fishery production questionnaires, also production data are stored in data tables. The raw data are in data table <em>processed_prod_national_detail_raw</em> and data including imputed values are in data table <em>processed_prod_national_detail_imputed</em>.</p>
+<p>The process is performed imputing values by country, year and commodity. As first step, the user sets these parameters from the interactive menu on the left side and visualizes data accordingly. The user can review and customize the export and primary production based approaches modifying the mapping directly on the shiny tabs. Once the user has compared the different approaches and has chosen the imputation value, a validation button is available to update the dataset directly in the Statistical Working System (SWS).</p>
+</div>
+<div id="application-structure" class="section level2">
+<h2>Application structure</h2>
+<p>The application has six working tabs, all sharing the same side menu where the user select data, plus an ‘About’ tab. The tab names are: ‘National mapping’, ‘Export approach’, ‘Primary Prod. approach’, ‘Summary’, ‘Check export approach mapping’, ‘Check prod approach mapping’ and ‘About’.</p>
+<p>The side menu has six fields to help the user select the data:</p>
+<ol style="list-style-type: decimal">
+<li><p>Country: with this button the user can select what country to analyze. The list includes all the countries in the M49 classification codelist. Both the country name and code are shown and the user can look for the country taping either of them. If there are no data for the country selected then the user would not be able to select anything else and a message will appear suggesting to choose another country.</p></li>
+<li><p>Imputation year: the user can select the year of interest for the imputation. The years listed are those present in the ‘processed_prod_national_detail_raw’ datatable for the chosen country, sorted in descending order.</p></li>
+<li><p>Starting year: it is the year the user wants to check the time series from. This choice only has visualization purpose, changes in the mapping and imputations are only going to affect data from imputation year onward. It is possible that for the export or primary production approach there are no data (respectively from the Commodity database or from the Global Production dataset) available to connect to the series of interest. If this is the case, a message appears showing what years are available within the chosen period. For example, if the chosen period is 2010-2017 and data are missing for years 2010-2014 the app returns a message saying that the years available are only 2015 and 2016 (being 2017 the imputation year). By default, the first year available is the year before the previously selected imputation year.</p></li>
+<li><p>Missing: This button filters the commodities displayed in the last field (Commodity) and it has three options: “Yes”, “No”, “Not to impute”. If the user selects “Yes” then the commodities shown are commodities with missing data that have to be imputed. These data do not appear in the ‘processed_prod_national_detail_raw’ datatable but they are in the ‘processed_prod_national_detail_imputed’ datatable with flags (M, u). Please note that this flag is the one used by the system to identify and impute missing data. Flags change once imputation is validated. The missing data to be imputed are identified by an internal function that analises the information contained in the time series. If the series contains only zeros and missing values flagged as (M,-) or (O,-) then it is considered to contain no information for imputation. Otherwise, if information is available, the cell can be imputed and it is included in the list of missing values to impute with flags (M, u). The option “No” filters all the commodities with non missing figures, i.e. with an observation status flag different from ‘M’ or ‘O’. These data do not need imputation; nevertheless, the user can still review these data and assign a different value if necessary. The third option “Not to impute” has been introduced for the user to see all the series with flags (M, -) or (O, -) meaning that the series is either not active anymore or the datum selected is missing and is not to impute. As in the previous case, the user can still perform imputation and validation steps if necessary.</p></li>
+<li><p>Commodity: After the previous filters the user visualizes the list of commodities available according to the previous choices. Even if the imputation is at national commodity level, along with the scheda code, the list also shows the ISSCFC commodity code and label associated to the scheda.</p></li>
+</ol>
+<p>Once inputs are chosen, they should remain the same during the all procedure to ensure consistency and to avoid errors. Nevertheless, the user can change the input at any time if necessary.</p>
+<p>Note that the application keeps memory of all changes in the mapping, only if the ‘Update’ button is pressed. After updating the mapping the user can revise the final mappings in the tabs ‘Check export approach mapping’ and ‘Check prod approach mapping’. If the user is satisfied with the mappings and they respect the modifications then it is possible to apply the changes to the data table in the SWS pressing the button ‘Save mapping in SWS’. These two steps ensure the all changes to be consistent with the user’s choices. Instead, by pressing the button ‘Impute value’, the data imputation step directly changes the SWS datatable <em>processed_prod_national_detail_imputed</em>.</p>
+<div id="national-mapping-tab" class="section level3">
+<h3>‘National mapping’ tab</h3>
+<p>In this first tab the user visualizes the imputed datatable <em>processed_prod_national_detail_imputed</em> as it is in the SWS. In this way all commodities for the period selected can be checked along with the approach used during the previous years. This table cannot be modified and only has consultation purpose.</p>
+</div>
+<div id="export-approach-tab" class="section level3">
+<h3>‘Export approach’ tab</h3>
+<p>The imputation approach based on export data assumes the proportion between export and production of a commodity is, on average, stable over time for each country. The missing processed production is calculated multiplying the export data by the average ratio between the produced and exported quantity of the chosen commodity during the period selected. There is also the possibility to insert a manual ratio changing the ratio choice with the light blue buttons. Choices: ‘Original data’, ‘Average ratio’, ‘Manual ratio’. As export data are sometimes more detailed than production ones, a mapping relating ISSCFC codes for commodity production to ISSCFC codes for commodity export has been created. The mapping is of the form one (production code) to one or many (export codes) and can be updated in the export approach tab through the first table appearing on the top of the page. Once the user is satisfied with the new mapping, the initial mapping can be updated with the button ‘Update mapping’. The effect of this update on the mapping can be checked on the ‘Check mapping export approach’ tab and the transferred to the datatable in the SWS. The processed production value computed is shown in the red bordered cells in the second tables in the export approach tab and will be displayed in the summary tab where the user can compare it with values deriving from other approaches.</p>
+<p><strong>Tab elements:</strong></p>
+<p>The ‘Export approach’ tab shows two tables, a graph, a ‘Check mapping’, an ‘Update mapping’ and a ‘Ratio choice’ button.</p>
+<p>The upper table has twelve columns:</p>
+<ol style="list-style-type: decimal">
+<li><p>‘Selection’: with this column the user can change the mapping. Checking and unchecking the exported commodities they are included or excluded from the processed production calculation.</p></li>
+<li><p>‘type’: it refers to the type of mapping of the row. If the mapping has been ‘provided’ by the FIAS unit or if it has been created automatically by matching commodities with the same code in production and export.</p></li>
+<li><p>‘description’: the name of the exported commodity in the row (names are those contained in the SWS reference list).</p></li>
+<li><p>‘measuredItemISSCFC_exp’: ISSCFC codes referring to the export commodity mapped to the ISSCFC production code.</p></li>
+<li><p>‘Value_exp’: value in tonnes of the exported commodity.</p></li>
+<li><p>‘flagObservationStatus_exp’: SDMX observation status flag of the export data</p></li>
+<li><p>‘flagMethod_exp’: SDMX method flag of the export data</p></li>
+<li><p>‘timePointYears’: the imputation year.</p></li>
+<li><p>‘nationaldescription’: description provided by the country for the commodity to impute (taken from the data table with raw data).</p></li>
+<li><p>‘remarks’: remarks provided by the country or inserted by the FIAS unit for the commodity to impute (taken from the data table with raw data).</p></li>
+<li><p>‘Scheda’: the code associated to the national commodity to impute.</p></li>
+<li><p>‘measuredItemISSCFC’: ISSCFC code referring to the Scheda</p></li>
+</ol>
+<p>Modifying this table the user can change the mapping previously in use. The user can add, remove, check or uncheck rows. In general it is recommended not to remove rows but only to uncheck unnecessary mappings so that unchecked rows can always be reintroduced and evidence of the old mapping is kept in the table the user visualizes. Once the user is satisfied with the changes in the mapping the mapping can be updated clicking on the button ‘Update mapping’. Changes in the mapping can be visualized in the ‘Check mapping export approach’ tab. In order to update the mapping only the type, export commodity and commodity cell can be compiled. The other information is retrieved automatically. Please note that the only fields modifiable are those also appearing in the mapping table provided by the FIAS unit and in the SWS, i.e. measuredItemISSCFC, measuredItemISSCFC_exp, type and Selection. Country, start year and end year are automatically assigned. When the user updates the mapping its consistency can be checked clicking the button ‘Check mapping’. It is advisable to perform this operation before starting any activity and regularly after few updates.</p>
+<p>Clicking the button the following checks are performed:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>If there is more than one mapping which has ‘LAST’ as end year. This is an inconsistency as it means that there are two periods in the datatable for the same mapping. The shiny should warn the user if something similar is happening when updating the mapping. message: ‘INCONSISTENCY! The chosen commodity has two start years for the same end year (LAST). Please check in the SWS mapping datatable.’</p></li>
+<li><p>If the imputation year is older than the current mapping, i.e. the mapping has already changed since the year the user wants to impute, this could cause an inconsistency in the mapping. Therefore, the shiny app returns the message: ‘The mapping has already changed since the chosen imputation year. Please update the mapping manually coherently to avoid automatic errors.’ The user can then manually change the mapping possibly correcting for retroactive changes.</p></li>
+<li><p>If the same exported commodity has been allocated twice, i.e. there is a duplication in the mapping for the last period, then the app returns the message: ‘The mapping implies a duplication. Please check commodity(ies): …’.</p></li>
+<li><p>If a new commodity appears in the national production list which is not included in the mapping the the message shown is ‘The following items have production figures but are not included in the export approach mapping table: …’</p></li>
+<li><p>Linked to the previous point, if there is export quantity for the new commodity appearing in the production list and the export code is linked to another commodity for the same country the message appearing is ‘The following commodity(ies) have export quantities linked to another commodity code in the mapping table: …’</p></li>
+<li><p>If a commodity, which is in the mapping as an export commodity, has not been allocated the message is: ‘The following commodity(ies) have not been included in the mapping: …’.</p></li>
+<li><p>If mapping validity periods overlap, e.g. if mapping for a commodity X has two mappings, one for period 1 and one for period 2 where: start_year1 = 1948, end_year1 = 2015 and start_year2 = 2012, end_year2 = ‘LAST’, because the two periods overlap for years 2012-2015 the message shown is: ‘This current mapping implies an inconsistent allocation. Two validity periods overlap for commodity(ies): …’.</p></li>
+</ol>
+<p>If no inconsistency is found then the button returns the message ‘The current mapping is consistent.’</p>
+<p>These messages do not prevent the user from proceeding. They only appear if the user presses the ‘Check mapping’ button. Conversely, there are cases when either the approach is not applicable or there is a clear error in what has been inserted by the user. In these cases the app shows messages the user has to address before continuing any activity. These messages are:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>‘Export approach not applicable. No available mapping for the chosen country.’: if there is no available mapping for the chosen country.</p></li>
+<li><p>‘Export approach not applicable. No available export value for the chosen input combination.’: if there is no export value associated to the chosen commodity.</p></li>
+<li><p>‘Export data for the time range and commodity selected are not available. Years available: …’: if no export data is available for the time range selected. In this case the app shows (within the chosen time range) the years available for which the approach is applicable.</p></li>
+<li><p>‘Export approach not applicable. Calculations for this commodity cannot be performed.’: if for any reason the calculations required cannot be performed. If this message appears, please contact the person in charge of the code as it likely an error that needs to be fixed in the code and does not depend on the user.</p></li>
+<li><p>‘The commodity inserted in the measuredItemISSCFC column is not in the commodity list. … is not a valid code.’: all the code inserted in the mapping table have to be in the commodity list used in the SWS, if the commodity inserted does not belong to this list either there is an error in the inserted code or the list of commodities in SWS has to be updated.</p></li>
+<li><p>‘The commodity inserted in the measuredItemISSCFC_exp column is not in the commodity list. … is not a valid code.’: same as the previous one but for the export commodities.</p></li>
+</ol>
+<p>As the user changes the mapping the consequences of the change are visible in the table and the graph below in the page.</p>
+<p>The second table in the tab has three rows: processed production volume, export volume and ratio row. The time series for these data is shown for all the selected period (starting year - imputation year). The processed production row shows beside each value the flag associated; the export row shows the sum of all the commodities in the mapping (if more than one) and the aggregated flag associated; the ratio row shows the ratio between the processed production and the export volumes for each year. The last column contains the average values calculated for the selected years but the imputation year. The table is dynamic and changes according to the mapping, changes only affect the imputation year. What happens in the table is graphically shown in the plot below the table showing the export and processed production volumes (in tonnes) over time. The user can choose what ratio apply to calculate the processed production estimate. By default the original data is shown (if available), if data are missing the average ratio is used. If the user want a manual ratio can be inserted clicking on the button ‘Manual ratio’.</p>
+<p>The average ratio is calculated as follows. Let <span class="math inline">\(P_t\)</span> and <span class="math inline">\(E_t\)</span> denote the production and the export volume in year <span class="math inline">\(t\)</span>, with <span class="math inline">\(t=1,...T\)</span> where <span class="math inline">\(T\)</span> is the year of interest. Then the ratio is <span class="math display">\[r_t = P_t / E_t\]</span> the imputed production <span class="math inline">\(P_T\)</span> is <span class="math display">\[P_T= \bar{r} \times E_T\]</span> where <span class="math inline">\(\bar{r}\)</span> is the mean of ratios <span class="math inline">\(r_1,...,r_{T-1}\)</span>.<br />
+The cell showing the quantity of interest <span class="math inline">\(P_T\)</span> has red borders.</p>
+</div>
+<div id="primary-production-approach-tab" class="section level3">
+<h3>‘Primary production approach’ tab</h3>
+<p>The approach based on primary production uses the data in the ‘global production’ dataset (union between capture and aquaculture productions) classified according to Asfis alphacodes. The connection between species and commodities is based on International Standard Statistical Classification of Aquatic Animals and Plants (ISSCAAP) groups. The mapping for the primary production approach connects each commodity to one or more ISSCAAP groups and, within each ISSCAAP group, to either a list or to all the species belonging to the groups. Since each ISSCAAP group and each species can be associated to more than one commodity, it is possible for the user to set the ratio (or share) of each species to allocate to the commodity. In this way the production can be split across different commodities. By default the ratio is set to 1.</p>
+<p>As in the export approach, the missing processed production is calculated multiplying the primary production mapped to the commodity of the chosen imputation year by the average ratio between the processed and primary production of the chosen commodity during the period selected. Also in this case, there is the possibility to insert a manual ratio changing the ratio choice with the light blue buttons. Choices: ‘Original data’, ‘Average ratio’, ‘Manual ratio’. By default in the tab all the species produced in the selected country are shown (even if production in t he selected year is zero). Then the user can check (uncheck) species to include (exclude) from the mapping, or just change the ratio/share of species to be associated to the commodity.</p>
+<p>Once the user is satisfied with the new mapping, the initial mapping can be updated with the button ‘Update mapping’. The effect of this update on the mapping can be checked on the ‘Check mapping prod approach’ tab and the transferred to the datatable in the SWS. The processed production value computed is shown in the red bordered cells in the second tables in the Primary Prod. approach tab and will be displayed in the summary tab where the user can compare it with values deriving from other approaches.</p>
+<p><strong>Tab elements:</strong></p>
+<p>The ‘Primary Prod. approach’ tab shows two tables, a graph, a ‘Check mapping’, an ‘Update mapping’ and a ‘Ratio choice’ button.</p>
+<p>The first table has fourteen columns:</p>
+<ol style="list-style-type: decimal">
+<li><p>‘Selection’: with this column the user can change the mapping. Checking and unchecking species they are included or excluded from the processed production calculation.</p></li>
+<li><p>‘type’: it refers to the type of mapping of the row. If the mapping has been ‘provided’ by the FIAS unit or if it has been created automatically by matching commodities with the same code in production and export.</p></li>
+<li><p>‘Ratio’: it is the share of production for the species to be mapped to the commodity, so the same species can be mapped to more than one commodity avoiding allocating for more than 100% of the production.</p></li>
+<li><p>‘isscaap’: the ISSCAAP group corresponding to the species.</p></li>
+<li><p>‘description’: the English name of the species in the row (names are those contained in the SWS reference list).</p></li>
+<li><p>‘frisheriesAsfis’: ASFIS alphacode referring to the species.</p></li>
+<li><p>‘Value_PrimaryProd’: value in tonnes produced for the species.</p></li>
+<li><p>‘flagObservationStatus_PrimaryProd’: SDMX observation status flag of the primary production value.</p></li>
+<li><p>‘flagMethod_PrimaryProd’: SDMX method flag of the primary production value.</p></li>
+<li><p>‘timePointYears’: the imputation year.</p></li>
+<li><p>‘nationaldescription’: description provided by the country for the commodity to impute (taken from the data table with raw data).</p></li>
+<li><p>‘remarks’: remarks provided by the country or inserted by the FIAS unit for the commodity to impute (taken from the data table with raw data).</p></li>
+<li><p>‘Scheda’: the code associated to the national commodity to impute.</p></li>
+<li><p>‘measuredItemISSCFC’: ISSCFC code referring to the Scheda</p></li>
+</ol>
+<p>Modifying this table the user can change the mapping previously in use. The user can add, remove, check or uncheck rows. In general it is recommended not to remove rows but only to uncheck unnecessary mappings so that unchecked rows can always be reintroduced and evidence of the old mapping is kept in the table the user visualizes. Once the user is satisfied with the changes in the mapping the mapping can be updated clicking on the button ‘Update mapping’. Changes in the mapping can be visualized in the ‘Check mapping prod approach’ tab. In order to update the mapping only the type, species, ISSCAAP and commodity cell can be compiled. The other information is retrieved automatically. Please note that the only fields modifiable are those also appearing in the mapping table provided by the FIAS unit and in the SWS, i.e. fisheriesAsfis, isscaap, measuredItemISSCFC, type and Selection. Country, start year and end year are automatically assigned.</p>
+<p>When the user updates the mapping its consistency can be checked clicking the button ‘Check mapping’. It is advisable to perform this operation before starting any activity and regularly after few updates.</p>
+<p>Clicking the button the following checks are performed (please note that checks a, b and d are the same as for the export approach):</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>If there is more than one mapping which has ‘LAST’ as end year. This is an inconsistency as it means that there are two periods in the datatable for the same mapping. The shiny should warn the user if something similar is happening when updating the mapping. message: ‘INCONSISTENCY! The chosen commodity has two start years for the same end year (LAST). Please check in the SWS mapping datatable.’</p></li>
+<li><p>If the imputation year is older than the current mapping, i.e. the mapping has already changed since the year the user wants to impute, this could cause an inconsistency in the mapping. Therefore, the shiny app returns the message: ‘The mapping has already changed since the chosen imputation year. Please update the mapping manually coherently to avoid automatic errors.’ The user can then manually change the mapping possibly correcting for retroactive changes.</p></li>
+<li><p>If the same ISSCAAP group is mapped to more than one commodity this is notified by the message: ‘ISSCAAP group(s) … is (are) mapped to more than one commodity for this country.’</p></li>
+<li><p>If a new commodity appears in the national production list which is not included in the mapping the message shown is ‘The following items have production figures but are not included in the export approach mapping table: …’.</p></li>
+<li><p>If more than 100% of the primary production for one species has been allocated, then the app returnss the message ‘More than 100% of the available primary production has been allocated for species …’</p></li>
+</ol>
+<p>If no inconsistency is found then the button returns the message ‘The current mapping is consistent.’</p>
+<p>As in the export approach, these messages do not prevent the user from proceeding. The messages the user has to address before continuing any activity are:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>If there is no primary production approach mapping provided for the whole country ‘Primary production approach not applicable. No available mapping for the chosen country.’.</p></li>
+<li><p>If no data are available for the chosen parameters: ‘Primary production data for the country, time range and commodity selected are not available. Please select different inputs or ignore this approach.’</p></li>
+<li><p>When modifying the mapping table in the tab, if a commodity code is not valid, or NA then the following message appears: ‘One of the commodity inserted in the measuredItemISSCFC column is not in the commodity list. … is not a valid code.’</p></li>
+<li><p>As in point c, the same happens if the species inserted is not valid.</p></li>
+<li><p>Along with the new species, also Isscaap group is a necessary information when adding a mapping in the table so if not inserted the app asks for it: ‘Please enter isscaap group for species …’</p></li>
+<li><p>If the ISSCAAP group inserted is not the one appearing in the datatable used for mapping then the message ‘Please assign species to the right ISSCAAP group(s).’ is returned.</p></li>
+</ol>
+<p>The second table has the same structure as the second table in the ‘Export approach’ tab but, instead of the exports volume, the primary production volume is shown. Let <span class="math inline">\(P_t\)</span> and <span class="math inline">\(S_t\)</span> denote the production and the primary production volume in year <span class="math inline">\(t\)</span>, with <span class="math inline">\(t=1,...T\)</span> where <span class="math inline">\(T\)</span> is the year of interest. Then the ratio is <span class="math display">\[r_t = P_t / S_t \times R\]</span> where <span class="math inline">\(R\)</span> is the share of primary production set for the commodity and the imputed production <span class="math inline">\(P_T\)</span> is <span class="math display">\[P_T= \bar{r} \times S_T \times R\]</span> where <span class="math inline">\(\bar{r}\)</span> is the mean of ratios <span class="math inline">\(r_1,...,r_{T-1}\)</span>.<br />
+The cell showing the quantity of interest <span class="math inline">\(P_T\)</span> has red borders.</p>
+</div>
+<div id="summary-tab" class="section level3">
+<h3>‘Summary’ tab</h3>
+<p>The ‘Summary’ tab contains results from the two previous approaches and, in addition, it proposes a value calculated using the ensemble method approach <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, the possibility to insert a manual input and the original data (if available). The user can see the values in the plot, along with the time series since the start year selected, and choose which value to impute in the dataset. Once the user has selected the approach, the imputation and the dataset update is performed clicking on the ‘Impute value’ button and the datatable <em>processed_prod_national_detail_imputed</em> is automatically updated.</p>
+<p><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> : Statistical Working Paper on Imputation Methodology for the FAOSTAT Production Domain. Joshua M. Browning, Michael C. J. Kao, Francesca Rosa Food and Agriculture Organization of the United Nations.</p>
+</div>
+<div id="check-export-approach-mapping-tab-and-check-primary-production-approach-mapping-tab" class="section level3">
+<h3>‘Check export approach mapping’ tab and ‘Check primary production approach mapping’ tab</h3>
+<p>These two tabs show the whole country specific mapping tables for the export and primary production approaches. The user can check the updates and validate the new mapping saving it directly in the SWS with the button ‘Save mapping in SWS’.</p>
+</div>
+<div id="dataset-datatable-and-codelists-used-sws" class="section level3">
+<h3>Dataset, datatable and codelists used SWS</h3>
+<p>The following table indicates the type of object the domain, the name and the internal identifier of all the objects the shiny app pulls from the SWS.</p>
+<table style="width:86%;">
+<colgroup>
+<col width="12%"></col>
+<col width="20%"></col>
+<col width="31%"></col>
+<col width="20%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Domain</th>
+<th>Name</th>
+<th>Identifier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>dataset</td>
+<td>Fisheries</td>
+<td>Global Production</td>
+<td>fi_global_production</td>
+</tr>
+<tr class="even">
+<td>dataset</td>
+<td>Fisheries Commodities</td>
+<td>Commodities (total)</td>
+<td>commodities_total</td>
+</tr>
+<tr class="odd">
+<td>datatable</td>
+<td>Fisheries Commodities</td>
+<td>processed_prod_national_detail_raw</td>
+<td>processed_prod_national_detail_raw</td>
+</tr>
+<tr class="even">
+<td>datatable</td>
+<td>Fisheries Commodities</td>
+<td>processed_prod_national_detail_imputed</td>
+<td>processed_prod_national_detail_imputed</td>
+</tr>
+<tr class="odd">
+<td>datatable</td>
+<td>Fisheries Commodities</td>
+<td>SUA item mapping table</td>
+<td>fishery_item_mapping</td>
+</tr>
+<tr class="even">
+<td>datatable</td>
+<td>Fisheries Commodities</td>
+<td>ASFIS - ICS - ISSCAAP map</td>
+<td>map_asfis</td>
+</tr>
+<tr class="odd">
+<td>datatable</td>
+<td>Fisheries Commodities</td>
+<td>ISSCFC Mapping - Export Approach</td>
+<td>isscfc_mapping_export_approach</td>
+</tr>
+<tr class="even">
+<td>datatable</td>
+<td>Fisheries Commodities</td>
+<td>ISSCFC Mapping - Primary Prod Approach</td>
+<td>isscfc_mapping_prod_approach</td>
+</tr>
+<tr class="odd">
+<td>codelist</td>
+<td>-</td>
+<td>-</td>
+<td>geographicAreaM49_fi</td>
+</tr>
+<tr class="even">
+<td>codelist</td>
+<td>-</td>
+<td>-</td>
+<td>measuredItemISSCFC</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>the user can find the functions in the <code>faoswsImputation</code> package on the GitHub repository <strong>SWS-Methodology</strong> (<a href="https://github.com/SWS-Methodology/faoswsImputation/tree/master/R" class="uri">https://github.com/SWS-Methodology/faoswsImputation/tree/master/R</a>).<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>the user can find the functions in the <code>faoswsImputation</code> package on the GitHub repository <strong>SWS-Methodology</strong> (<a href="https://github.com/SWS-Methodology/faoswsImputation/tree/master/R" class="uri">https://github.com/SWS-Methodology/faoswsImputation/tree/master/R</a>).<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>the user can find the functions in the <code>faoswsImputation</code> package on the GitHub repository <strong>SWS-Methodology</strong> (<a href="https://github.com/SWS-Methodology/faoswsImputation/tree/master/R" class="uri">https://github.com/SWS-Methodology/faoswsImputation/tree/master/R</a>).<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
+

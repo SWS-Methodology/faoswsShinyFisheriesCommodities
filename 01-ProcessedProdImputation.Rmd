@@ -7,10 +7,10 @@ The following paragraphs describe the workflow for processed production data fro
 ## **Data collection and data entry processes**
 
 Data are collected through questionnaires sent to the countries by the FIAS unit once a year. Questionnaires contain country specific commodities classified according semi-standardized codes, national codes, often more detailed than the International Standard Statistical Classification of Fishery Commodities (ISSCFC) classification.
-This means questionnaires sent out by the FIAS unit are compiled by countries with products, so that, for each ISSCFC product there could be more than one corresponding national code. Initial country data are classified according _schede_ cards having a two-fold structure divided by a dot: the first part, a number between 1 and 9, corresponding to the FAO major group and the second part formed by a 4 digit sequential number.E.g. 1.1369, where the first number of the sequential key is the FAO major group (1) and the second part (1369) is a sequential key. Every time a new code enters the database for that country a new sequential key is generated. The major FAO groups are defined by the YBKlang classification.
+This means questionnaires sent out by the FIAS unit are compiled by countries with products, so that, for each ISSCFC product there could be more than one corresponding national code. Initial country data are classified according to _schede_ cards having a two-fold structure divided by a dot: the first part, a number between 1 and 9, corresponding to the FAO major group and the second part formed by a 4 digit sequential number.E.g. 1.1369, where the first number of the sequential key is the FAO major group (1) and the second part (1369) is the sequential key. Every time a new code enters the database for that country a new sequential key is generated. The major FAO groups are defined by the YBKlang classification.
 If a new product is reported by a country for the first time, FIAS unit assign a new scheda first identifying the FAO major group and then assigning the first available sequential code in the FAO group for the country. It is worth noting that _schede_ are country specific so the same code can correspond to different products in different country. Please note a new dimension has been proposed by the Methodological team so that products could be uniquely identified and data inserted in a dataset (and not a data table) in the SWS. These codes have been created and can be found in the '`processed_prod_national_detail_imputed`' data table in the '`measureditemnational`' column. This new dimension would avoid errors and inconsistencies that are more difficult to spot in a data table.
 
-Once the questionnaires have been collected and _schede_ assigned to all products, processed production data are gathered and uploaded into the Statistical Working System (SWS) in the '`processed_prod_national_detail_raw`' data table. 
+Once the questionnaires have been collected and _schede_ assigned to all products, processed production data are gathered and uploaded into the Statistical Working System (SWS) in the '`processed_prod_national_detail_quest`' data table. 
 Figure \@ref(fig:preWF) show the process performed by FIAS unit from the questionnaire receipt until the upload in the SWS. The data are first received by FIAS unit, the missing _schede_ are assigned and data uploaded into the SWS.
 
 ```{r  preWF, echo=FALSE, out.width="100%", fig.cap=' Workflow from data colletion to data entry on SWS.'}
@@ -18,10 +18,80 @@ knitr::include_graphics("img/PrProdQuest.png")
 ```
 
 
+## **Time series update ** 
+
+The methodology developed for processed production data imputation and validation results from a close cooperation between the FIAS unit and the ESS methodological team. 
+
+The main tool developed for this part of the workflow is a Shiny application but, before that, an additional control step has been introduced to updated the raw datatable.
+
+The datatable ‘`processed_prod_national_detail_quest`’ is where the data from the questionnaires are stored; datatable ‘`processed_prod_national_detail_raw`’ is where the last round of data has been stored and where the shiny app pulls data from to start the imputation and validation process. Therefore, the raw datatable is to be updated every year with new questionnaire data.
+Conversely from datasets, datatables do not have data history in SWS, so it is important that data coming from questionnaires do not directly overwrite raw data without any warning to the technical unit. To obviate this inconvenient, a third datatable has been created where the user can check discrepancies between the quest and the raw datatable.
+In figure \@ref(fig:compareflow) the proposed workflow is represented
+
+```{r  compareflow, echo=FALSE, out.width="100%", fig.cap=' Workflow from questionnaire data to raw data SWS.'}
+knitr::include_graphics("img/compareFlow.png")
+```
+
+The workflow proposed in figure \@ref(fig:compareflow) has three main steps:
+1. Run of the first plugin (`fi_comparison_quest_raw`) on the comparison datatable (‘`processed_prod_national_detail_compare`’) to compare data.
+2. Manual choice and validation of data to update or not.
+3. Run the second plugin (‘`fi_update_raw_dt`’) on the raw datatatable (‘`processed_prod_national_detail_raw`’) to consciously update the datatable.
+Both plugin can be run on the whole datatable or only for one country depending on the user need.
+
+The name of the first plugin to run is '*fi_comparison_quest_raw*'. The user can select the plugin from the compare datatable, choose the requested parameters and run the plugin. The process is described in figures \@ref(fig:selectdt), \@ref(fig:pluginCompare1), \@ref(fig:pluginCompare2) and \@ref(fig:pluginCompare3).
+
+```{r  selectdt, echo=FALSE, out.width="100%", fig.cap=' Workflow from questionnaire data to raw data SWS.'}
+knitr::include_graphics("img/selectdt.png")
+```
+
+```{r  pluginCompare1, echo=FALSE, out.width="100%", fig.cap=' Select the plugin name to run.'}
+knitr::include_graphics("img/pluginCompare1.png")
+```
+
+```{r  pluginCompare2, echo=FALSE, out.width="100%", fig.cap=' Select if run the plugin on the whole datatable or only on one country.'}
+knitr::include_graphics("img/pluginCompare2.png")
+```
+
+```{r  pluginCompare3, echo=FALSE, out.width="100%", fig.cap=' Select M49 country code (if needed) and run the plugin.'}
+knitr::include_graphics("img/pluginCompare3.png")
+```
+The first step is for the user to select on SWS the datatable ‘*processed_prod_national_detail_compare*’ in the Fisheries Commodities domain (figure \@ref(fig:selectdt)).
+Once the datatable is open, there are three steps to run the plugin.
+In Figure \@ref(fig:pluginCompare1) the user selects the ‘*fi_comparison_quest_raw*’ plugin to run. The plugin has two parameters the user has to set. The first parameter is mandatory and asks the user if the plugin has to run on the whole datatable (all countries) or just on one country (figure \@ref(fig:pluginCompare2)). The second one asks the M49 code of the chosen countryand it only applies if the plugin has to run on a single country.
+Figure \@ref(fig:pluginCompare3) is an example of the plugin running on a single country (Australia). Please note the user has to insert the M49 code of the country he/she wants to compare. If the code is not valid, the plugin will stop. Once the parameters are set, the user can launch the plugin.
+
+The plugin runs quickly and the user can see the results in the ‘*processed_prod_national_detail_compare*’ datatable. The compare datatable has two columns where the user chooses what data is to keep to overwrite the raw datatable. The data only present in the quest datatable, i.e. new data, are selected by default and the same happens with data only present in the raw datatable (figure \@ref(fig:NewDataFromQuestionnaire)).
+
+```{r  NewDataFromQuestionnaire, echo=FALSE, out.width="100%", fig.cap=' New data from questionnaire.'}
+knitr::include_graphics("img/NewDataFromQuestionnaire.png")
+```
+
+```{r  ChangedDataToValidate, echo=FALSE, out.width="100%", fig.cap='Conflicting data the user has to review because they differ in the two datatables.'}
+knitr::include_graphics("img/ChangedDataToValidate.png")
+```
+
+Conflicting data (having different values in the quest and raw datatables) are not selected by default and the user has to choose what data to keep (figure \@ref(fig:ChangedDataToValidate)).
+The user selects values to keep by checking the cells in the ‘*validate_quest*’ or ‘*validate_raw*’ columns respectively if the questionnaire or the raw figure has been chosen.
+The comparison datatable shows all the columns and flags of both datatables (quest and raw) therefore everything can be verified and possibly modified by the user, e.g. modify the remark field.
+If none of the validate columns is checked, i.e. ‘validate_quest’ and ‘validate_raw’ are both empty, the data will be ignored and the existing value in the raw datatable does not change.
+When the user has reviewed the values, the second plugin (‘fi_update_raw_dt’) can run.
+This plugin is similar to the first one as it requires the same parameters (Type of update and Country). The user selects the plugin from the ‘*processed_prod_national_detail_raw*’ datatable. Figures \@ref(fig:pluginUpdate1) \@ref(fig:pluginUpdate2)  shows the workflow.
+
+```{r  pluginUpdate1, echo=FALSE, out.width="100%", fig.cap=' Datatable selection and plugin selection.'}
+knitr::include_graphics("img/pluginUpdate1.png")
+```
+
+```{r  pluginUpdate2, echo=FALSE, out.width="100%", fig.cap='Plugin parameter selection example.'}
+knitr::include_graphics("img/pluginUpdate2.png")
+```
+
+When the user launch the plugin, the ‘*processed_prod_national_detail_raw*’ is updated according to the choice made in the ‘*processed_prod_national_detail_compare*’ datatable.
+In both plugins the user receives an email after their correct execution.
+After the update of the raw datatable the shiny app can properly run and the user can start the imputation and validation.
+
 ## **Data imputation and validation processes** {#shiny}
 
-The methodology developed for processed production data imputation and validation results from a close cooperation between the FIAS unit and the ESS methodological team. The developed Shiny application mostly follows the methodology used so far by the FIAS unit with some additional feature.
-The additional features mainly consist of a more detailed and documented mapping structure between the missing figure and the figures used as proxy, the introduction of a third approach based on a statistical model to impute data, and a process integrated in the SWS.
+The developed Shiny application mostly follows the methodology used so far by the FIAS unit with some additional feature. The additional features mainly consist of a more detailed and documented mapping structure between the missing figure and the figures used as proxy, the introduction of a third approach based on a statistical model to impute data, and a process integrated in the SWS.
 
 The two main approaches used, the export approach and the primary production approach, are based, respectively, on export data (stored in the Commodity dataset) and on primary production data (stored in the Global production dataset). Therefore, if data are not available for the chosen imputation year in these datasets then it will not be possible to apply either of the approaches. For this reason the imputation of trade data has to precede the one of processed production data.
 
@@ -35,7 +105,7 @@ The workflow starting from the raw data table until the final entry into the Com
 knitr::include_graphics("img/ShinyAppComm.png")
 ```
 
-The workflow show two data tables that store values at the national level one for raw data and the other for all the data (imputed and not). Between the data tables a Shiny app allows for data imputation and validation. Once the imputed table is ready data at _scheda_ level are aggregated at ISSCFC level to populate the Commodity dataset.
+The workflow shows two data tables that store values at the national level one for raw data and the other for all the data (imputed and not). Between the data tables a Shiny app allows for data imputation and validation. Once the imputed table is ready data at _scheda_ level are aggregated at ISSCFC level to populate the Commodity dataset.
 
 ### Export approach 
 
@@ -98,11 +168,13 @@ The processes described in the previous paragraphs are embedded in the SWS throu
 
 Data tables have been chosen as data storage objects instead of datasets because of the semi-standardized codes contained in the questionnaires. In the SWS, data tables are more flexible than data sets and a higher number of information can be stored without restrictions. At the same time, an extra care is required for the same reason. Because the system cannot control the content, the user has to carefully check that the information inserted in the data table contains no error.
 
-Both raw and imputed processed production data are stored in two data tables in the SWS, respectively: '`processed_prod_national_detail_raw`' and '`processed_prod_national_detail_imputed`'. The Shiny application reads from the *raw* and writes on the *imputed* data table. Once in the *imputed* data table the semi-standardized data are standardized, aggregated and included in the Commodity dataset which uses ISSCFC codes.
+All data are stored in data tables in the SWS. The questionnaire data are stored into the '`processed_prod_national_detail_quest`' data table which has the same dimensions as the '`processed_prod_national_detail_raw`' data table. There is the '`processed_prod_national_detail_compare`' datatable for the *comparison* plugin and the '`processed_prod_national_detail_imputed`' the Shiny application writes on. Once in the *imputed* data table, the semi-standardized data are standardized, aggregated and included in the Commodity dataset which uses ISSCFC codes.
+The questionnaire data are stored into the '`processed_prod_national_detail_quest`' data table which has the same dimensions as the '`processed_prod_national_detail_raw`' data table. The '`processed_prod_national_detail_compare`' is a merge of the previous two by the geographic, time, element, ISSCFC and scheda dimension, therefore, apart from these dimensions all the other are the duplicated for the questionnaire and raw data tables.
 
 With the Shiny app the user performs the checking, validation and imputation process. The data tables used by the Shiny app for the processes are described below.
 The '`processed_prod_National_detail_raw`' data table contains the whole time series for all countries. This implies that new data are appended every year to the same table. This way of storing data has been discussed with the technical unit and the structure of the *raw* data table has been chosen by the technical unit. The *imputed* data table copies the same structure with two additional columns (*measureditemnational* and *approach*). 
 
+|**processed_prod_national_detail_quest**|                                                   |
 |**processed_prod_national_detail_raw**|                                                   |
 |:------------------------------------:|---------------------------------------------------|
 | *Dimension id*                       | *Description* |
@@ -129,6 +201,7 @@ The '`processed_prod_National_detail_imputed`' data table replicates the same st
 | *Dimension id* | *Description* |
 | measureditemnational | An *ad-hoc* dimension to uniquely define the _schede_ |
 | approach | Approach used for the imputation |
+
 
 The data tables used for the export and primary production approaches have the following structure:
 
@@ -431,6 +504,7 @@ knitr::include_graphics("img/Shiny3c.png")
 ### Summary and  check mappings tabs
 
 The 'Summary' tab contains results from the two previous approaches, it proposes a value calculated using the ensemble method approach ^[Statistical Working Paper on Imputation Methodology for the FAOSTAT Production Domain. Joshua M. Browning, Michael C. J. Kao, Francesca Rosa. Food and Agriculture Organization of the United Nations.] and, in addition, the possibility to insert a manual input and the original data (if available). The user can see the values in the plot, along with the time series since the start year selected, and choose which value to impute in the dataset. Once the user has selected the approach, the imputation and the dataset update is performed clicking on the 'Impute value' button and the data table *processed_prod_national_detail_imputed* is automatically updated.
+A box to update the remark field is also provided.
 
 Figure \@ref(fig:summ1) shows the summary approach tab.
 
@@ -438,7 +512,7 @@ Figure \@ref(fig:summ1) shows the summary approach tab.
 knitr::include_graphics("img/ShinySumm.png")
 ```
 
-The two last tabs are checking tabs where the user can see the result of the mapping updates performed in the export and primary production tabs. This last step is necessary to ensure errors in the updates or unwanted updates are saved into the SWS and used for the next imputations. The tables shown in the app exactly reproduce the data tables stored in the SWS and can be seen in figures \@ref(fig:cME) and \@ref(fig:cMP).
+There are then two checking tabs where the user can see the result of the mapping updates performed in the export and primary production tabs. This last step is necessary to ensure errors in the updates or unwanted updates are saved into the SWS and used for the next imputations. The tables shown in the app exactly reproduce the data tables stored in the SWS and can be seen in figures \@ref(fig:cME) and \@ref(fig:cMP).
 
 ```{r  cME, echo=FALSE, out.width="100%", fig.cap=' Shiny application, Check mapping export approach tab.'}
 knitr::include_graphics("img/ShinyExpMap.png")
@@ -448,7 +522,10 @@ knitr::include_graphics("img/ShinyExpMap.png")
 knitr::include_graphics("img/ShinyPpMap.png")
 ```
 
+The data aggregates tabs allows the user to check the aggregated quantities so to get an overview of the impact the single scheda validation has on a larger scale. The aggregate proposed are the Grand total (sum of all the scheda), the so called Yearbook total (main groups from 1 to 7), Main groups (total by group) and ISSCFC Total (scheda aggregation by *scheda*), see figure \@ref(fig:shinyAggr).
 
-
+```{r  shinyAggr, echo=FALSE, out.width="100%", fig.cap=' Shiny application, Check mapping prod approach tab.'}
+knitr::include_graphics("img/ShinyAggr.png")
+```
 
 
