@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 The raw processed production update R code | Migration of Fishery processed production Statistical Processes into the SWS</title>
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 The raw processed production update R code | Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 The raw processed production update R code | Migration of Fishery processed production Statistical Processes into the SWS" />
+  
+  <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
+  
+
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)" />
+
+
+<meta name="date" content="2020-03-26" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ProcProd.html"/>
+<link rel="next" href="ProcProdcode.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="ess.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="index.html#introduction"><strong>Introduction</strong></a><ul>
+<li><a href="index.html#migration-actors"><strong>Migration actors</strong></a></li>
+<li><a href="index.html#new-fias-methodology"><strong>New FIAS methodology</strong></a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Data Collection</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fias-processed-production-in-sws-proposed-workflow"><i class="fa fa-check"></i>FIAS processed production in SWS: proposed workflow</a></li>
+</ul></li>
+<li><a href="index.html#sws-resources"><strong>SWS resources</strong></a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-lists"><i class="fa fa-check"></i>Code lists</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#data-tables-and-datasets"><i class="fa fa-check"></i>Data tables and datasets</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="ProcProd.html"><a href="ProcProd.html"><i class="fa fa-check"></i><b>1</b> <strong>Processed production data workflow</strong></a><ul>
+<li class="chapter" data-level="1.1" data-path="ProcProd.html"><a href="ProcProd.html#data-collection-and-data-entry-processes"><i class="fa fa-check"></i><b>1.1</b> <strong>Data collection and data entry processes</strong></a></li>
+<li class="chapter" data-level="1.2" data-path="ProcProd.html"><a href="ProcProd.html#time-series-update"><i class="fa fa-check"></i><b>1.2</b> <strong>Time series update </strong></a></li>
+<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#shiny"><i class="fa fa-check"></i><b>1.3</b> <strong>Data imputation and validation processes</strong></a><ul>
+<li class="chapter" data-level="1.3.1" data-path="ProcProd.html"><a href="ProcProd.html#export-approach"><i class="fa fa-check"></i><b>1.3.1</b> Export approach</a></li>
+<li class="chapter" data-level="1.3.2" data-path="ProcProd.html"><a href="ProcProd.html#primary-production-approach"><i class="fa fa-check"></i><b>1.3.2</b> Primary production approach</a></li>
+<li class="chapter" data-level="1.3.3" data-path="ProcProd.html"><a href="ProcProd.html#ensemble-method-approach"><i class="fa fa-check"></i><b>1.3.3</b> Ensemble method approach</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.4</b> <strong>SWS objects and the Shiny application</strong></a><ul>
+<li class="chapter" data-level="1.4.1" data-path="ProcProd.html"><a href="ProcProd.html#datatables"><i class="fa fa-check"></i><b>1.4.1</b> Datatables</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="ProcProd.html"><a href="ProcProd.html#application-goal-and-structure"><i class="fa fa-check"></i><b>1.5</b> <strong>Application goal and structure</strong></a><ul>
+<li class="chapter" data-level="1.5.1" data-path="ProcProd.html"><a href="ProcProd.html#national-mapping-tab"><i class="fa fa-check"></i><b>1.5.1</b> National mapping tab</a></li>
+<li class="chapter" data-level="1.5.2" data-path="ProcProd.html"><a href="ProcProd.html#export-approach-tab"><i class="fa fa-check"></i><b>1.5.2</b> Export approach tab</a></li>
+<li class="chapter" data-level="1.5.3" data-path="ProcProd.html"><a href="ProcProd.html#primary-prod.-approach-tab"><i class="fa fa-check"></i><b>1.5.3</b> Primary Prod. approach tab</a></li>
+<li class="chapter" data-level="1.5.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>1.5.4</b> Summary and check mappings tabs</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="Rawcode.html"><a href="Rawcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The raw processed production update R code</strong></a><ul>
+<li class="chapter" data-level="2.1" data-path="Rawcode.html"><a href="Rawcode.html#comparison-plugin-fi_comparison_quest_raw"><i class="fa fa-check"></i><b>2.1</b> <strong>Comparison plugin</strong> (‘<code>fi_comparison_quest_raw</code>’)</a></li>
+<li class="chapter" data-level="2.2" data-path="Rawcode.html"><a href="Rawcode.html#update-plugin-fi_update_raw_dt"><i class="fa fa-check"></i><b>2.2</b> <strong>Update plugin</strong> (‘<code>fi_update_raw_dt</code>’)</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>3</b> <strong>The Processed production imputation Shiny R code</strong></a><ul>
+<li class="chapter" data-level="3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>3.1</b> <strong>‘global.R’ file</strong></a></li>
+<li class="chapter" data-level="3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>3.2</b> <strong>‘ui.R’ file</strong></a></li>
+<li class="chapter" data-level="3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>3.3</b> <strong>‘server.R’ file</strong></a><ul>
+<li class="chapter" data-level="3.3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#export-approach-tab-1"><i class="fa fa-check"></i><b>3.3.1</b> Export approach tab</a></li>
+<li class="chapter" data-level="3.3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#primary-production-approach-tab"><i class="fa fa-check"></i><b>3.3.2</b> Primary production approach tab</a></li>
+<li class="chapter" data-level="3.3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#summary-tab"><i class="fa fa-check"></i><b>3.3.3</b> Summary tab</a></li>
+<li class="chapter" data-level="3.3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#update-mapping-process"><i class="fa fa-check"></i><b>3.3.4</b> Update mapping process</a></li>
+<li class="chapter" data-level="3.3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#imputing-new-values-and-saving-changes-into-the-sws"><i class="fa fa-check"></i><b>3.3.5</b> Imputing new values and saving changes into the SWS</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#aggregate-data-tab"><i class="fa fa-check"></i><b>3.4</b> <strong>Aggregate data tab</strong></a></li>
+<li class="chapter" data-level="3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#functionsExp"><i class="fa fa-check"></i><b>3.5</b> <strong>‘external_functions.R’ file</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>4</b> <strong>The aggregation module</strong></a><ul>
+<li class="chapter" data-level="4.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>4.1</b> <strong>The code</strong></a></li>
+<li class="chapter" data-level="4.2" data-path="Aggregation.html"><a href="Aggregation.html#practical-tips-and-final-remarks"><i class="fa fa-check"></i><b>4.2</b> <strong>Practical tips and final remarks</strong></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Migration of Fishery processed production Statistical Processes into the SWS</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Rawcode" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> <strong>The raw processed production update R code</strong></h1>
+<p>The following paragraphs contain the code of the two plugin used to compare the questionnaire and raw data tables (‘<code>processed_prod_national_detail_quest</code>’ and ‘<code>processed_prod_national_detail_raw</code>’) and to update the raw data table.</p>
+<div id="comparison-plugin-fi_comparison_quest_raw" class="section level2">
+<h2><span class="header-section-number">2.1</span> <strong>Comparison plugin</strong> (‘<code>fi_comparison_quest_raw</code>’)</h2>
+<p>First of all, the comparison plugin checks the first parameter (Type of comparison). If the comparison is at country level, the plugin checks if country code inserted as second parameter (Country code) is a valid M49 code. The questionnaire and the raw data tables are pulled fro the SWS, the whole tables or only the chosen country depending on the parameter, and merged in a new object. Note only years contained in the questionnaire table are selected from the raw table. In this new object (‘<em>updating</em>’ in the code), two additional columns are created (‘validate_quest’ and ‘validate_raw’) where a boolean variable (0,1) denotes if the questionnaire or the old raw value has to be kept. By default value only present in one of the two datatables are accepted by default, whereas conflicting values have to be checked and chosen manually by the user once the plugin has finished running. The resulting table is saved into the ‘<code>processed_prod_national_detail_compare</code>’ data table. An email is sent to the user at the end of the plugin.</p>
+<pre><code>##&#39; # National processed production fishery data update from questionnaires
+##&#39;
+##&#39; **Author: Charlotte Taglioni**
+##&#39;
+##&#39; **Description:**
+##&#39;
+##&#39; This module is designed to read data from the questionnaire and update the datatable 
+##&#39; &#39;processed_prod_national_detail_raw&#39; the Commodity shiny app read data from. 
+##&#39; 
+##&#39; **Inputs:**
+##&#39;
+##&#39; * Processed prodution datable: processed_prod_national_detail_quest, processed_prod_national_detail_raw
+
+
+
+## Load the library
+suppressMessages({
+  library(faosws)
+  library(sendmailR)
+  library(data.table)
+})
+
+
+# Token QA
+if(CheckDebug()){
+  
+  library(faoswsModules)
+  SETTINGS = ReadSettings(&quot;sws.yml&quot;)
+  
+  ## If you&#39;re not on the system, your settings will overwrite any others
+  R_SWS_SHARE_PATH = SETTINGS[[&quot;share&quot;]]
+  
+  ## Define where your certificates are stored
+  SetClientFiles(SETTINGS[[&quot;certdir&quot;]])
+  
+  ## Get session information from SWS. Token must be obtained from web interface
+  GetTestEnvironment(baseUrl = SETTINGS[[&quot;server&quot;]],
+                     token = SETTINGS[[&quot;token&quot;]])
+  
+}
+
+type &lt;- swsContext.computationParams$type # Whole, country
+
+if(type == &#39;country&#39;){
+  country &lt;- swsContext.computationParams$country # M49 code
+  country &lt;- as.character(country)
+  #Take away spaces (just in case)
+  country &lt;- gsub(&#39; &#39;, &#39;&#39;, country)
+  M49 &lt;- GetCodeList(&quot;FisheriesCommodities&quot;, &quot;commodities_total&quot;,&quot;geographicAreaM49_fi&quot; )[type == &#39;country&#39;,code]
+  if(!country %in% M49){
+    stop(&#39;Invalid country code. Please insert a valid M49 code.&#39;)
+  }
+  where &lt;- paste(&quot;geographicaream49_fi = &#39;&quot;, country, &quot;&#39;&quot;, sep = &#39;&#39;)
+  quest &lt;- ReadDatatable(&#39;processed_prod_national_detail_quest&#39;, where = where)
+  raw &lt;- ReadDatatable(&#39;processed_prod_national_detail_raw&#39;, where = where)
+  table2erase &lt;- ReadDatatable(&#39;processed_prod_national_detail_compare&#39;, where = where, readOnly = FALSE)
+} else {
+  quest &lt;- ReadDatatable(&#39;processed_prod_national_detail_quest&#39;)
+  raw &lt;- ReadDatatable(&#39;processed_prod_national_detail_raw&#39;)
+  table2erase &lt;- ReadDatatable(&#39;processed_prod_national_detail_compare&#39;, readOnly = FALSE)
+  }
+
+questyear &lt;- unique(quest$timepointyears)
+raw &lt;- raw[timepointyears %in% questyear]
+
+updating &lt;- merge(quest, raw, by = c(&quot;geographicaream49_fi&quot;,
+                                     &quot;measuredelement&quot;,
+                                     &quot;timepointyears&quot;,  
+                                     &quot;id_isscfc&quot;,            
+                                     &quot;measureditemisscfc&quot;,
+                                     &quot;id_nationalcode&quot;), 
+                  all = TRUE, 
+                  suffixes = c(&#39;_quest&#39;, &#39;_raw&#39;))
+
+# For new data questionnaire data are inserted by default
+newdata &lt;- updating[is.na(quantitymt_raw)]
+newdata &lt;- newdata[ , c(&#39;validate_quest&#39;, &#39;validate_raw&#39;) := list(1,0)]
+
+# For old data not in the questionnaire anymore they are inserted by default
+olddata &lt;- updating[is.na(quantitymt_quest)]
+olddata &lt;- olddata[ , c(&#39;validate_quest&#39;, &#39;validate_raw&#39;) := list(0,1)]
+
+# For changed data the choice has to be made
+changes &lt;- updating[quantitymt_quest != quantitymt_raw]
+changes &lt;- changes[ , c(&#39;validate_quest&#39;, &#39;validate_raw&#39;) := list(0,0)]
+
+# Put together the three tables
+tocheck &lt;- rbind(newdata, olddata)
+tocheck &lt;- rbind(tocheck, changes)
+
+ordercolumns &lt;- c(names(tocheck)[1:6], 
+                  names(tocheck[ , 7:ncol(tocheck), with =FALSE])[order(names(tocheck)[7:length(names(tocheck))])])
+
+setcolorder(tocheck, ordercolumns)
+
+# Save into the comparison table
+changeset &lt;- Changeset(&#39;processed_prod_national_detail_compare&#39;)
+AddDeletions(changeset, table2erase)
+Finalise(changeset)
+
+changeset &lt;- Changeset(&#39;processed_prod_national_detail_compare&#39;)
+AddInsertions(changeset, tocheck)
+Finalise(changeset)
+
+## Initiate email
+from = &quot;sws@fao.org&quot;
+to = swsContext.userEmail
+subject = &quot;Compare national processed production datatable updated&quot;
+body = &quot;Data have been properly updated. 
+              Please check &#39;Comm: processed_prod_national_detail_compare&#39; datatable 
+              and choose what data to accept.&quot;
+
+sendmail(from = from, to = to, subject = subject, msg = body)
+</code></pre>
+</div>
+<div id="update-plugin-fi_update_raw_dt" class="section level2">
+<h2><span class="header-section-number">2.2</span> <strong>Update plugin</strong> (‘<code>fi_update_raw_dt</code>’)</h2>
+<p>The plugin to update the raw data table (‘<code>processed_prod_national_detail_raw</code>’) has the same parameters as the compare plugin. It pulls data from the compare data table (‘<code>processed_prod_national_detail_compare</code>’) and copy the selected columns into the raw table. Columns coming from the questionnaire data table have the suffix ’*_quest<em>‘whereas those coming from the raw data table have the suffix’</em>_raw*’. Once the replacement is done the raw data table is updated and saved. An email is sent to the user at the end of the plugin.</p>
+<pre><code>##&#39; # National processed production fishery data update
+##&#39;
+##&#39; **Author: Charlotte Taglioni**
+##&#39;
+##&#39; **Description:**
+##&#39;
+##&#39; This module is designed to read data from the comparison datatable where 
+##&#39; modified data have been approved and update the raw datatable 
+##&#39; &#39;processed_prod_national_detail_raw&#39; the Commodity shiny app read data from. 
+##&#39; 
+##&#39; **Inputs:**
+##&#39;
+##&#39; * Processed prodution datable: processed_prod_national_detail_compare,
+##&#39;  processed_prod_national_detail_raw
+
+
+
+## Load the library
+suppressMessages({
+  library(faosws)
+  library(sendmailR)
+  library(data.table)
+})
+
+
+# Token QA
+if(CheckDebug()){
+  
+  library(faoswsModules)
+  SETTINGS = ReadSettings(&quot;sws.yml&quot;)
+  
+  ## If you&#39;re not on the system, your settings will overwrite any others
+  R_SWS_SHARE_PATH = SETTINGS[[&quot;share&quot;]]
+  
+  ## Define where your certificates are stored
+  SetClientFiles(SETTINGS[[&quot;certdir&quot;]])
+  
+  ## Get session information from SWS. Token must be obtained from web interface
+  GetTestEnvironment(baseUrl = SETTINGS[[&quot;server&quot;]],
+                     token = SETTINGS[[&quot;token&quot;]])
+  
+}
+
+type &lt;- swsContext.computationParams$type # Whole, country
+
+if(type == &#39;country&#39;){
+  country &lt;- swsContext.computationParams$country # M49 code
+  country &lt;- as.character(country)
+  #Take away spaces (just in case)
+  country &lt;- gsub(&#39; &#39;, &#39;&#39;, country)
+  M49 &lt;- GetCodeList(&quot;FisheriesCommodities&quot;, &quot;commodities_total&quot;,&quot;geographicAreaM49_fi&quot; )[type == &#39;country&#39;,code]
+  if(!country %in% M49){
+    stop(&#39;Invalid country code. Please insert a valid M49 code.&#39;)
+  }
+  where &lt;- paste(&quot;geographicaream49_fi = &#39;&quot;, country, &quot;&#39;&quot;, sep = &#39;&#39;)
+  raw &lt;- ReadDatatable(&#39;processed_prod_national_detail_raw&#39;, where = where, readOnly = FALSE)
+  compare &lt;- ReadDatatable(&#39;processed_prod_national_detail_compare&#39;, where = where)
+} else {
+  raw &lt;- ReadDatatable(&#39;processed_prod_national_detail_raw&#39;, readOnly = FALSE)
+  compare &lt;- ReadDatatable(&#39;processed_prod_national_detail_compare&#39;)
+}
+
+updating &lt;- merge(compare, raw, by = c(&quot;geographicaream49_fi&quot;,
+                                     &quot;measuredelement&quot;,
+                                     &quot;timepointyears&quot;,  
+                                     &quot;id_isscfc&quot;,            
+                                     &quot;measureditemisscfc&quot;,
+                                     &quot;id_nationalcode&quot;),
+                  all.x = TRUE)
+
+apply(updating[ , -grepl(&#39;quantity&#39;, names(updating)), with = F], 2, as.character)
+
+col2save_raw &lt;- names(updating)[grepl(&#39;_raw&#39;, names(updating))]
+col2update_raw &lt;- gsub(&#39;_raw&#39;, &#39;&#39;, col2save_raw)
+
+updating[validate_raw == TRUE, 
+         col2update_raw := updating[validate_raw == TRUE, 
+                                    col2save_raw, with = FALSE], 
+         with = FALSE]
+
+col2save_quest &lt;- names(updating)[grepl(&#39;_quest&#39;, names(updating))]
+col2update_quest &lt;- gsub(&#39;_quest&#39;, &#39;&#39;, col2save_quest)
+
+updating[validate_quest == TRUE, 
+         col2update_quest := updating[validate_quest == TRUE, 
+                                    col2save_quest, with = FALSE], 
+         with = FALSE]
+updating[ , validate :=NULL]
+updating &lt;- updating[, names(updating)[!grepl(c(&#39;_quest|_raw&#39;), names(updating))], with = FALSE]
+
+# Save into the comparison table
+changeset &lt;- Changeset(&#39;processed_prod_national_detail_raw&#39;)
+AddModifications(changeset, updating)
+Finalise(changeset)
+
+## Initiate email
+from = &quot;sws@fao.org&quot;
+to = swsContext.userEmail
+subject = &quot;Raw national processed production datatable updated&quot;
+body = &quot;Please check &#39;Comm: processed_prod_national_detail_raw&#39; datatable to ensure the datatable has been properly updated.&quot;
+
+sendmail(from = from, to = to, subject = subject, msg = body)
+</code></pre>
+<p>When the two plugins have run the ‘<code>processed_prod_national_detail_raw</code>’ data table is ready to be used by the shiny app.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ProcProd.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ProcProdcode.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

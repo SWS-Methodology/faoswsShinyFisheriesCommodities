@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Chapter 2 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS</title>
-  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS</title>
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta property="og:title" content="Chapter 3 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS" />
   <meta property="og:type" content="book" />
   
   
@@ -17,23 +16,23 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta name="twitter:title" content="Chapter 3 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS" />
   
   <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
   
 
-<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)" />
 
 
-<meta name="date" content="2019-11-08">
+<meta name="date" content="2020-03-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="ProcProd.html">
-<link rel="next" href="Aggregation.html">
+<link rel="prev" href="Rawcode.html"/>
+<link rel="next" href="Aggregation.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -77,36 +79,42 @@
 </ul></li>
 <li class="chapter" data-level="1" data-path="ProcProd.html"><a href="ProcProd.html"><i class="fa fa-check"></i><b>1</b> <strong>Processed production data workflow</strong></a><ul>
 <li class="chapter" data-level="1.1" data-path="ProcProd.html"><a href="ProcProd.html#data-collection-and-data-entry-processes"><i class="fa fa-check"></i><b>1.1</b> <strong>Data collection and data entry processes</strong></a></li>
-<li class="chapter" data-level="1.2" data-path="ProcProd.html"><a href="ProcProd.html#shiny"><i class="fa fa-check"></i><b>1.2</b> <strong>Data imputation and validation processes</strong></a><ul>
-<li class="chapter" data-level="1.2.1" data-path="ProcProd.html"><a href="ProcProd.html#export-approach"><i class="fa fa-check"></i><b>1.2.1</b> Export approach</a></li>
-<li class="chapter" data-level="1.2.2" data-path="ProcProd.html"><a href="ProcProd.html#primary-production-approach"><i class="fa fa-check"></i><b>1.2.2</b> Primary production approach</a></li>
-<li class="chapter" data-level="1.2.3" data-path="ProcProd.html"><a href="ProcProd.html#ensemble-method-approach"><i class="fa fa-check"></i><b>1.2.3</b> Ensemble method approach</a></li>
+<li class="chapter" data-level="1.2" data-path="ProcProd.html"><a href="ProcProd.html#time-series-update"><i class="fa fa-check"></i><b>1.2</b> <strong>Time series update </strong></a></li>
+<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#shiny"><i class="fa fa-check"></i><b>1.3</b> <strong>Data imputation and validation processes</strong></a><ul>
+<li class="chapter" data-level="1.3.1" data-path="ProcProd.html"><a href="ProcProd.html#export-approach"><i class="fa fa-check"></i><b>1.3.1</b> Export approach</a></li>
+<li class="chapter" data-level="1.3.2" data-path="ProcProd.html"><a href="ProcProd.html#primary-production-approach"><i class="fa fa-check"></i><b>1.3.2</b> Primary production approach</a></li>
+<li class="chapter" data-level="1.3.3" data-path="ProcProd.html"><a href="ProcProd.html#ensemble-method-approach"><i class="fa fa-check"></i><b>1.3.3</b> Ensemble method approach</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.3</b> <strong>SWS objects and the Shiny application</strong></a><ul>
-<li class="chapter" data-level="1.3.1" data-path="ProcProd.html"><a href="ProcProd.html#datatables"><i class="fa fa-check"></i><b>1.3.1</b> Datatables</a></li>
+<li class="chapter" data-level="1.4" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.4</b> <strong>SWS objects and the Shiny application</strong></a><ul>
+<li class="chapter" data-level="1.4.1" data-path="ProcProd.html"><a href="ProcProd.html#datatables"><i class="fa fa-check"></i><b>1.4.1</b> Datatables</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="ProcProd.html"><a href="ProcProd.html#application-goal-and-structure"><i class="fa fa-check"></i><b>1.4</b> <strong>Application goal and structure</strong></a><ul>
-<li class="chapter" data-level="1.4.1" data-path="ProcProd.html"><a href="ProcProd.html#national-mapping-tab"><i class="fa fa-check"></i><b>1.4.1</b> National mapping tab</a></li>
-<li class="chapter" data-level="1.4.2" data-path="ProcProd.html"><a href="ProcProd.html#export-approach-tab"><i class="fa fa-check"></i><b>1.4.2</b> Export approach tab</a></li>
-<li class="chapter" data-level="1.4.3" data-path="ProcProd.html"><a href="ProcProd.html#primary-prod.-approach-tab"><i class="fa fa-check"></i><b>1.4.3</b> Primary Prod. approach tab</a></li>
-<li class="chapter" data-level="1.4.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>1.4.4</b> Summary and check mappings tabs</a></li>
+<li class="chapter" data-level="1.5" data-path="ProcProd.html"><a href="ProcProd.html#application-goal-and-structure"><i class="fa fa-check"></i><b>1.5</b> <strong>Application goal and structure</strong></a><ul>
+<li class="chapter" data-level="1.5.1" data-path="ProcProd.html"><a href="ProcProd.html#national-mapping-tab"><i class="fa fa-check"></i><b>1.5.1</b> National mapping tab</a></li>
+<li class="chapter" data-level="1.5.2" data-path="ProcProd.html"><a href="ProcProd.html#export-approach-tab"><i class="fa fa-check"></i><b>1.5.2</b> Export approach tab</a></li>
+<li class="chapter" data-level="1.5.3" data-path="ProcProd.html"><a href="ProcProd.html#primary-prod.-approach-tab"><i class="fa fa-check"></i><b>1.5.3</b> Primary Prod. approach tab</a></li>
+<li class="chapter" data-level="1.5.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>1.5.4</b> Summary and check mappings tabs</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The Processed production imputation Shiny R code</strong></a><ul>
-<li class="chapter" data-level="2.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>2.1</b> <strong>‘global.R’ file</strong></a></li>
-<li class="chapter" data-level="2.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>2.2</b> <strong>‘ui.R’ file</strong></a></li>
-<li class="chapter" data-level="2.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>2.3</b> <strong>‘server.R’ file</strong></a><ul>
-<li class="chapter" data-level="2.3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#export-approach-tab-1"><i class="fa fa-check"></i><b>2.3.1</b> Export approach tab</a></li>
-<li class="chapter" data-level="2.3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#primary-production-approach-tab"><i class="fa fa-check"></i><b>2.3.2</b> Primary production approach tab</a></li>
-<li class="chapter" data-level="2.3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#summary-tab"><i class="fa fa-check"></i><b>2.3.3</b> Summary tab</a></li>
-<li class="chapter" data-level="2.3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#update-mapping-process"><i class="fa fa-check"></i><b>2.3.4</b> Update mapping process</a></li>
-<li class="chapter" data-level="2.3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#imputing-new-values-and-saving-changes-into-the-sws"><i class="fa fa-check"></i><b>2.3.5</b> Imputing new values and saving changes into the SWS</a></li>
+<li class="chapter" data-level="2" data-path="Rawcode.html"><a href="Rawcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The raw processed production update R code</strong></a><ul>
+<li class="chapter" data-level="2.1" data-path="Rawcode.html"><a href="Rawcode.html#comparison-plugin-fi_comparison_quest_raw"><i class="fa fa-check"></i><b>2.1</b> <strong>Comparison plugin</strong> (‘<code>fi_comparison_quest_raw</code>’)</a></li>
+<li class="chapter" data-level="2.2" data-path="Rawcode.html"><a href="Rawcode.html#update-plugin-fi_update_raw_dt"><i class="fa fa-check"></i><b>2.2</b> <strong>Update plugin</strong> (‘<code>fi_update_raw_dt</code>’)</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#functionsExp"><i class="fa fa-check"></i><b>2.4</b> <strong>‘external_functions.R’ file</strong></a></li>
+<li class="chapter" data-level="3" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>3</b> <strong>The Processed production imputation Shiny R code</strong></a><ul>
+<li class="chapter" data-level="3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>3.1</b> <strong>‘global.R’ file</strong></a></li>
+<li class="chapter" data-level="3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>3.2</b> <strong>‘ui.R’ file</strong></a></li>
+<li class="chapter" data-level="3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>3.3</b> <strong>‘server.R’ file</strong></a><ul>
+<li class="chapter" data-level="3.3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#export-approach-tab-1"><i class="fa fa-check"></i><b>3.3.1</b> Export approach tab</a></li>
+<li class="chapter" data-level="3.3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#primary-production-approach-tab"><i class="fa fa-check"></i><b>3.3.2</b> Primary production approach tab</a></li>
+<li class="chapter" data-level="3.3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#summary-tab"><i class="fa fa-check"></i><b>3.3.3</b> Summary tab</a></li>
+<li class="chapter" data-level="3.3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#update-mapping-process"><i class="fa fa-check"></i><b>3.3.4</b> Update mapping process</a></li>
+<li class="chapter" data-level="3.3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#imputing-new-values-and-saving-changes-into-the-sws"><i class="fa fa-check"></i><b>3.3.5</b> Imputing new values and saving changes into the SWS</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>3</b> <strong>The aggregation module</strong></a><ul>
-<li class="chapter" data-level="3.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>3.1</b> <strong>The code</strong></a></li>
-<li class="chapter" data-level="3.2" data-path="Aggregation.html"><a href="Aggregation.html#practical-tips-and-final-remarks"><i class="fa fa-check"></i><b>3.2</b> <strong>Practical tips and final remarks</strong></a></li>
+<li class="chapter" data-level="3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#aggregate-data-tab"><i class="fa fa-check"></i><b>3.4</b> <strong>Aggregate data tab</strong></a></li>
+<li class="chapter" data-level="3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#functionsExp"><i class="fa fa-check"></i><b>3.5</b> <strong>‘external_functions.R’ file</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>4</b> <strong>The aggregation module</strong></a><ul>
+<li class="chapter" data-level="4.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>4.1</b> <strong>The code</strong></a></li>
+<li class="chapter" data-level="4.2" data-path="Aggregation.html"><a href="Aggregation.html#practical-tips-and-final-remarks"><i class="fa fa-check"></i><b>4.2</b> <strong>Practical tips and final remarks</strong></a></li>
 </ul></li>
 </ul>
 
@@ -126,11 +134,11 @@
 
             <section class="normal" id="section-">
 <div id="ProcProdcode" class="section level1">
-<h1><span class="header-section-number">Chapter 2</span> <strong>The Processed production imputation Shiny R code</strong></h1>
-<p>The code used for the R Shiny application is available at <a href="http://hqlprsws1.hq.un.fao.org:3838/shinyFisheriesCommodities/" class="uri">http://hqlprsws1.hq.un.fao.org:3838/shinyFisheriesCommodities/</a>. The Shiny application used for processed production imputation and validation is a rather simple one. It contains the three standard Shiny files (<code>global</code>, <code>ui</code> and <code>server</code>) plus a <code>.Rmd</code> file containing a brief app description and another file containing functions used in the Shiny (<code>external_functions.R</code>). The application directly connects, pulls and modifies data and other information from the Statistical Working System (SWS).</p>
+<h1><span class="header-section-number">Chapter 3</span> <strong>The Processed production imputation Shiny R code</strong></h1>
+<p>The R Shiny application is available at <a href="http://hqlprsws1.hq.un.fao.org:3838/shinyFisheriesCommodities/" class="uri">http://hqlprsws1.hq.un.fao.org:3838/shinyFisheriesCommodities/</a>. The Shiny application used for processed production imputation and validation is a rather simple one. It contains the three standard Shiny files (<code>global</code>, <code>ui</code> and <code>server</code>) plus a <code>.Rmd</code> file containing a brief app description and another file containing functions used in the Shiny (<code>external_functions.R</code>). The application directly connects, pulls and modifies data and other information from the Statistical Working System (SWS).</p>
 <p>The following paragraphs contain the code as visible in the folder in the Shiny server and in the shared drive (<code>R:/shiny-app/shinyFisheriesCommodities</code>).</p>
 <div id="global.r-file" class="section level2">
-<h2><span class="header-section-number">2.1</span> <strong>‘global.R’ file</strong></h2>
+<h2><span class="header-section-number">3.1</span> <strong>‘global.R’ file</strong></h2>
 <p>The <code>global.R</code> file first lists the path access the needed packages. There are then four paragraphs:</p>
 <ul>
 <li><p>Token QA: it contains the ‘token’ and other information to connect to the SWS.</p></li>
@@ -203,7 +211,7 @@ id_exp &lt;- NULL
 id_prod &lt;- NULL</code></pre>
 </div>
 <div id="ui.r-file" class="section level2">
-<h2><span class="header-section-number">2.2</span> <strong>‘ui.R’ file</strong></h2>
+<h2><span class="header-section-number">3.2</span> <strong>‘ui.R’ file</strong></h2>
 <p>The <code>ui.R</code> file contains the interface structure of the Shiny app with the outputs of the <code>server.R</code> file. Each <code>tabPanel</code> functions is a tab containing different objects (buttons, graphs, table).</p>
 <p>Only one button is defined in this file and it is the ‘country button’ which uses the list created in the <code>global</code> file.</p>
 <pre><code>fluidPage( 
@@ -334,7 +342,7 @@ id_prod &lt;- NULL</code></pre>
 </code></pre>
 </div>
 <div id="server.r-file" class="section level2">
-<h2><span class="header-section-number">2.3</span> <strong>‘server.R’ file</strong></h2>
+<h2><span class="header-section-number">3.3</span> <strong>‘server.R’ file</strong></h2>
 <p>The <code>server.R</code> file is the longest and most complex file as it contains all the operations for the right functioning of the Shiny app.</p>
 <p>First, two reactive value objects are created to store the datasets pulled from the SWS and the mapping tables for the export and primary production based approaches. The data table containing the raw data (<code>processed_prod_national_detail_raw</code>) is loaded for the chosen country, the encoding is checked and adapted with both formal and substantial operations:in the first category there are column names turning into compatible names for datasets, flag class turning from character to an ordered factor class and years are confirmed as character class. As substantial operation there is the ‘<code>expandYear</code>’ function which creates cells for missing data and the ‘<code>removeNoInfo</code>’ function which remove series with no information. Note that both functions belong to the <code>faoswsProcessing</code> package but the ‘<code>expandYear</code>’ function is also present in the <code>external_functions.R</code> file as it is an updated version of the function not yet released. The original and modified versions of raw data are stored in the data table prepared in the ‘<code>rv_data</code>’ object.</p>
 <pre><code>function(input, output) { 
@@ -871,7 +879,7 @@ id_prod &lt;- NULL</code></pre>
   })
 </code></pre>
 <div id="export-approach-tab-1" class="section level3">
-<h3><span class="header-section-number">2.3.1</span> Export approach tab</h3>
+<h3><span class="header-section-number">3.3.1</span> Export approach tab</h3>
 <p>After recalling the chosen commodity and the needed data a first check is performed. If there is no mapping for the chosen country then the app shows the message ‘Export approach not applicable. No available mapping for the chosen country.’. Once all the parameters have been retrieved the data are filtered by the chosen parameters. Other checks are made to see if the chosen time series is available. If the series is not available or only few years out of the chosen ones are available then messages are displayed and the user has to choose a different series. The data from the imputed processed production and the commodity dataset are merged through the export approach mapping table. Before the merge, the three objects are filtered in order to select only the needed rows: the processed production table is filtered by country, years and Scheda selected; the mapping table rows selected are those corresponding to the ISSCFC (production) code corresponding to the selected Scheda for the country and the period selected is the one corresponding to the selected year; the commodity dataset selected contains only non-missing export data (i.e. observation flag different from ‘O’, ‘M’, ‘Q’ and code ‘5910’) for the country selected and the commodity listed in the mapping table (ISSCFC export). The function then returns the whole merged data tables and the one to display in the Shiny tab which has commodity description and ordered columns.</p>
 <pre><code>#-- Export method approach ----
   
@@ -1034,7 +1042,7 @@ id_prod &lt;- NULL</code></pre>
     
   })
 </code></pre>
-<p>The table containing value of processed production, exports and ratio for the time series selected and the average values can now be built. First, all the needed datasets and parameters are recalled along with the table where mapping modification can have been performed and the output of the <code>isscfc_check_reac</code> containing the needed table. Checks for new commodities in the production and export columns are performed so to have all commodities included in the mapping. The old and the new data are compared and the missing values are inserted. Old and new data are then bound together and manual inputs are checked. The function <code>export_imputation2</code> is applied to build the table shown in the middle of the export tab. The function is described in the <a href="ProcProdcode.html#functionsExp">2.4</a> paragraph.</p>
+<p>The table containing value of processed production, exports and ratio for the time series selected and the average values can now be built. First, all the needed datasets and parameters are recalled along with the table where mapping modification can have been performed and the output of the <code>isscfc_check_reac</code> containing the needed table. Checks for new commodities in the production and export columns are performed so to have all commodities included in the mapping. The old and the new data are compared and the missing values are inserted. Old and new data are then bound together and manual inputs are checked. The function <code>export_imputation2</code> is applied to build the table shown in the middle of the export tab. The function is described in the <a href="ProcProdcode.html#functionsExp">3.5</a> paragraph.</p>
 <pre><code>#-- Create table with potentially imputable value ----
   output$table_exp_estimates &lt;- renderRHandsontable({
     
@@ -1445,7 +1453,7 @@ id_prod &lt;- NULL</code></pre>
   })</code></pre>
 </div>
 <div id="primary-production-approach-tab" class="section level3">
-<h3><span class="header-section-number">2.3.2</span> Primary production approach tab</h3>
+<h3><span class="header-section-number">3.3.2</span> Primary production approach tab</h3>
 <p>The primary production approach tab has almost the same structure as the export approach one. First the mapping is loaded for the selected country and, along with the original version, a version compatible with the datasets is stored. Then, as with the export approach, there is a <code>reactive</code>, two <code>renderRHandsontable</code>, two <code>renderUI</code>, a <code>renderPlot</code> chunks and the mapping checks as an <code>observeEvent</code> chunk.</p>
 <pre><code>#-- Primary production approach ----
   
@@ -1625,7 +1633,7 @@ id_prod &lt;- NULL</code></pre>
   })
   
 </code></pre>
-<p>In order to create the table to calculate the missing value firstly the data, the parameters and the previously compiled tables are recalled. A validation of the codes (ISSCFC and Asfis) inserted is performed and, if the codes inserted are not valid, a message is displayed and the user would not be able to continue if the invalid codes are not changed. Note the checks are only based on the ISSCFC or Asfis codes in the mapping table <code>map_isscfc</code> and <code>map_asfis</code> present in the SWS. Also a check on the ISSCAAP group is performed. The ISSCAAP group inserted by the user must be the one the species belongs to. After the first checks, the data are updated with the new mapping and data, and the missing cells are filled. With the new data table (<code>full_updated</code>) and the missing data checks, the table with the time series for the primary production, processed production and ratio is built through the function ‘<code>primaryprod_imputation2</code>’ presented in paragraph <a href="ProcProdcode.html#functionsExp">2.4</a>.</p>
+<p>In order to create the table to calculate the missing value firstly the data, the parameters and the previously compiled tables are recalled. A validation of the codes (ISSCFC and Asfis) inserted is performed and, if the codes inserted are not valid, a message is displayed and the user would not be able to continue if the invalid codes are not changed. Note the checks are only based on the ISSCFC or Asfis codes in the mapping table <code>map_isscfc</code> and <code>map_asfis</code> present in the SWS. Also a check on the ISSCAAP group is performed. The ISSCAAP group inserted by the user must be the one the species belongs to. After the first checks, the data are updated with the new mapping and data, and the missing cells are filled. With the new data table (<code>full_updated</code>) and the missing data checks, the table with the time series for the primary production, processed production and ratio is built through the function ‘<code>primaryprod_imputation2</code>’ presented in paragraph <a href="ProcProdcode.html#functionsExp">3.5</a>.</p>
 <pre><code> # Create table with potentially imputable value
   output$table_prod_estimates &lt;- renderRHandsontable({
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
@@ -2016,8 +2024,8 @@ id_prod &lt;- NULL</code></pre>
 </code></pre>
 </div>
 <div id="summary-tab" class="section level3">
-<h3><span class="header-section-number">2.3.3</span> Summary tab</h3>
-<p>The summary tab shows the results of the previous two tabs and the result of the ensemble approach method, along with the plot of the three results. Once the data and parameters are recalled, the code makes sure all the variables are assigned even if one or both the approaches have not been applied. If there is no result for the approach selected (export or primary production) ‘NA’ value is assigned to the variable. This is to avoids errors in the following lines. Observation and method flags are combined to run the ensemble approach on the chosen data. The function used to generate the ensemble method value is ‘<code>method_imputation</code>’ and it is described in paragraph <a href="ProcProdcode.html#functionsExp">2.4</a>. After the model value has been estimated and assigned to a variable, the same is done with the original value in the raw data table (whether it is NA or not). Then all the possible approaches are listed and the button to choose among the values is built (<code>radioGroupButtons</code> function). The possibility to insert a manual value is also included and corresponds to the manual button (<code>out_btn_manual</code>).</p>
+<h3><span class="header-section-number">3.3.3</span> Summary tab</h3>
+<p>The summary tab shows the results of the previous two tabs and the result of the ensemble approach method, along with the plot of the three results. Once the data and parameters are recalled, the code makes sure all the variables are assigned even if one or both the approaches have not been applied. If there is no result for the approach selected (export or primary production) ‘NA’ value is assigned to the variable. This is to avoids errors in the following lines. Observation and method flags are combined to run the ensemble approach on the chosen data. The function used to generate the ensemble method value is ‘<code>method_imputation</code>’ and it is described in paragraph <a href="ProcProdcode.html#functionsExp">3.5</a>. After the model value has been estimated and assigned to a variable, the same is done with the original value in the raw data table (whether it is NA or not). Then all the possible approaches are listed and the button to choose among the values is built (<code>radioGroupButtons</code> function). The possibility to insert a manual value is also included and corresponds to the manual button (<code>out_btn_manual</code>).</p>
 <pre><code>  ##-- Summary ----
   
   output$summary_check_data &lt;- renderUI({
@@ -2215,7 +2223,7 @@ id_prod &lt;- NULL</code></pre>
 </code></pre>
 </div>
 <div id="update-mapping-process" class="section level3">
-<h3><span class="header-section-number">2.3.4</span> Update mapping process</h3>
+<h3><span class="header-section-number">3.3.4</span> Update mapping process</h3>
 <p>The updating process of the mapping tables is similar for the export and the primary production mappings. For the export mapping, once the parameters and data have been recalled, the new mapping appearing in the first table of the export tab is compared with the corresponding chunk of the original mapping table (selected country, production commodities included in the new mapping, last available period). Four cases are considered in the mapping change: (i) if nothing changes the table stays the same; (ii) if rows are added (or removed) to the original mapping then they are added with <code>Selection</code> cell turned to <code>FALSE</code>; (iii) if the mapping changes for a period already existing, the <code>Selection</code> and <code>type</code> variables are compared and the latest is chosen. If a row has been deleted then the <code>Selection</code> value is turned into <code>FALSE</code>; (iv) in all the remaining cases, i.e. the mapping is completely new, the previous corresponding mapping gets the end_year variable changed from ‘LAST’ to the year before the imputation year, and the new mapping is bound to the old mapping. The old mapping is replaced in the reactive value data and at the end of the process a window opens informing the user of the update.</p>
 <pre><code>  ##-- Update export mapping ----
   
@@ -2482,7 +2490,7 @@ id_prod &lt;- NULL</code></pre>
 </code></pre>
 </div>
 <div id="imputing-new-values-and-saving-changes-into-the-sws" class="section level3">
-<h3><span class="header-section-number">2.3.5</span> Imputing new values and saving changes into the SWS</h3>
+<h3><span class="header-section-number">3.3.5</span> Imputing new values and saving changes into the SWS</h3>
 <p>In order to update the <code>processed_prod_national_detail_imputed</code> data table the input approach has to be identified (‘approach_number’) and the imputed value assigned to the variable ‘imput_value’. The right flag has to be assigned according to the approach chosen, and the new data table built merging the old data table with the new one (‘newImputedData’). The data table in the SWS can now be updated along with the imputed data table stored in the app. With this second update the user can see the new value directly in the Shiny without reloading it.</p>
 <pre><code> ##-- Impute value ----
   
@@ -2824,8 +2832,123 @@ id_prod &lt;- NULL</code></pre>
 } # end of the function</code></pre>
 </div>
 </div>
+<div id="aggregate-data-tab" class="section level2">
+<h2><span class="header-section-number">3.4</span> <strong>Aggregate data tab</strong></h2>
+<p>The aggregation tab sum the current state of processed produciton values, including the latest ones modified, and aggregate them according to the chosen level of aggregation (‘Grand Total’, ‘Yearbook Total’, ‘Main groups’, ‘ISSCFC Total’). A plot is available when choosing the ISSCFC aggregation to see the time series of the ISSCFC commodity disaggregated by all the scheda for the chosen country.</p>
+<pre><code>  # -- Total by ISSCFC ----
+  
+  aggregates_reac &lt;- reactive({
+    
+    req(input$btn_country, input$btn_year, input$btn_start_year)
+    
+    data &lt;- rv_data$procprod_imp
+    data$Value &lt;- as.numeric(data$Value)
+    if(input$btn_total == &#39;Grand Total&#39;){
+      # Grand total
+      grandtotal &lt;- copy(data)
+      grandtotal &lt;- grandtotal[ , Value := sum(Value, na.rm = TRUE), by = c(&quot;geographicAreaM49_fi&quot;, 
+                                                                            &quot;measuredElement&quot;,
+                                                                            &quot;timePointYears&quot;)]
+      grandtotal &lt;- unique(grandtotal[ , .(geographicAreaM49_fi, timePointYears, Value)])
+      grandtotal[ , measuredElement := &#39;Grand Total&#39;]
+      
+      tab2show &lt;- grandtotal
+      tab2show &lt;-  dcast(tab2show, geographicAreaM49_fi + measuredElement ~ timePointYears, value.var = c(&quot;Value&quot;))
+      
+    } else if(input$btn_total == &#39;Yearbook Total&#39;){
+      # Yearbook Total
+      
+      YBtotal &lt;- copy(data)
+      YBtotal &lt;- YBtotal[ , Group := sub(&quot;\\..*&quot;,&#39;&#39;,  YBtotal$Scheda)]
+      YBtotal$Group &lt;- as.numeric(YBtotal$Group)
+      YBtotal &lt;- YBtotal[ Group &lt;= 7 ]
+      YBtotal[, Value := sum(Value, na.rm = TRUE), by = c(&quot;geographicAreaM49_fi&quot;,
+                                                          &quot;measuredElement&quot;, 
+                                                          &quot;timePointYears&quot;)]
+      
+      YBtotal &lt;- unique(YBtotal[ , .(geographicAreaM49_fi, timePointYears, Value)])
+      YBtotal[ , measuredElement := &#39;Yearbook Total&#39;]
+      tab2show &lt;- YBtotal
+      tab2show &lt;-  dcast(tab2show, geographicAreaM49_fi + measuredElement ~ timePointYears, value.var = c(&quot;Value&quot;))
+      
+    } else if(input$btn_total == &#39;Main groups&#39;){
+      
+      # Main groups
+      FAOtotal &lt;- copy(data)
+      FAOtotal &lt;- FAOtotal[ , Group := sub(&quot;\\..*&quot;,&#39;&#39;,  FAOtotal$Scheda)]
+      FAOtotal &lt;- FAOtotal[ , Value := sum(Value, na.rm = TRUE), by = c(&quot;geographicAreaM49_fi&quot;,
+                                                                        &quot;measuredElement&quot;, 
+                                                                        &quot;timePointYears&quot;,
+                                                                        &quot;Group&quot;)]
+      
+      FAOtotal &lt;- unique(FAOtotal[ , .(geographicAreaM49_fi, timePointYears, Group, Value)])
+      FAOtotal[ , measuredElement := &#39;Main groups&#39;]
+      tab2show &lt;- FAOtotal
+      tab2show &lt;-  dcast(tab2show, geographicAreaM49_fi + measuredElement + Group ~ timePointYears, value.var = c(&quot;Value&quot;))
+      
+    } else if(input$btn_total == &#39;ISSCFC Total&#39;){
+      # Isscfc total
+      ISSCFCtotal &lt;- copy(data)
+      ISSCFCtotal &lt;- ISSCFCtotal[ , Value := sum(Value, na.rm = TRUE), by = c(&quot;geographicAreaM49_fi&quot;, 
+                                                                              &quot;measuredElement&quot;,
+                                                                              &quot;timePointYears&quot;, 
+                                                                              &quot;measuredItemISSCFC&quot;)]
+      
+      ISSCFCtotal &lt;- unique(ISSCFCtotal[ , .(geographicAreaM49_fi, timePointYears, measuredItemISSCFC, Value)])
+      ISSCFCtotal[ , measuredElement := &#39;ISSCFC Total&#39;]
+      tab2show &lt;- ISSCFCtotal
+      tab2show &lt;-  dcast(tab2show, geographicAreaM49_fi + measuredItemISSCFC ~ timePointYears, value.var = c(&quot;Value&quot;))
+      
+    } else if(input$btn_total == &#39;&#39;){
+    
+      tab2show &lt;- data.table()
+    }
+    
+    return(tab2show)
+    
+  })
+  
+  
+  output$aggregates_data &lt;- DT::renderDataTable( server = FALSE, {
+    agg &lt;- aggregates_reac()
+    DT::datatable(agg, extensions = &#39;Buttons&#39;, filter = &#39;top&#39;, rownames = FALSE)
+    
+  })
+  
+  
+  
+  output$gg_tot_isscfc &lt;- renderPlot({ 
+    
+    req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
+    if(input$btn_total == &#39;ISSCFC Total&#39;){
+      commodity_label &lt;- rv_data$commodity_label
+      procprodimp &lt;- rv_data$procprod_imp
+      commodityDB &lt;- rv_data$commodityDB
+      
+      # if(is.null(input$isscfc_check_data)) return(NULL)
+      
+      sel_country &lt;- country_input[country_input$label == input$btn_country, code]
+      sel_commodity &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, code]
+      sel_years &lt;- input$btn_start_year:input$btn_year
+      sel_isscfc &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, isscfc]
+      
+      procprod_isscfc &lt;- procprodimp[measuredItemISSCFC == sel_isscfc, ]
+      procprod_isscfc$Value &lt;- as.numeric(procprod_isscfc$Value)
+      
+      ggplot(procprod_isscfc, aes(timePointYears, Value, group = Scheda, fill = Scheda)) +
+        geom_bar(stat=&quot;identity&quot;) +
+        geom_text(aes(label = Value), position = position_stack(vjust = .5), size = 3)  +
+        stat_summary(fun.y = sum, aes(label = ..y.., group = timePointYears), geom = &quot;text&quot;, vjust = -.5) +
+        labs(y = &#39;Quantity (in tonnes)&#39;, color = &#39;&#39;, title = &#39;Scheda aggregation by ISSCFC series&#39;) +
+        theme_minimal()
+    }
+    
+  })
+  
+} # end of the whole server function</code></pre>
+</div>
 <div id="functionsExp" class="section level2">
-<h2><span class="header-section-number">2.4</span> <strong>‘external_functions.R’ file</strong></h2>
+<h2><span class="header-section-number">3.5</span> <strong>‘external_functions.R’ file</strong></h2>
 <p>The R file <code>external_functions</code> contains seven functions. Two of them <code>expandYear</code> and <code>computeEnsemble</code> are only updated versions of existing functions in the <code>faoswsProcessing</code> and <code>faoswsImputation</code> packages. Until the original packages are not updated the function is sourced from this file. Only small changes have been made, so the main purpose of the functions remains the same as explained in the package help documents.</p>
 <pre><code>#-- expandYear function ----
 # This function is sourced from this loca file instead of the proper package faoswsProcessing
@@ -3340,17 +3463,19 @@ method_imputation &lt;- function(procprod, # Datasets
           </div>
         </div>
       </div>
-<a href="ProcProd.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Rawcode.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="Aggregation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -3358,12 +3483,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -3375,6 +3499,10 @@ gitbook.start({
 "text": null
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

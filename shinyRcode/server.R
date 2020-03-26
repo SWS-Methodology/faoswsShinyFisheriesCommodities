@@ -258,13 +258,20 @@ function(input, output) {
                      # i.e. the flagObservationStatus cell was empty then the raw updated one is assigned
                      procprod_imp_upd[ , flagObservationStatus := flagObservationStatus_old]
                      procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus <- procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus_upd
-                     #procprod_imp_upd[flagObservationStatus_upd %in% c('', 'X'), ]$flagObservationStatus <- procprod_imp_upd[flagObservationStatus_upd %in% c('', 'X'), ]$flagObservationStatus_upd
+                     procprod_imp_upd[, flagMethod := flagMethod_old]
+                     procprod_imp_upd[is.na(flagMethod_old), flagMethod := flagMethod_upd]
+  
+                     # If official data in updated table than it overwrites 
+                     procprod_imp_upd[flagObservationStatus_upd %in% c('', 'X'), 
+                                      c('Value', 'flagObservationStatus', 'flagMethod', 'remarks') := list(Value_upd,
+                                                                                                           flagObservationStatus_upd,
+                                                                                                           flagMethod_upd,
+                                                                                                           remarks_upd)]
                      
                      procprod_imp_upd$flagObservationStatus <- factor(procprod_imp_upd$flagObservationStatus, 
                                                                       levels = c('M', 'O', 'N', '', 'X', 'T', 'E', 'I'), 
-                                                                      ordered = TRUE)
-                     procprod_imp_upd[, flagMethod := flagMethod_old]
-                     procprod_imp_upd[is.na(flagMethod_old), flagMethod := flagMethod_upd]
+                                                                  ordered = TRUE)
+            
                      procprod_imp_upd[ , c('remarks_old', 'Value_old', 'flagObservationStatus_old', 'flagMethod_old',
                                            'remarks_upd', 'Value_upd', 'flagObservationStatus_upd', 'flagMethod_upd') := NULL]
                    
