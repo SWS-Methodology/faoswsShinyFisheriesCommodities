@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html >
+
 <head>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS</title>
-  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Fishery processed production Statistical Processes into the SWS</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 3 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta property="og:title" content="Migration of Fishery processed production Statistical Processes into the SWS" />
   <meta property="og:type" content="book" />
   
   
@@ -16,33 +18,30 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 The Processed production imputation Shiny R code | Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta name="twitter:title" content="Migration of Fishery processed production Statistical Processes into the SWS" />
   
   <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
   
 
-<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)" />
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
 
 
-<meta name="date" content="2020-03-26" />
+<meta name="date" content="2020-10-21">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="Rawcode.html"/>
-<link rel="next" href="Aggregation.html"/>
+<link rel="prev" href="Rawcode.html">
+<link rel="next" href="Aggregation.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
 
 
 
@@ -59,51 +58,20 @@
 <body>
 
 
-
   <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
     <div class="book-summary">
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="index.html#introduction"><strong>Introduction</strong></a><ul>
-<li><a href="index.html#migration-actors"><strong>Migration actors</strong></a></li>
-<li><a href="index.html#new-fias-methodology"><strong>New FIAS methodology</strong></a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Data Collection</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fias-processed-production-in-sws-proposed-workflow"><i class="fa fa-check"></i>FIAS processed production in SWS: proposed workflow</a></li>
-</ul></li>
-<li><a href="index.html#sws-resources"><strong>SWS resources</strong></a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-lists"><i class="fa fa-check"></i>Code lists</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#data-tables-and-datasets"><i class="fa fa-check"></i>Data tables and datasets</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="1" data-path="ProcProd.html"><a href="ProcProd.html"><i class="fa fa-check"></i><b>1</b> <strong>Processed production data workflow</strong></a><ul>
-<li class="chapter" data-level="1.1" data-path="ProcProd.html"><a href="ProcProd.html#data-collection-and-data-entry-processes"><i class="fa fa-check"></i><b>1.1</b> <strong>Data collection and data entry processes</strong></a></li>
-<li class="chapter" data-level="1.2" data-path="ProcProd.html"><a href="ProcProd.html#time-series-update"><i class="fa fa-check"></i><b>1.2</b> <strong>Time series update </strong></a></li>
-<li class="chapter" data-level="1.3" data-path="ProcProd.html"><a href="ProcProd.html#shiny"><i class="fa fa-check"></i><b>1.3</b> <strong>Data imputation and validation processes</strong></a><ul>
-<li class="chapter" data-level="1.3.1" data-path="ProcProd.html"><a href="ProcProd.html#export-approach"><i class="fa fa-check"></i><b>1.3.1</b> Export approach</a></li>
-<li class="chapter" data-level="1.3.2" data-path="ProcProd.html"><a href="ProcProd.html#primary-production-approach"><i class="fa fa-check"></i><b>1.3.2</b> Primary production approach</a></li>
-<li class="chapter" data-level="1.3.3" data-path="ProcProd.html"><a href="ProcProd.html#ensemble-method-approach"><i class="fa fa-check"></i><b>1.3.3</b> Ensemble method approach</a></li>
-</ul></li>
-<li class="chapter" data-level="1.4" data-path="ProcProd.html"><a href="ProcProd.html#sws-objects-and-the-shiny-application"><i class="fa fa-check"></i><b>1.4</b> <strong>SWS objects and the Shiny application</strong></a><ul>
-<li class="chapter" data-level="1.4.1" data-path="ProcProd.html"><a href="ProcProd.html#datatables"><i class="fa fa-check"></i><b>1.4.1</b> Datatables</a></li>
-</ul></li>
-<li class="chapter" data-level="1.5" data-path="ProcProd.html"><a href="ProcProd.html#application-goal-and-structure"><i class="fa fa-check"></i><b>1.5</b> <strong>Application goal and structure</strong></a><ul>
-<li class="chapter" data-level="1.5.1" data-path="ProcProd.html"><a href="ProcProd.html#national-mapping-tab"><i class="fa fa-check"></i><b>1.5.1</b> National mapping tab</a></li>
-<li class="chapter" data-level="1.5.2" data-path="ProcProd.html"><a href="ProcProd.html#export-approach-tab"><i class="fa fa-check"></i><b>1.5.2</b> Export approach tab</a></li>
-<li class="chapter" data-level="1.5.3" data-path="ProcProd.html"><a href="ProcProd.html#primary-prod.-approach-tab"><i class="fa fa-check"></i><b>1.5.3</b> Primary Prod. approach tab</a></li>
-<li class="chapter" data-level="1.5.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>1.5.4</b> Summary and check mappings tabs</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="Rawcode.html"><a href="Rawcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The raw processed production update R code</strong></a><ul>
-<li class="chapter" data-level="2.1" data-path="Rawcode.html"><a href="Rawcode.html#comparison-plugin-fi_comparison_quest_raw"><i class="fa fa-check"></i><b>2.1</b> <strong>Comparison plugin</strong> (‘<code>fi_comparison_quest_raw</code>’)</a></li>
-<li class="chapter" data-level="2.2" data-path="Rawcode.html"><a href="Rawcode.html#update-plugin-fi_update_raw_dt"><i class="fa fa-check"></i><b>2.2</b> <strong>Update plugin</strong> (‘<code>fi_update_raw_dt</code>’)</a></li>
-</ul></li>
+<li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
+<li class="chapter" data-level="1" data-path="ProcProd.html"><a href="ProcProd.html"><i class="fa fa-check"></i><b>1</b> <strong>Processed production data workflow</strong></a></li>
+<li class="chapter" data-level="2" data-path="Rawcode.html"><a href="Rawcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The raw processed production update R code</strong></a></li>
 <li class="chapter" data-level="3" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>3</b> <strong>The Processed production imputation Shiny R code</strong></a><ul>
 <li class="chapter" data-level="3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>3.1</b> <strong>‘global.R’ file</strong></a></li>
 <li class="chapter" data-level="3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>3.2</b> <strong>‘ui.R’ file</strong></a></li>
 <li class="chapter" data-level="3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>3.3</b> <strong>‘server.R’ file</strong></a><ul>
-<li class="chapter" data-level="3.3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#export-approach-tab-1"><i class="fa fa-check"></i><b>3.3.1</b> Export approach tab</a></li>
+<li class="chapter" data-level="3.3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#export-approach-tab"><i class="fa fa-check"></i><b>3.3.1</b> Export approach tab</a></li>
 <li class="chapter" data-level="3.3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#primary-production-approach-tab"><i class="fa fa-check"></i><b>3.3.2</b> Primary production approach tab</a></li>
 <li class="chapter" data-level="3.3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#summary-tab"><i class="fa fa-check"></i><b>3.3.3</b> Summary tab</a></li>
 <li class="chapter" data-level="3.3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#update-mapping-process"><i class="fa fa-check"></i><b>3.3.4</b> Update mapping process</a></li>
@@ -112,10 +80,7 @@
 <li class="chapter" data-level="3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#aggregate-data-tab"><i class="fa fa-check"></i><b>3.4</b> <strong>Aggregate data tab</strong></a></li>
 <li class="chapter" data-level="3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#functionsExp"><i class="fa fa-check"></i><b>3.5</b> <strong>‘external_functions.R’ file</strong></a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>4</b> <strong>The aggregation module</strong></a><ul>
-<li class="chapter" data-level="4.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>4.1</b> <strong>The code</strong></a></li>
-<li class="chapter" data-level="4.2" data-path="Aggregation.html"><a href="Aggregation.html#practical-tips-and-final-remarks"><i class="fa fa-check"></i><b>4.2</b> <strong>Practical tips and final remarks</strong></a></li>
-</ul></li>
+<li class="chapter" data-level="4" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>4</b> <strong>The aggregation module</strong></a></li>
 </ul>
 
       </nav>
@@ -148,9 +113,11 @@
 </ul>
 <pre><code># packages
  
- .libPaths( c(&quot;/usr/local/lib64/R-3.1.2/library&quot;,&quot;/work/SWS_R_Share/shiny/Rlib/3.1&quot;,.libPaths()))
+ .libPaths( c(&quot;/usr/local/lib64/R-3.1.2/library&quot;,&quot;/work/SWS_R_Share/shiny/Rlib/3.1&quot;,
+              .libPaths()))
 
 suppressMessages({
+library(dplyr)
 library(data.table)
 library(DT)
 library(faosws)
@@ -164,27 +131,50 @@ library(shiny)
 library(shinyWidgets)
 })
 
-source(&#39;external_functions.R&#39;)
+local &lt;- TRUE
 
 #-- Token QA ----
+if(local){
+  setwd(&#39;C:/Users/Taglionic/OneDrive - Food and Agriculture Organization/Github/shinyFisheriesCommodities/shinyFisheriesCommodities&#39;)
+  
+  if(CheckDebug()){
 
+  library(faoswsModules)
+  SETTINGS = ReadSettings(&quot;sws.yml&quot;)
+
+  ## If you&#39;re not on the system, your settings will overwrite any others
+  R_SWS_SHARE_PATH = SETTINGS[[&quot;share&quot;]]
+
+  ## Define where your certificates are stored
+  SetClientFiles(SETTINGS[[&quot;certdir&quot;]])
+
+  ## Get session information from SWS. Token must be obtained from web interface
+  GetTestEnvironment(baseUrl = SETTINGS[[&quot;server&quot;]],
+                     token = &#39;dd142b17-6b58-440c-8b94-d578c7500e50&#39;)#&#39;27ded447-71ec-413b-bcd4-87669ac20c70&#39;)
+}
+
+ } else {
 R_SWS_SHARE_PATH = &quot;Z:&quot;
-SetClientFiles(&quot;/srv/shiny-server/shinyFisheriesCommodities&quot;)
-GetTestEnvironment(baseUrl = &quot;https://hqlqasws1.hq.un.fao.org:8181/sws&quot;,
+SetClientFiles(&quot;/srv/shiny-server/.R/QA/&quot;)
+GetTestEnvironment(baseUrl = &quot;https://swsqa.aws.fao.org:8181&quot;,
                    token = &quot;04fc0c00-a4f3-4640-bee6-49a906863095&quot;)
+}
+
+source(&#39;external_functions.R&#39;)
 
 #-- Get the M49 countries from dimension ----
-
 M49 &lt;- GetCodeList(domain =&quot;FisheriesCommodities&quot;, dataset = &quot;commodities_total&quot;, 
-dimension = &quot;geographicAreaM49_fi&quot;)
+                   dimension = &quot;geographicAreaM49_fi&quot;)
 M49 &lt;- M49[ type == &quot;country&quot;, .( description, code)]
+# M49$description &lt;- iconv(M49$description, to = &#39;UTF-8&#39;, &#39;&#39;)
+
 M49$description &lt;- replaceforeignchars(M49$description)
 
 country_input &lt;-  sort(sprintf(&quot;%s - %s&quot;, M49$description, as.numeric(M49$code)))
-country_input &lt;- data.table(label = country_input, 
-code = sub(&quot; &quot;, &quot;&quot;, sub(&quot;.*-&quot;, &quot;&quot;, country_input)))
-country_input &lt;- rbind(data.table(label = &quot;Select country&quot;, code = &quot;-&quot;), country_input)
-
+country_input &lt;- data.table(label = country_input, code = sub(&quot; &quot;, &quot;&quot;, sub(&quot;.*-&quot;, &quot;&quot;, 
+                                                                           country_input)))
+country_input &lt;- rbind(data.table(label = &quot;&quot;, code = &quot;-&quot;), country_input)
+Encoding(country_input$label)
 #-- Mappings ----
 
 # Isscaap-isscfc-ics mapping
@@ -196,8 +186,9 @@ map_asfis[, ics := NULL]
 setnames(map_asfis, &#39;asfis&#39;, &#39;fisheriesAsfis&#39;)
 
 # Get list of commodities and create labels for shiny app
-map_isscfc &lt;- GetCodeList(&quot;FisheriesCommodities&quot;, &quot;commodities_total&quot;,
-&quot;measuredItemISSCFC&quot; )[,.(code, description)]
+map_isscfc &lt;- GetCodeList(&quot;FisheriesCommodities&quot;, 
+                          &quot;commodities_total&quot;,
+                          &quot;measuredItemISSCFC&quot;)[,.(code, description)]
 
 #-- Variables for messages from action buttons ----
 
@@ -208,7 +199,8 @@ id_comm &lt;- NULL
 id_exp &lt;- NULL
 
 # variable for primary production approach shiny messages
-id_prod &lt;- NULL</code></pre>
+id_prod &lt;- NULL
+</code></pre>
 </div>
 <div id="ui.r-file" class="section level2">
 <h2><span class="header-section-number">3.2</span> <strong>‘ui.R’ file</strong></h2>
@@ -228,7 +220,8 @@ id_prod &lt;- NULL</code></pre>
                        uiOutput(&#39;btn_year&#39;),
                        uiOutput(&#39;btn_start_year&#39;),
                        uiOutput(&#39;btn_missing&#39;),
-                       uiOutput(&#39;btn_commodity&#39;)
+                       uiOutput(&#39;btn_commodity&#39;),
+                       width = 3
                        )
                      ),
     
@@ -279,9 +272,9 @@ id_prod &lt;- NULL</code></pre>
                  br(),
                  br(),
                  actionBttn(&quot;update_production_mapping&quot;, 
-                                 label = &quot;Update mapping&quot;,
-                                 color = &quot;primary&quot;,
-                                 style = &quot;bordered&quot;),
+                            label = &quot;Update mapping&quot;,
+                            color = &quot;primary&quot;,
+                            style = &quot;bordered&quot;),
                  br(),
                  br(),
                  uiOutput(&#39;ratio_choice_prod&#39;),
@@ -293,7 +286,8 @@ id_prod &lt;- NULL</code></pre>
                  br(),
                  plotOutput(&#39;gg_prod_estimates&#39;, width = &#39;80%&#39;)
                  ),
-        tags$head(tags$style(&quot;.buttclass{background-color: #288ffe;} .buttclass{color: #fcf8e3;}&quot;)),
+        tags$head(tags$style(
+          &quot;.buttclass{background-color: #288ffe;} .buttclass{color: #fcf8e3;}&quot;)),
         tabPanel(&quot;Summary&quot;,
                  br(),
                  uiOutput(&#39;summary_check_data&#39;),
@@ -301,16 +295,19 @@ id_prod &lt;- NULL</code></pre>
                                   uiOutput(&#39;out_btn_manual&#39;)),
                  fluidPage(
                    fluidRow(
-                     column(width = 8, 
+                     column(width = 6, 
+                            uiOutput(&#39;out_btn_manual_remark&#39;),
                             plotOutput(&#39;gg_methods&#39;)),
                      column(width = 6, 
+                            h4(&#39;Choose the approach to impute the value&#39;),
+                            conditionalPanel(&quot;input.btn_approach != &#39;6&#39;&quot;,
                             actionBttn(&#39;btn_imputation&#39;, label = &#39;Impute value&#39;,
                                        style = &quot;gradient&quot;,
-                                       color = &quot;success&quot;))
+                                       color = &quot;success&quot;)))
                      )
                    )
                  ),
-        tabPanel(&quot;Check mapping export approach&quot;, 
+        tabPanel(&quot;Save Export Mapping&quot;, 
                  br(),
                  actionBttn(&quot;save_export_mapping&quot;, 
                             label = &quot;Save mapping in SWS&quot;,
@@ -318,9 +315,17 @@ id_prod &lt;- NULL</code></pre>
                             style = &quot;bordered&quot;),
                  br(),
                  br(),
+                 actionBttn(&quot;add_export_mapping&quot;, 
+                            label = &quot;Add to mapping&quot;,
+                            color = &quot;danger&quot;,
+                            style = &quot;bordered&quot;),
+                 br(),
+                 br(),
+                 rHandsontableOutput(&#39;expAdd&#39;),
+                 br(),
                  DT::dataTableOutput(&#39;check_export_mapping_data&#39;)
                  ),
-        tabPanel(&quot;Check mapping prod approach&quot;, 
+        tabPanel(&quot;Save Primary Prod. Mapping&quot;, 
                  br(),
                  actionBttn(&quot;save_prod_mapping&quot;, 
                             label = &quot;Save mapping in SWS&quot;,
@@ -328,17 +333,45 @@ id_prod &lt;- NULL</code></pre>
                             style = &quot;bordered&quot;),
                  br(),
                  br(),
+                 actionBttn(&quot;add_prod_mapping&quot;, 
+                            label = &quot;Add to mapping&quot;,
+                            color = &quot;danger&quot;,
+                            style = &quot;bordered&quot;),
+                 br(),
+                 br(),
+                 rHandsontableOutput(&#39;prodAdd&#39;),
+                 br(),
                  DT::dataTableOutput(&#39;check_prod_mapping_data&#39;)
                  ),
+        ## Aggregates panel
+        tabPanel(&quot;Data aggregates&quot;, value = &#39;tot_isscfc&#39;,
+                 br(),
+                 selectInput(inputId = &quot;btn_total&quot;, 
+                             label = &#39;Aggregation&#39;, 
+                             choices = c(&#39;&#39;, 
+                                         &#39;Grand Total&#39;, 
+                                         &#39;Yearbook Total&#39;, 
+                                         &#39;Main groups&#39;, 
+                                         &#39;ISSCFC Total&#39;), 
+                             selected = NULL),
+                 br(),
+                 
+                 DT::dataTableOutput(&#39;aggregates_data&#39;),
+                 br(),
+                 plotOutput(&#39;gg_tot_isscfc&#39;, width = &#39;80%&#39;)
+                 
+        ),
         ## Tab with markdown file presenting the Shiny App
         tabPanel(&quot;About&quot;,value = &quot;intro&quot;,
                  br(),
                  shiny::includeMarkdown(&quot;App_description.Rmd&quot;)
-                 )
+                 #withMathJax (includeHTML(rmarkdown::render(&#39;App_description.Rmd&#39;)))
+        )
         )
       )
     )
   )
+
 </code></pre>
 </div>
 <div id="server.r-file" class="section level2">
@@ -347,7 +380,7 @@ id_prod &lt;- NULL</code></pre>
 <p>First, two reactive value objects are created to store the datasets pulled from the SWS and the mapping tables for the export and primary production based approaches. The data table containing the raw data (<code>processed_prod_national_detail_raw</code>) is loaded for the chosen country, the encoding is checked and adapted with both formal and substantial operations:in the first category there are column names turning into compatible names for datasets, flag class turning from character to an ordered factor class and years are confirmed as character class. As substantial operation there is the ‘<code>expandYear</code>’ function which creates cells for missing data and the ‘<code>removeNoInfo</code>’ function which remove series with no information. Note that both functions belong to the <code>faoswsProcessing</code> package but the ‘<code>expandYear</code>’ function is also present in the <code>external_functions.R</code> file as it is an updated version of the function not yet released. The original and modified versions of raw data are stored in the data table prepared in the ‘<code>rv_data</code>’ object.</p>
 <pre><code>function(input, output) { 
   
-  #-- Get data and select variables ----
+  # -- Get data and select variables ----
   
   # Data needed
   rv_data &lt;- reactiveValues(procprod_raw0 = data.table(),
@@ -366,10 +399,13 @@ id_prod &lt;- NULL</code></pre>
                                     map_prod_prod = data.table()
   )
   
+  checkPassed &lt;- reactiveValues(Exp = &#39;No&#39;,
+                                Prim = &#39;No&#39;)
+  
   # Select INITIAL needed dataset
   
   observeEvent(input$btn_country, { 
-    
+  
     # Selected country
     sel_country &lt;- country_input[label == input$btn_country, code]
     
@@ -378,12 +414,12 @@ id_prod &lt;- NULL</code></pre>
       where &lt;- paste(&quot;geographicaream49_fi = &#39;&quot;, sel_country, &quot;&#39; &quot;, 
                      sep = &quot;&quot;)
       
-      withProgress(message = &#39;Data loading in progress&#39;,
+      withProgress(message = &#39;Loading raw data&#39;,
                    value = 0, {
                      
                      Sys.sleep(0.25)
                      incProgress(0.25)
-                     
+                    
                      # Original datatable
                      procprodraw0 &lt;- ReadDatatable(&#39;processed_prod_national_detail_raw&#39;, 
                                                    where = where)
@@ -395,6 +431,7 @@ id_prod &lt;- NULL</code></pre>
                      
                      Encoding(procprodraw0$nationaldescription) &lt;- &quot;unknown&quot; 
                      Encoding(procprodraw0$remarks) &lt;- &quot;unknown&quot; 
+                     
                      # Copied datatable to work on
                      procprodraw &lt;- copy(procprodraw0)
                      setnames(procprodraw, 
@@ -425,7 +462,7 @@ id_prod &lt;- NULL</code></pre>
                      procprodrawExp &lt;- expandYear(procprodraw[as.numeric(timePointYears) &lt; end_year, ], 
                                                   areaVar = &quot;geographicAreaM49_fi&quot;, 
                                                   elementVar = &quot;measuredElement&quot;, 
-                                                  itemVar = c(&quot;measuredItemISSCFC&quot;, &quot;id_isscfc&quot;, &quot;Scheda&quot;), 
+                                                  itemVar = c(&quot;measuredItemISSCFC&quot;, &quot;id_isscfc&quot;, &quot;Scheda&quot;, &quot;nationaldescription&quot;), 
                                                   yearVar = &quot;timePointYears&quot; , 
                                                   valueVar = &quot;Value&quot;,
                                                   newYears = end_year)
@@ -456,9 +493,10 @@ id_prod &lt;- NULL</code></pre>
       
     }
     
-  })</code></pre>
+  })
+  </code></pre>
 <p>Before the user has access to the year button the app checks if the user has selected a country and if there are data for the selected country. If the country has not been selected then the message shown is ‘Please choose a country.’. And if there are no data for the country the message is ‘Processed production data not available for this country. Choose another country.’ will appear. The imputation year button is then defined sorting the years available for the chosen country in decreasing order. After the imputation year, the starting year button is defined in the same way as the imputation year but it is restricted to be less than the imputation year. Note that the imputation year is the year for which the imputation will be performed, the imputation can only be performed for one year at the time. The start year chosen only allows to check the time series. Once the start year is chosen, the imputed data table with processed production data is loaded (<code>processed_prod_national_detail_imputed</code>) and the same formal operation as in the raw table are performed. The imputed table is also merged with the raw table to compare values. The remarks field is updated according to the raw data table, the imputed data table only inherits this field. If the data value in the raw table is missing then the value in the imputed table is kept. If the value in the raw table is not NA then raw value is kept. Flags are changed accordingly. If the data in the year before the chosen imputation year is missing, i.e. flagged (O, -), then the imputation year value is imputed as (0, O, -) and not as to be imputed (NA, M, u). This is relevant for the next button, i.e. the ‘missing’ button. With the ‘missing’ button the user is enabled to choose what data category to visualize. The user has three choices “Yes”, “No” and “Not to impute”. This choice influences the list of commodities the user visualizes when clicking the commodity button. For the commodity button a list with codes and labels is created (<code>commodity_label</code>) with the available commodities in the imputed table of processed production and the ISSCFC map. The list shown depends on the missing button choice. If the missing button value is ‘Yes’ then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have flags (M, u). If the missing button value is ‘No’ then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have observation flags different from ‘M’, ‘O’ or ‘Q’. If the missing button value is ‘Not to impute’ then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have flags (M, -) or (O, -).</p>
-<pre><code>  #-- Year ----
+<pre><code>  # -- Year ----
   output$btn_year &lt;- renderUI({
     # country button required
     validate(need(country_input[country_input$label == input$btn_country, code] != &quot;-&quot;, 
@@ -492,7 +530,7 @@ id_prod &lt;- NULL</code></pre>
     
   })
   
-  #-- Start year ----
+  # -- Start year ----
   output$btn_start_year &lt;- renderUI({
     
     # Country and year buttons required
@@ -514,9 +552,9 @@ id_prod &lt;- NULL</code></pre>
   })
   
   
-  #-- Charge imputed table ----
+  # -- Charge imputed table ----
   observeEvent(input$btn_start_year, { 
-    
+
     sel_country &lt;- country_input[country_input$label == input$btn_country, code]
     
     if(!is.null(input$btn_start_year) &amp; input$btn_start_year != &quot;&quot;){
@@ -524,8 +562,8 @@ id_prod &lt;- NULL</code></pre>
       procprodraw &lt;- rv_data$procprod_raw
       procprodraw &lt;- procprodraw[timePointYears %in% sel_years, ]
       where &lt;- paste(&quot;geographicaream49_fi = &#39;&quot;, sel_country, &quot;&#39; &quot;, sep = &quot;&quot;)
-      
-      withProgress(message = &#39;Data loading in progress&#39;,
+
+      withProgress(message = &#39;Loading complete (official + imputed) data&#39;,
                    value = 0, {
                      
                      Sys.sleep(0.25)
@@ -586,24 +624,40 @@ id_prod &lt;- NULL</code></pre>
                                                all = TRUE, suffixes = c(&quot;_old&quot;, &quot;_upd&quot;))
                      
                      
-                     # Value: if in raw table is NA either is true NA or already imputed.
-                     # If true missing then both old and upd are missing otherwise odl has a figure.
-                     # So if is.na(Value_upd) then take old value which is either missing or not
-                     # If upd is not missing and official then Value_upd, otherwise leave old.
-                     procprod_imp_upd[, remarks := remarks_upd]
-                     procprod_imp_upd[, Value := ifelse(is.na(Value_upd), Value_old, Value_upd)]
-                     procprod_imp_upd[, flagObservationStatus := flagObservationStatus_old]
+                     # Remarks are the old ones, if the row was empty in the imputed table, 
+                     # i.e. the remark cell was empty then the raw updated one is assigned
+                     procprod_imp_upd[ , remarks := remarks_old]
+                     procprod_imp_upd[is.na(remarks_old), remarks := remarks_upd]
+                     
+                     # Values are the old ones, if the row was empty in the imputed table, 
+                     # i.e. the Values cell was empty then the raw updated one is assigned
+                     procprod_imp_upd[ , Value := as.numeric(Value_old)]
+                     procprod_imp_upd[is.na(Value_old), Value := as.numeric(Value_upd)]
+                     
+                     # flagObservationStatus are the old ones, if the row was empty in the imputed table, 
+                     # i.e. the flagObservationStatus cell was empty then the raw updated one is assigned
+                     procprod_imp_upd[ , flagObservationStatus := flagObservationStatus_old]
                      procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus &lt;- procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus_upd
-                     procprod_imp_upd[flagObservationStatus_upd %in% c(&#39;&#39;, &#39;X&#39;), ]$flagObservationStatus &lt;- procprod_imp_upd[flagObservationStatus_upd %in% c(&#39;&#39;, &#39;X&#39;), ]$flagObservationStatus_upd
+                     
+                     procprod_imp_upd[, flagMethod := flagMethod_old]
+                     procprod_imp_upd[is.na(flagMethod_old), flagMethod := flagMethod_upd]
+                     
+                     # If official data in updated table than it overwrites 
+                     procprod_imp_upd[flagObservationStatus_upd %in% c(&#39;&#39;, &#39;X&#39;), 
+                                      c(&#39;Value&#39;, &#39;flagObservationStatus&#39;, &#39;flagMethod&#39;, &#39;remarks&#39;) := list(Value_upd,
+                                                                                                           flagObservationStatus_upd,
+                                                                                                           flagMethod_upd,
+                                                                                                           remarks_upd)]
+                     
                      
                      procprod_imp_upd$flagObservationStatus &lt;- factor(procprod_imp_upd$flagObservationStatus, 
                                                                       levels = c(&#39;M&#39;, &#39;O&#39;, &#39;N&#39;, &#39;&#39;, &#39;X&#39;, &#39;T&#39;, &#39;E&#39;, &#39;I&#39;), 
                                                                       ordered = TRUE)
-                     procprod_imp_upd[, flagMethod := ifelse(is.na(flagMethod_old), flagMethod_upd, flagMethod_old)]
-                     
+                    
                      procprod_imp_upd[ , c(&#39;remarks_old&#39;, &#39;Value_old&#39;, &#39;flagObservationStatus_old&#39;, &#39;flagMethod_old&#39;,
                                            &#39;remarks_upd&#39;, &#39;Value_upd&#39;, &#39;flagObservationStatus_upd&#39;, &#39;flagMethod_upd&#39;) := NULL]
                    
+                     # If previous year the data was (O, -) then if this year it was considered (M, u) the figure is set back to (O, -)
                      imputYear &lt;- input$btn_year
                      missingO &lt;- procprod_imp_upd[flagObservationStatus == &#39;O&#39; &amp; timePointYears == as.character((as.numeric(imputYear) - 1)), ]
                      
@@ -626,7 +680,7 @@ id_prod &lt;- NULL</code></pre>
     
   })
   
-  #-- Missing ----
+  # -- Missing ----
   output$btn_missing &lt;- renderUI({
     
     # Country and years buttons required
@@ -640,11 +694,11 @@ id_prod &lt;- NULL</code></pre>
     
   })
   
-  #-- Commodities ----
+  # -- Commodities ----
   output$btn_commodity &lt;- renderUI({
     # Country, years and missing buttons required
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_missing)
-    
+  
     input$btn_imputation
     
     # load parameters and raw data
@@ -702,13 +756,14 @@ id_prod &lt;- NULL</code></pre>
   })
   </code></pre>
 <p>The following code chunk contains the first tab. The imputed table is recalled, the column order and names are changed and displayed. There is the ‘<code>check_new_items</code>’ button that compares the ISSCFC and the scheda codes contained in the processed production raw table and those in the initial processed production imputed table. If an ISSCFC code or a Scheda code found in the raw table is not found in the imputed table it means there is a new commodity that was not present for the country before the last year. Clicking the button the user sees the messages.</p>
-<pre><code>#-- First tab showing imputed table----
+<pre><code>  # -- First tab showing imputed table----
   output$imputed_data &lt;- DT::renderDataTable(server = FALSE, {
     req(input$btn_country, input$btn_year, input$btn_start_year)
     if(is.null(input$btn_start_year)) return(NULL)
     
     tab2display &lt;- copy(rv_data$procprod_imp)
     
+    if(nrow(tab2display) &gt; 0){
     setcolorder(tab2display, c(&quot;geographicAreaM49_fi&quot;, &quot;Scheda&quot;, &quot;timePointYears&quot;, 
                                &quot;id_isscfc&quot;, &quot;measuredItemISSCFC&quot;, &quot;nationalquantity&quot;,
                                &quot;nationalquantityunit&quot;, &quot;Value&quot;, &quot;flagObservationStatus&quot;,
@@ -724,7 +779,7 @@ id_prod &lt;- NULL</code></pre>
                &quot;N. unit&quot;, &quot;Value&quot;, &quot;Obs.flag&quot;,
                &quot;Met.flag&quot;, &quot;Approach&quot;, &quot;N.code&quot;, &quot;N.description&quot;,
                &quot;Remarks&quot;, &quot;N.Item&quot;, &quot;Element&quot;))
-    
+    }
     DT::datatable(tab2display, extensions = &#39;Buttons&#39;, filter = &#39;top&#39;,
                   options = list(
                     dom = &#39;Bfrtip&#39;,
@@ -773,59 +828,167 @@ id_prod &lt;- NULL</code></pre>
       
     }
     
-  })</code></pre>
-<p>In order to complete the preparation part of the app, the part of the ‘Global production’ and ‘Commodity (total)’ datasets involved in the computations are loaded, followed by the data table of the export approach mapping. From the ‘Global production’ dataset all the data for the country and time series selected are loaded. Column names are then adapted and data are aggregated by the ‘<code>fisheriesCatchArea</code>’ variable (data for the same area are summed and the lowest observation flag is assigned to the cell); from the ‘Commodity (total)’ datasets only export data (‘5910’ code) for the mapped commodities are selected for the country and time series selected. Note that both datasets when loaded are accompanied by a progress bar. The export mapping data table is also loaded for the selected country and a copy with dataset compatible column names is made. A check for duplicates is included but not for the user (these checks are performed in the next tabs).</p>
-<pre><code>  #-- Get commodity and global production datasets ----
-  observeEvent(input$btn_commodity, { 
+  })
+  </code></pre>
+<p>In order to complete the preparation part of the app, the part of the ‘Capture’, ‘Aquaculture’ and ‘Commodity (total)’ datasets involved in the computations are loaded, followed by the data table of the export approach mapping. From the ‘Capture’ and ‘Aquaculture’ datasets all the data for the country and time series selected are loaded and merged. Column names are then adapted and data are aggregated by the ‘<code>fisheriesCatchArea</code>’ variable (data for the same area are summed and the lowest observation flag is assigned to the cell); from the ‘Commodity (total)’ datasets only export data (‘5910’ code) for the mapped commodities are selected for the country and time series selected. Note that both datasets when loaded are accompanied by a progress bar. The export mapping data table is also loaded for the selected country and a copy with dataset compatible column names is made. A check for duplicates is included but not for the user (these checks are performed in the next tabs).</p>
+<pre><code>  # -- Get commodity and global production datasets ----
+  observeEvent(input$btn_start_year, { 
     req(input$btn_country, input$btn_year, input$btn_start_year)
     commodity_label &lt;- rv_data$commodity_label
     
     sel_country &lt;- country_input[country_input$label == input$btn_country, code]
     sel_years &lt;- input$btn_start_year:input$btn_year
-    sel_isscfc &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, isscfc]
-    
-    if(input$btn_commodity != &quot;&quot;){
+    # sel_isscfc &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, isscfc]
+
+    #if(input$btn_commodity != &quot;&quot;){
       ## Get Global production
-      KeyGlobal &lt;- DatasetKey(domain = &quot;Fisheries&quot;, dataset = &quot;fi_global_production&quot;, dimensions = list(
-        geographicAreaM49_fi = Dimension(name = &quot;geographicAreaM49_fi&quot;, keys = sel_country), # GetCodeList(&quot;Fisheries&quot;, &quot;fi_global_production&quot;,&quot;geographicAreaM49_fi&quot; )[,code]),
-        fisheriesAsfis = Dimension(name = &quot;fisheriesAsfis&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;fi_global_production&quot;,&quot;fisheriesAsfis&quot; )[,code]),
-        fisheriesCatchArea = Dimension(name = &quot;fisheriesCatchArea&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;fi_global_production&quot;,&quot;fisheriesCatchArea&quot; )[,code]),
-        measuredElement = Dimension(name = &quot;measuredElement&quot;, keys = c(&quot;FI_001&quot;)),
-        timePointYears = Dimension(name = &quot;timePointYears&quot;, keys =  as.character(sel_years) )))
-      withProgress(message = &#39;Global production data loading in progress&#39;,
+      # KeyGlobal &lt;- DatasetKey(domain = &quot;Fisheries&quot;, dataset = &quot;fi_global_production&quot;, dimensions = list(
+      #   geographicAreaM49_fi = Dimension(name = &quot;geographicAreaM49_fi&quot;, keys = sel_country), # GetCodeList(&quot;Fisheries&quot;, &quot;fi_global_production&quot;,&quot;geographicAreaM49_fi&quot; )[,code]),
+      #   fisheriesAsfis = Dimension(name = &quot;fisheriesAsfis&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;fi_global_production&quot;,&quot;fisheriesAsfis&quot; )[,code]),
+      #   fisheriesCatchArea = Dimension(name = &quot;fisheriesCatchArea&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;fi_global_production&quot;,&quot;fisheriesCatchArea&quot; )[,code]),
+      #   measuredElement = Dimension(name = &quot;measuredElement&quot;, keys = c(&quot;FI_001&quot;)),
+      #   timePointYears = Dimension(name = &quot;timePointYears&quot;, keys =  as.character(sel_years) )))
+      browser()
+      # Now getting capture and aquaculture frome production and merging
+    if(local){
+      
+      if(CheckDebug()){
+        
+        library(faoswsModules)
+        SETTINGS = ReadSettings(&quot;sws1.yml&quot;)
+        
+        ## If you&#39;re not on the system, your settings will overwrite any others
+        R_SWS_SHARE_PATH = SETTINGS[[&quot;share&quot;]]
+        
+        ## Define where your certificates are stored
+        SetClientFiles(SETTINGS[[&quot;certdir&quot;]])
+        
+        ## Get session information from SWS. Token must be obtained from web interface
+        GetTestEnvironment(baseUrl = SETTINGS[[&quot;server&quot;]],
+                           token = &#39;b830f39c-253d-4d6f-9978-ff6f00d47765&#39;)#&#39;27ded447-71ec-413b-bcd4-87669ac20c70&#39;)
+      }
+      
+    } else {
+      R_SWS_SHARE_PATH = &quot;Z:&quot;
+      SetClientFiles(&quot;/srv/shiny-server/.R/PROD/&quot;)
+      GetTestEnvironment(baseUrl = &quot;https://sws.fao.org:8181&quot;,
+                         token = &quot;04fc0c00-a4f3-4640-bee6-49a906863095&quot;)
+    }  
+    
+    
+      withProgress(message = &#39;Loading Global Production data&#39;,
                    value = 0, {
+                    
+                     Sys.sleep(0.05)
+                     incProgress(0.15)
+                  
+                     dim1aqua &lt;- Dimension(name = &quot;geographicAreaM49_fi&quot;, keys = sel_country) # GetCodeList(&quot;Fisheries&quot;, &quot;aqua&quot;, &quot;geographicAreaM49_fi&quot;)$code)
+                     dim2aqua &lt;- Dimension(name = &quot;fisheriesAsfis&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;aqua&quot;, &quot;fisheriesAsfis&quot;)$code)
+                     dim3aqua &lt;- Dimension(name = &quot;fisheriesProductionSource&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;aqua&quot;, &quot;fisheriesProductionSource&quot;)$code)
+                     dim4aqua &lt;- Dimension(name = &quot;fisheriesCatchArea&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;aqua&quot;, &quot;fisheriesCatchArea&quot;)$code)
+                     dim5aqua &lt;- Dimension(name = &quot;measuredElement&quot;, keys = &quot;FI_001&quot;)
+                     dim6aqua &lt;- Dimension(name = &quot;timePointYears&quot;, keys = as.character(sel_years)) # GetCodeList(&quot;Fisheries&quot;, &quot;aqua&quot;, &quot;timePointYears&quot;)$code) 
+                     key1 &lt;- DatasetKey(domain = &quot;Fisheries&quot;, dataset = &quot;aqua&quot;, dimensions = list(dim1aqua, dim2aqua, dim3aqua, dim4aqua, dim5aqua, dim6aqua))
+                     aqua_quantity &lt;- GetData(key1)
                      
-                     Sys.sleep(0.25)
-                     incProgress(0.25)
+                     Sys.sleep(0.05)
+                     incProgress(0.35)
+                     #[1] &quot;geographicAreaM49_fi&quot; &quot;fisheriesAsfis&quot;       &quot;fisheriesCatchArea&quot;   &quot;measuredElement&quot;     
+                     #[5] &quot;timePointYears&quot;   
+                     dim1capture &lt;- Dimension(name = &quot;geographicAreaM49_fi&quot;, keys = sel_country) #  GetCodeList(&quot;Fisheries&quot;, &quot;capture&quot;, &quot;geographicAreaM49_fi&quot;)$code)
+                     dim2capture &lt;- Dimension(name = &quot;fisheriesAsfis&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;capture&quot;, &quot;fisheriesAsfis&quot;)$code)
+                     dim3capture &lt;- Dimension(name = &quot;fisheriesCatchArea&quot;, keys = GetCodeList(&quot;Fisheries&quot;, &quot;capture&quot;, &quot;fisheriesCatchArea&quot;)$code)
+                     dim4capture &lt;- Dimension(name = &quot;measuredElement&quot;, keys = &quot;FI_001&quot;)
+                     dim5capture &lt;- Dimension(name = &quot;timePointYears&quot;, keys = as.character(sel_years)) # GetCodeList(&quot;Fisheries&quot;, &quot;aqua&quot;, &quot;timePointYears&quot;)$code) 
+                     key2 &lt;- DatasetKey(domain = &quot;Fisheries&quot;, dataset = &quot;capture&quot;, dimensions = list(dim1capture, dim2capture, dim3capture, dim4capture, dim5capture))
+                     cap_quantity &lt;- GetData(key2)
                      
-                     globalProduction &lt;- GetData(KeyGlobal)
-                     Sys.sleep(0.75)
+                     Sys.sleep(0.05)
+                     incProgress(0.55)
+                     
+                     dim4capture = Dimension(name = &quot;measuredElement&quot;, keys = &quot;FI_002&quot;)
+                     key2 &lt;- DatasetKey(domain = &quot;Fisheries&quot;, dataset = &quot;capture&quot;, dimensions = list(dim1capture, dim2capture, dim3capture, dim4capture, dim5capture))
+                     cap_numbers &lt;- GetData(key2)
+                     
+                     aqua_quantity$flagCurrency &lt;- NULL
+                     aqua_quantity$fisheriesProductionSource &lt;- NULL
+                    
+                     globalprod_new &lt;- rbind (aqua_quantity, cap_quantity) 
+                     globalprod_new &lt;- rbind (globalprod_new, cap_numbers)
+                     
+                     globalprod_new &lt;- globalprod_new %&gt;% 
+                       group_by(geographicAreaM49_fi,fisheriesAsfis,fisheriesCatchArea,measuredElement,timePointYears) %&gt;% 
+                       summarise(Flag=myAggregate(Value,flagObservationStatus), Quantity=sum(Value))
+                     globalprod_new &lt;- globalprod_new %&gt;% ungroup()
+                     
+                     colnames(globalprod_new)[colnames(globalprod_new)==&quot;Quantity&quot;]  &lt;- &quot;Value&quot;
+                     colnames(globalprod_new)[colnames(globalprod_new)==&quot;Flag&quot;]  &lt;- &quot;flagObservationStatus&quot;
+                     globalprod_new$flagMethod &lt;- &quot;-&quot;
+                     
+                     # for aggregated Values&gt;0,status=N is no longer correct
+                     globalprod_new$flagObservationStatus[which(globalprod_new$Value&gt;0 &amp; globalprod_new$flagObservationStatus==&#39;N&#39;)] &lt;- &#39;&#39;
+                     Sys.sleep(0.05)
+                     incProgress(0.75)
+                     # order columns
+                     globalprod_new &lt;- globalprod_new[,c(&#39;geographicAreaM49_fi&#39;,&#39;fisheriesAsfis&#39;,&#39;fisheriesCatchArea&#39;,&#39;measuredElement&#39;,&#39;timePointYears&#39;,&#39;Value&#39;,&#39;flagObservationStatus&#39;,&#39;flagMethod&#39;) ]
+                     
+                     # remove grouping
+                     globalProduction &lt;- as.data.table(globalprod_new)
+                     
+                     # Convert flags into ordinal factor so that simple aggregation is possible
+                     # The function aggregateObservationFlag is too slow so flag are transformed into factors
+                     globalProduction$flagObservationStatus &lt;- ifelse(is.na(globalProduction$flagObservationStatus), &#39;&#39;, globalProduction$flagObservationStatus)
+                     globalProduction$flagObservationStatus &lt;- factor(globalProduction$flagObservationStatus, levels = c(&#39;M&#39;, &#39;O&#39;, &#39;N&#39;, &#39;&#39;, &#39;X&#39;, &#39;T&#39;, &#39;E&#39;, &#39;I&#39;), ordered = TRUE)
+                     
+                     # Aggregate by fisheriesCatchArea
+                     globalProduction &lt;- globalProduction[, list(ValueAggr = sum(Value, na.rm = TRUE),
+                                                                 flagObservationStatusAggr = max(flagObservationStatus),
+                                                                 flagMethodAggr = &quot;s&quot;),
+                                                          by=c(&quot;geographicAreaM49_fi&quot;,
+                                                               &quot;fisheriesAsfis&quot;,
+                                                               &quot;measuredElement&quot;,
+                                                               &quot;timePointYears&quot;)]
+                     Sys.sleep(0.05)
                      incProgress(0.95)
-                   })
+                     setnames(globalProduction, 
+                              c(&quot;ValueAggr&quot;, &quot;flagObservationStatusAggr&quot;, &quot;flagMethodAggr&quot;),
+                              c(&quot;Value&quot;, &quot;flagObservationStatus&quot;, &quot;flagMethod&quot;))
+                     
+                     globalProduction[ , c(&quot;measuredElement&quot;):=NULL]     
+      })
+    
+      if(local){
+        
+        if(CheckDebug()){
+          
+          library(faoswsModules)
+          SETTINGS = ReadSettings(&quot;sws.yml&quot;)
+          
+          ## If you&#39;re not on the system, your settings will overwrite any others
+          R_SWS_SHARE_PATH = SETTINGS[[&quot;share&quot;]]
+          
+          ## Define where your certificates are stored
+          SetClientFiles(SETTINGS[[&quot;certdir&quot;]])
+          
+          ## Get session information from SWS. Token must be obtained from web interface
+          GetTestEnvironment(baseUrl = SETTINGS[[&quot;server&quot;]],
+                             token = &#39;dd142b17-6b58-440c-8b94-d578c7500e50&#39;)#&#39;27ded447-71ec-413b-bcd4-87669ac20c70&#39;)
+        }
+        
+      } else {
+        R_SWS_SHARE_PATH = &quot;Z:&quot;
+        SetClientFiles(&quot;/srv/shiny-server/.R/QA/&quot;)
+        GetTestEnvironment(baseUrl = &quot;https://swsqa.aws.fao.org:8181&quot;,
+                           token = &quot;04fc0c00-a4f3-4640-bee6-49a906863095&quot;)
+      }
       
-      # Convert flags into ordinal factor so that simple aggregation is possible
-      # The function aggregateObservationFlag is too slow so flag are transformed into factors
-      globalProduction$flagObservationStatus &lt;- ifelse(is.na(globalProduction$flagObservationStatus), &#39;&#39;, globalProduction$flagObservationStatus)
-      
-      globalProduction$flagObservationStatus &lt;- factor(globalProduction$flagObservationStatus, levels = c(&#39;M&#39;, &#39;O&#39;, &#39;N&#39;, &#39;&#39;, &#39;X&#39;, &#39;T&#39;, &#39;E&#39;, &#39;I&#39;), ordered = TRUE)
-      
-      # Aggregate by fisheriesCatchArea
-      globalProduction &lt;- globalProduction[, list(ValueAggr = sum(Value, na.rm = TRUE),
-                                                  flagObservationStatusAggr = max(flagObservationStatus),
-                                                  flagMethodAggr = &quot;s&quot;),
-                                           by=c(&quot;geographicAreaM49_fi&quot;,
-                                                &quot;fisheriesAsfis&quot;,
-                                                &quot;measuredElement&quot;,
-                                                &quot;timePointYears&quot;)]
-      
-      setnames(globalProduction, 
-               c(&quot;ValueAggr&quot;, &quot;flagObservationStatusAggr&quot;, &quot;flagMethodAggr&quot;),
-               c(&quot;Value&quot;, &quot;flagObservationStatus&quot;, &quot;flagMethod&quot;))
-      
-      globalProduction[ , c(&quot;measuredElement&quot;):=NULL]
-      
-      ## Get export mapping table
+      withProgress(message = &#39;Loading Commodity data&#39;,
+                                value = 0, {
+                                  ## Get export mapping table
       whereMap &lt;- paste(&quot;geographic_area_m49_fi = &#39;&quot;, sel_country, &quot;&#39; &quot;, sep = &quot;&quot;) 
+      
+      Sys.sleep(0.10)
+      incProgress(0.15)
       
       map_prod_exp0 &lt;- ReadDatatable(&#39;isscfc_mapping_export_approach&#39;, readOnly = FALSE, where = whereMap)
       map_prod_exp &lt;- copy(map_prod_exp0)
@@ -847,26 +1010,39 @@ id_prod &lt;- NULL</code></pre>
   
       ##Get Commodity Data
       
-      onlyExport &lt;- &#39;5910&#39;
-      commodity2load &lt;- as.vector(map_prod_exp[measuredItemISSCFC == sel_isscfc, ]$measuredItemISSCFC_exp)
+      onlyExport &lt;- c(&#39;5910&#39;, &#39;5912&#39;)
+      # commodity2load &lt;- as.vector(map_prod_exp[measuredItemISSCFC == sel_isscfc, ]$measuredItemISSCFC_exp)
+      # commodity2load &lt;- as.vector(map_prod_exp$measuredItemISSCFC_exp)
+      Sys.sleep(0.10)
+      incProgress(0.25)
       
       KeyComm &lt;- DatasetKey(domain = &quot;Fisheries Commodities&quot;, dataset = &quot;commodities_total&quot;, dimensions = list(
         geographicAreaM49_fi = Dimension(name = &quot;geographicAreaM49_fi&quot;, keys = sel_country), 
-        measuredItemISSCFC = Dimension(name = &quot;measuredItemISSCFC&quot;, keys = commodity2load),
+        measuredItemISSCFC = Dimension(name = &quot;measuredItemISSCFC&quot;, keys =  GetCodeList(&quot;FisheriesCommodities&quot;, 
+                                                                                        &quot;commodities_total&quot;,
+                                                                                        &quot;measuredItemISSCFC&quot;)$code ),#commodity2load),
         measuredElement = Dimension(name = &quot;measuredElement&quot;, keys = onlyExport),
         timePointYears = Dimension(name = &quot;timePointYears&quot;, keys = as.character(sel_years) ))) 
-      withProgress(message = &#39;Commodity data loading in progress&#39;,
-                   value = 0, {
+      
                      
-                     Sys.sleep(0.25)
-                     incProgress(0.25)
-                     
+                     Sys.sleep(0.10)
+                     incProgress(0.4)
+                     6
                      commodityDB &lt;- GetData(KeyComm)
                      Sys.sleep(0.75)
                      incProgress(0.95)
                    })
       
       commodityDB$flagObservationStatus &lt;- factor(commodityDB$flagObservationStatus, levels = c(&#39;M&#39;, &#39;O&#39;, &#39;N&#39;, &#39;&#39;, &#39;X&#39;, &#39;T&#39;, &#39;E&#39;, &#39;I&#39;), ordered = TRUE)
+      
+      
+      commodityDB &lt;- commodityDB[ , list(Value = sum(Value, na.rm = TRUE),
+                                         measuredElement = &#39;5910&#39;,
+                                         flagObservationStatus = max(flagObservationStatus),
+                                         flagMethod = &quot;-&quot;),
+                                  by=c(&quot;geographicAreaM49_fi&quot;,
+                                       &quot;measuredItemISSCFC&quot;,
+                                       &quot;timePointYears&quot;)]
       
       # Save into the rv_data object so to recall it when needed
       rv_data$globalProduction &lt;- globalProduction
@@ -875,13 +1051,17 @@ id_prod &lt;- NULL</code></pre>
       rv_mappingtable$map_prod_exp0 &lt;- map_prod_exp0
       rv_mappingtable$map_prod_exp &lt;- map_prod_exp
       
-    }
+    
+      
+      
+      # }
   })
+  
 </code></pre>
-<div id="export-approach-tab-1" class="section level3">
+<div id="export-approach-tab" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> Export approach tab</h3>
 <p>After recalling the chosen commodity and the needed data a first check is performed. If there is no mapping for the chosen country then the app shows the message ‘Export approach not applicable. No available mapping for the chosen country.’. Once all the parameters have been retrieved the data are filtered by the chosen parameters. Other checks are made to see if the chosen time series is available. If the series is not available or only few years out of the chosen ones are available then messages are displayed and the user has to choose a different series. The data from the imputed processed production and the commodity dataset are merged through the export approach mapping table. Before the merge, the three objects are filtered in order to select only the needed rows: the processed production table is filtered by country, years and Scheda selected; the mapping table rows selected are those corresponding to the ISSCFC (production) code corresponding to the selected Scheda for the country and the period selected is the one corresponding to the selected year; the commodity dataset selected contains only non-missing export data (i.e. observation flag different from ‘O’, ‘M’, ‘Q’ and code ‘5910’) for the country selected and the commodity listed in the mapping table (ISSCFC export). The function then returns the whole merged data tables and the one to display in the Shiny tab which has commodity description and ordered columns.</p>
-<pre><code>#-- Export method approach ----
+<pre><code>  # -- Export method approach ----
   
   #-- Get first tab with mapping
   isscfc_check_reac &lt;- reactive({
@@ -898,7 +1078,7 @@ id_prod &lt;- NULL</code></pre>
     globalProduction &lt;- rv_data$globalProduction
     commodityDB &lt;- rv_data$commodityDB
     map_prod_exp &lt;- rv_mappingtable$map_prod_exp
-    
+
     validate(
       need(nrow(map_prod_exp) &gt; 0,
            &quot;Export approach not applicable. No available mapping for the chosen country.&quot;)
@@ -912,7 +1092,9 @@ id_prod &lt;- NULL</code></pre>
     
     ## Checks
     # Select export commodities linked to the selected commodity to check if there are export data available 
-    commodities2check &lt;- map_prod_exp[ start_year &lt; input$btn_year &amp;
+    map_prod_exp_mod &lt;- copy(map_prod_exp)
+    map_prod_exp_mod &lt;- map_prod_exp_mod[ end_year == &#39;LAST&#39;, end_year := &#39;9999&#39;]
+    commodities2check &lt;- map_prod_exp_mod[ start_year &lt;= input$btn_year &amp; input$btn_year &lt; end_year &amp;
                                          measuredItemISSCFC %in% sel_isscfc, ]
     
     commodities2check &lt;-  commodities2check[start_year == max(as.numeric(start_year))]$measuredItemISSCFC_exp
@@ -920,8 +1102,8 @@ id_prod &lt;- NULL</code></pre>
     # Filter commodity db chunk needed
     commodityDB_filtered &lt;- commodityDB[geographicAreaM49_fi == sel_country &amp; 
                                           measuredElement == &quot;5910&quot; &amp;
-                                          measuredItemISSCFC %in% commodities2check &amp;
-                                          !flagObservationStatus %in% c(&#39;O&#39;, &#39;M&#39;, &#39;Q&#39;), ]
+                                          measuredItemISSCFC %in% commodities2check, ]  # &amp;
+                                        #  !flagObservationStatus %in% c(&#39;O&#39;, &#39;M&#39;, &#39;Q&#39;), ]
     
     # Commodity DB with needed data change dimension name so not confunded with production codes
     setnames(commodityDB_filtered, old = &quot;measuredItemISSCFC&quot;, new = &quot;measuredItemISSCFC_exp&quot;)
@@ -929,24 +1111,16 @@ id_prod &lt;- NULL</code></pre>
     # Years available among those selected 
     avail_years &lt;- unique(commodityDB_filtered$timePointYears)
     
-    validate(
-      need(length(avail_years) &gt; 0,
-           &quot;Export approach not applicable. No available export value for the chosen input combination.&quot;)
-    )
-    
-    validate(
-      need(all(sel_years %in% avail_years),
-           sprintf(&quot;Export data for the time range and commodity selected are not available. Years available: %s&quot;,
-                   ifelse(length(avail_years)&gt;0, paste(avail_years, collapse = &quot;, &quot;),&quot;None&quot;)))
-    )
-    
     # Processed production chunk needed
     procprod_filtered &lt;- procprodimp[geographicAreaM49_fi %in% sel_country &amp; 
                                        timePointYears %in% sel_years &amp;
                                        Scheda %in% sel_commodity, ]
     
     # Mapping chunk needed
-    map_prod_exp_filtered &lt;- map_prod_exp[end_year == &quot;LAST&quot; &amp; measuredItemISSCFC %in% sel_isscfc, ]
+    map_prod_exp_filtered &lt;- map_prod_exp[start_year &lt;= input$btn_year &amp; 
+                                            input$btn_year &lt; end_year &amp; 
+                                            measuredItemISSCFC %in% sel_isscfc, ]
+    
     # Delete unnecessary columns
     map_prod_exp_filtered[ , c(&#39;__id&#39;, &#39;__ts&#39;) := NULL]
     
@@ -993,16 +1167,35 @@ id_prod &lt;- NULL</code></pre>
                                      &quot;measuredItemISSCFC&quot;
     ))
     
+    if(nrow(map_prod_exp) == 0| length(avail_years) == 0| any(!sel_years %in% avail_years)){
+    imputed_year_data &lt;- NA
+    prod_exp_data_tab &lt;- NA
+    checkPassed$Exp &lt;- &#39;No&#39;
+    } else {
+      checkPassed$Exp &lt;- &#39;Yes&#39;
+    }
+    
     out_exp &lt;- list(DF_display = imputed_year_data, DF_full = prod_exp_data_tab)
+    
+    validate(
+      need(length(avail_years) &gt; 0,
+           &quot;Export approach not applicable. No available export value for the chosen input combination.&quot;)
+    )
+    
+    validate(
+      need(all(sel_years %in% avail_years),
+           sprintf(&quot;Export data for the time range and commodity selected are not available. Years available: %s&quot;,
+                   ifelse(length(avail_years)&gt;0, paste(avail_years, collapse = &quot;, &quot;),&quot;None&quot;)))
+    )
+    
     return(out_exp)
   })
-</code></pre>
+  </code></pre>
 <p>The next code chunk includes the ‘<code>rhandsontable</code>’ object needed to modify the table shown at the top of the tab to change the export mapping and the button to select the ratio used to calculate the missing data (keep the ‘Original data’, use the ‘Average ratio’ or choose a ‘Manual ratio’). If the manual ratio is chosen then a panel is shown to insert the value.</p>
-<pre><code>#-- Export selection table
+<pre><code> #-- Export selection table
   
   output$isscfc_check_data &lt;- renderRHandsontable({
     data_out &lt;- isscfc_check_reac()
-    
     rhandsontable(data_out$DF_display, rowHeaders = NULL, width = &#39;auto&#39;, height = &#39;auto&#39;) 
   })
   
@@ -1041,7 +1234,7 @@ id_prod &lt;- NULL</code></pre>
     numericInput(inputId = &#39;btn_manual_exp&#39;, label = &#39;Manual ratio&#39;, value = NA)
     
   })
-</code></pre>
+  </code></pre>
 <p>The table containing value of processed production, exports and ratio for the time series selected and the average values can now be built. First, all the needed datasets and parameters are recalled along with the table where mapping modification can have been performed and the output of the <code>isscfc_check_reac</code> containing the needed table. Checks for new commodities in the production and export columns are performed so to have all commodities included in the mapping. The old and the new data are compared and the missing values are inserted. Old and new data are then bound together and manual inputs are checked. The function <code>export_imputation2</code> is applied to build the table shown in the middle of the export tab. The function is described in the <a href="ProcProdcode.html#functionsExp">3.5</a> paragraph.</p>
 <pre><code>#-- Create table with potentially imputable value ----
   output$table_exp_estimates &lt;- renderRHandsontable({
@@ -1064,12 +1257,20 @@ id_prod &lt;- NULL</code></pre>
     tab_updated &lt;- rhandsontable::hot_to_r(input$isscfc_check_data)
     # ISSCFC description code no more needed
     tab_updated &lt;- tab_updated[ , description := NULL]
-    
+    tab_updated$measuredItemISSCFC_exp &lt;- gsub(&#39; &#39;, &#39;&#39;, tab_updated$measuredItemISSCFC_exp)
+    tab_updated$measuredItemISSCFC &lt;- gsub(&#39; &#39;, &#39;&#39;, tab_updated$measuredItemISSCFC)
+
     # Tables as from &#39;out_exp&#39;
     data_out &lt;- isscfc_check_reac()
     # Complete table for imputed year
     data4update &lt;- data_out$DF_full[timePointYears == input$btn_year, ]
+    data4update$measuredItemISSCFC_exp &lt;- gsub(&#39; &#39;, &#39;&#39;, data4update$measuredItemISSCFC_exp)
+    data4update$measuredItemISSCFC &lt;- gsub(&#39; &#39;, &#39;&#39;, data4update$measuredItemISSCFC)
+    
     data_prev &lt;- data_out$DF_full[timePointYears != input$btn_year, ]
+    data_prev$measuredItemISSCFC_exp &lt;- gsub(&#39; &#39;, &#39;&#39;, data_prev$measuredItemISSCFC_exp)
+    data_prev$measuredItemISSCFC &lt;- gsub(&#39; &#39;, &#39;&#39;, data_prev$measuredItemISSCFC)
+    
     ## check the commodities inserted in the new table
     
     # If unknown commodity inserted in production codes
@@ -1146,9 +1347,10 @@ id_prod &lt;- NULL</code></pre>
                     bottom = list(width = 2, color = &quot;red&quot;),
                     right = list(width = 2, color = &quot;red&quot;))))
     
-  })</code></pre>
+  })
+  </code></pre>
 <p>The same process applies to create the plot (<em>ggplot</em>) showing the time series for both the processed production and the export figures.</p>
-<pre><code>#-- Export approach plot ----
+<pre><code>  #-- Export approach plot ----
   output$gg_exp_estimates &lt;- renderPlot({
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
     
@@ -1194,6 +1396,11 @@ id_prod &lt;- NULL</code></pre>
       )
     )
     
+    validate(
+      need (all(!is.na(tab_updated[ , .(type, measuredItemISSCFC_exp, timePointYears, measuredItemISSCFC)])),
+            &quot;One of the key mapping information is missing (type, measuredItemISSCFC_exp, timePointYears, measuredItemISSCFC).&quot;
+      )
+    )
     
     # # Fill missing columns and update start and end year. Start year is the year of imputation and end_year is last by default
     # tab_updated &lt;- tab_updated[, c(&quot;start_year&quot;, &quot;end_year&quot;):= list(input$btn_year, &#39;LAST&#39;)]
@@ -1245,22 +1452,24 @@ id_prod &lt;- NULL</code></pre>
     # Prepare table for plot
     export_out2 &lt;- export_out[, -which(names(export_out) == &quot;Flag&quot;), with = FALSE]
     export_out_aux &lt;- melt(export_out2, 1, variable.name = &#39;Year&#39;)
-    
+
     suppressWarnings(export_out_aux[, Year := as.numeric(as.character(Year))])
     suppressWarnings(export_out_aux[, value := as.numeric(as.character(value))])
     
     ggplot(data = export_out_aux[Stats != &#39;Ratio&#39;], aes(x = Year, y = value)) +
       geom_line(aes(group = Stats, color = Stats), size = 1) +
       geom_point(aes(color = Stats), size = 2) +
+      scale_color_manual(values=c(&quot;blue&quot;,&quot;red&quot;)) +
       labs(y = &#39;Quantity (in tonnes)&#39;, color = &#39;&#39;, title = &#39;Export approach imputation&#39;) +
       theme_minimal() +
       theme(legend.position = &#39;bottom&#39;)
     
   })
+  
 </code></pre>
 <p>At the beginning and at the end of the process the user can use the ‘Check mapping’ button to check mapping consistency. The following checks are performed and for each inconsistency a message is shown. If no inconsistency arises then the message shown is ‘The current mapping is consistent.’.</p>
 <p>Each check is described in the code comments:</p>
-<pre><code>#-- Check export mapping ----
+<pre><code> # -- Check export mapping ----
   observeEvent(input$check_consistency_exp, {
     # If there&#39;s currently a notification, don&#39;t add another
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
@@ -1450,12 +1659,13 @@ id_prod &lt;- NULL</code></pre>
       id_exp &lt;&lt;- showNotification(&quot;The current mapping is consistent.&quot;, duration = 0)
     }
     
-  })</code></pre>
+  })
+  </code></pre>
 </div>
 <div id="primary-production-approach-tab" class="section level3">
 <h3><span class="header-section-number">3.3.2</span> Primary production approach tab</h3>
 <p>The primary production approach tab has almost the same structure as the export approach one. First the mapping is loaded for the selected country and, along with the original version, a version compatible with the datasets is stored. Then, as with the export approach, there is a <code>reactive</code>, two <code>renderRHandsontable</code>, two <code>renderUI</code>, a <code>renderPlot</code> chunks and the mapping checks as an <code>observeEvent</code> chunk.</p>
-<pre><code>#-- Primary production approach ----
+<pre><code> # -- Primary production approach ----
   
   # Get primary production mapping table 
   
@@ -1463,7 +1673,7 @@ id_prod &lt;- NULL</code></pre>
     
     sel_country &lt;- country_input[country_input$label == input$btn_country, code]
     whereMap &lt;- paste(&quot;geographic_area_m49_fi = &#39;&quot;, sel_country, &quot;&#39; &quot;, sep = &quot;&quot;) 
-    
+   
     # Get primary production mapping
     map_prod_prod0 &lt;-  ReadDatatable(&#39;isscfc_mapping_prod_approach&#39;, readOnly = FALSE, where = whereMap)
     map_prod_prod &lt;- copy(map_prod_prod0)
@@ -1487,25 +1697,22 @@ id_prod &lt;- NULL</code></pre>
     rv_mappingtable$map_prod_prod &lt;- map_prod_prod
     
   })
+  
 </code></pre>
 <p>After recalling data and parameters, data from the processed production data table, commodity and global production datasets are combined through the ‘<code>primaryprod_imputation1</code>’ function. The function returns two items: the table with the processed production data and the mapping and the one with the species associated to the commodity for the imputation year. A third tab is then created selecting only rows where primary production is available and columns to display in the tab.</p>
-<pre><code>#-- Get first tab with mapping
+<pre><code> #-- Get first tab with mapping
   
   asfis_check_reac &lt;- reactive({
     
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
-    
+
     commodity_label &lt;- rv_data$commodity_label
     procprodimp &lt;- rv_data$procprod_imp
     globalProduction &lt;- rv_data$globalProduction
     commodityDB &lt;- rv_data$commodityDB
-    
+  
     map_prod_prod &lt;- rv_mappingtable$map_prod_prod
     
-    validate(
-      need(nrow(map_prod_prod) &gt; 0,
-           &quot;Primary production approach not applicable. No available mapping for the chosen country.&quot;)
-    )
     # Buttons
     sel_country &lt;- country_input[country_input$label == input$btn_country, code]
     sel_years &lt;- input$btn_start_year:input$btn_year
@@ -1516,19 +1723,15 @@ id_prod &lt;- NULL</code></pre>
     
     avail_years &lt;- unique(globalProduction$timePointYears)
 
-    validate(
-      need(all(sel_years %in% avail_years),
-           sprintf(&quot;Primary production data for the time range and commodity selected are not available. Years available: %s&quot;,
-                   ifelse(length(avail_years)&gt;0, paste(avail_years, collapse = &quot;, &quot;),&quot;None&quot;)))
-    )
-    
-    
     # As calculations are slow, a progress bar is needed
     withProgress(message = &#39;Calculation in progress&#39;,
                  value = 0, {
                    
                    Sys.sleep(0.25)
                    incProgress(0.25)
+                   
+                   mapforfunction &lt;- copy(map_prod_prod)
+                   mapforfunction &lt;- mapforfunction[end_year == &quot;LAST&quot;, end_year := gsub(&#39;-.*&#39;, &#39;&#39;, Sys.Date())]
                    
                    # The output of this function consists of a list of two items 
                    # (associated to cdb_prod_isscaap and cdb_cfc_asfis_full in the following lines)
@@ -1539,7 +1742,8 @@ id_prod &lt;- NULL</code></pre>
                                                                                                   !flagObservationStatus %in% c(&#39;O&#39;, &#39;M&#39;, &#39;Q&#39;)], # Dataset 
                                                             sel_year = input$btn_year,
                                                             map_asfis = map_asfis,
-                                                            mappingTable  = map_prod_prod[end_year == &quot;LAST&quot; &amp; measuredItemISSCFC %in% sel_isscfc ])
+                                                            mappingTable  = mapforfunction[end_year &gt;= input$btn_start_year &amp;
+                                                                                          end_year &gt;= input$btn_year &amp; measuredItemISSCFC %in% sel_isscfc ])
                    
                    
                    Sys.sleep(0.75)
@@ -1562,23 +1766,44 @@ id_prod &lt;- NULL</code></pre>
                                                             Scheda, measuredItemISSCFC)]
                    
                    # If no primary production is available for the chosen commodity an error is displayed
-                   validate(
-                     need( nrow(cdb_cfc_asfis) &gt; 0,
-                           paste0(&quot;Primary production data for the country, time range and commodity 
-                                  selected are not available. Please select different inputs or 
-                                  ignore this approach.&quot;))
-                   )
-                   
                    
                    # Add imputation year and select needed columns
                    cdb_cfc_asfis &lt;- cdb_cfc_asfis[timePointYears == input$btn_year]
                    
                    setkey(cdb_cfc_asfis)
                    cdb_cfc_asfis &lt;- unique(cdb_cfc_asfis)
+                  
+                   if(nrow(map_prod_prod) == 0| nrow(cdb_cfc_asfis) == 0| any(!sel_years %in% avail_years)){
+                     cdb_prod_isscaap &lt;- NA
+                     cdb_cfc_asfis_full &lt;- NA
+                     cdb_cfc_asfis &lt;- NA
+                     checkPassed$Prim &lt;- &#39;No&#39;
+                   } else {
+                     checkPassed$Prim &lt;- &#39;Yes&#39;
+                   }
                    
                    out_prod &lt;- list(prod_isscaap = cdb_prod_isscaap, # processed production for selected years with mapping
                                     prod_asfis_full = cdb_cfc_asfis_full, # full table with processed and primary production
                                     prod_asfis_display = cdb_cfc_asfis) # table to display in the shiny
+                   
+                   
+                   validate(
+                     need(nrow(map_prod_prod) &gt; 0,
+                          &quot;Primary production approach not applicable. No available mapping for the chosen country.&quot;)
+                   )
+                   
+                   validate(
+                     need(all(sel_years %in% avail_years),
+                          sprintf(&quot;Primary production data for the time range and commodity selected are not available. Years available: %s&quot;,
+                                  ifelse(length(avail_years)&gt;0, paste(avail_years, collapse = &quot;, &quot;),&quot;None&quot;)))
+                   )
+                   
+                   validate(
+                     need( nrow(cdb_cfc_asfis) &gt; 0,
+                           paste0(&quot;Primary production data for the country, time range and commodity 
+                                  selected are not available. Please select different inputs or 
+                                  ignore this approach.&quot;))
+                   )
                    
                    Sys.sleep(0.75)
                    incProgress(0.95)
@@ -1590,7 +1815,7 @@ id_prod &lt;- NULL</code></pre>
   })
 </code></pre>
 <p>The chunks for the modified table, the ratio choice button and the manual ratio button follow:</p>
-<pre><code>##-- Primary production selection table ----
+<pre><code> ##-- Primary production selection table ----
   output$asfis_check_data &lt;- renderRHandsontable({
     data_out_prod &lt;- asfis_check_reac()
     rhandsontable(data_out_prod$prod_asfis_display, rowHeaders = NULL, width = &#39;auto&#39;, height = &#39;auto&#39;) 
@@ -1631,14 +1856,13 @@ id_prod &lt;- NULL</code></pre>
     if(is.null(input$btn_commodity)) return(NULL)
     numericInput(inputId = &#39;btn_manual_prod&#39;, label = &#39;Manual ratio&#39;, value = NA)
   })
-  
 </code></pre>
 <p>In order to create the table to calculate the missing value firstly the data, the parameters and the previously compiled tables are recalled. A validation of the codes (ISSCFC and Asfis) inserted is performed and, if the codes inserted are not valid, a message is displayed and the user would not be able to continue if the invalid codes are not changed. Note the checks are only based on the ISSCFC or Asfis codes in the mapping table <code>map_isscfc</code> and <code>map_asfis</code> present in the SWS. Also a check on the ISSCAAP group is performed. The ISSCAAP group inserted by the user must be the one the species belongs to. After the first checks, the data are updated with the new mapping and data, and the missing cells are filled. With the new data table (<code>full_updated</code>) and the missing data checks, the table with the time series for the primary production, processed production and ratio is built through the function ‘<code>primaryprod_imputation2</code>’ presented in paragraph <a href="ProcProdcode.html#functionsExp">3.5</a>.</p>
 <pre><code> # Create table with potentially imputable value
   output$table_prod_estimates &lt;- renderRHandsontable({
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
     if(is.null(input$asfis_check_data)) return(NULL)
-    
+  
     commodity_label &lt;- rv_data$commodity_label
     procprodimp &lt;- rv_data$procprod_imp
     globalProduction &lt;- rv_data$globalProduction
@@ -1777,7 +2001,8 @@ id_prod &lt;- NULL</code></pre>
                     right = list(width = 2, color = &quot;red&quot;))) )
     
     
-  })</code></pre>
+  })
+</code></pre>
 <p>The same process is applied for the plot displayed at the bottom of the tab.</p>
 <pre><code>  output$gg_prod_estimates &lt;- renderPlot({
     
@@ -1896,14 +2121,16 @@ id_prod &lt;- NULL</code></pre>
     ggplot(data = prim_prod_out_aux[Stats != &#39;Ratio&#39;], aes(x = Year, y = value)) +
       geom_line(aes(group = Stats, color = Stats), size = 1) +
       geom_point(aes(color = Stats), size = 2) +
+      scale_color_manual(values=c(&quot;blue&quot;,&quot;red&quot;)) +
       labs(y = &#39;Quantity (in tonnes)&#39;, color = &#39;&#39;, title = &#39;Primary production approach imputation&#39;) +
       theme_minimal() +
       theme(legend.position = &#39;bottom&#39;)
     
   })
+  
 </code></pre>
 <p>As in the export approach tab, a ‘Check mapping’ button is inserted and it performs the checks commented in the code below:</p>
-<pre><code>#-- Check production mapping ----
+<pre><code> # -- Check production mapping ----
   observeEvent(input$check_consistency_prod, {
     
     # If there&#39;s currently a notification, don&#39;t add another
@@ -2021,6 +2248,7 @@ id_prod &lt;- NULL</code></pre>
     }
     
   })
+  
 </code></pre>
 </div>
 <div id="summary-tab" class="section level3">
@@ -2114,7 +2342,7 @@ id_prod &lt;- NULL</code></pre>
   
 </code></pre>
 <p>A very similar code defines the plot to display all the possible values that can be imputed. The time series shown is taken from the primary production tab series.</p>
-<pre><code>  # Plot
+<pre><code> # Plot
   
   output$gg_methods &lt;- renderPlot({
     
@@ -2130,7 +2358,7 @@ id_prod &lt;- NULL</code></pre>
     sel_commodity &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, code]
     sel_isscfc &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, isscfc]
     
-    if(is.null(input$table_exp_estimates)){
+    if(is.null(input$table_exp_estimates) | checkPassed$Exp == &#39;No&#39;){
       tab_exp_prod &lt;- NA
       export_app &lt;- NA
     } else {
@@ -2138,7 +2366,7 @@ id_prod &lt;- NULL</code></pre>
       export_app &lt;- tab_exp_prod[1, input$btn_year, with = F]
     }
     
-    primary_app &lt;- ifelse(!is.null(input$table_prod_estimates),
+    primary_app &lt;- ifelse(!is.null(input$table_prod_estimates) &amp; checkPassed$Prim != &#39;No&#39;,
                           unlist(input$table_prod_estimates$data[[1]])[(length(sel_years)*2)],
                           NA)
     
@@ -2219,13 +2447,15 @@ id_prod &lt;- NULL</code></pre>
       
       
     }
+    
   })
+  
 </code></pre>
 </div>
 <div id="update-mapping-process" class="section level3">
 <h3><span class="header-section-number">3.3.4</span> Update mapping process</h3>
 <p>The updating process of the mapping tables is similar for the export and the primary production mappings. For the export mapping, once the parameters and data have been recalled, the new mapping appearing in the first table of the export tab is compared with the corresponding chunk of the original mapping table (selected country, production commodities included in the new mapping, last available period). Four cases are considered in the mapping change: (i) if nothing changes the table stays the same; (ii) if rows are added (or removed) to the original mapping then they are added with <code>Selection</code> cell turned to <code>FALSE</code>; (iii) if the mapping changes for a period already existing, the <code>Selection</code> and <code>type</code> variables are compared and the latest is chosen. If a row has been deleted then the <code>Selection</code> value is turned into <code>FALSE</code>; (iv) in all the remaining cases, i.e. the mapping is completely new, the previous corresponding mapping gets the end_year variable changed from ‘LAST’ to the year before the imputation year, and the new mapping is bound to the old mapping. The old mapping is replaced in the reactive value data and at the end of the process a window opens informing the user of the update.</p>
-<pre><code>  ##-- Update export mapping ----
+<pre><code># -- Update export mapping ----
   
   observeEvent(input$update_export_mapping, {
     
@@ -2361,13 +2591,13 @@ id_prod &lt;- NULL</code></pre>
     
     showModal(modalDialog(
       title = &quot;Update export-based approach mapping.&quot; ,
-      sprintf(&quot;The mapping table has been updated and it is diplayed in the tab: Check mapping export approach.&quot;)
+      sprintf(&quot;The mapping table has been updated and it is diplayed in the tab: Save Export Mapping.&quot;)
     ))
     
   })
-</code></pre>
+  </code></pre>
 <p>Also the primary production mapping approach considers four update cases: (i) if the mapping does not change; (ii) if an ISSCAAP group is added then the additional part is bound to the old one with the species listed by the user; (iii) if changes are performed for a period with an already existing start_year (i.e. the mapping is only modified and does not need to be added) then the previous and new <code>Selection</code>, <code>Ratio</code> and <code>type</code> variables are compared and the updated is chosen if available. If a row has been deleted then the <code>Selection</code> value is turned into <code>FALSE</code>; (iv) in the remaining cases, as for the export mapping, the previous corresponding mapping gets the end_year variable changed from ‘LAST’ to the year before the imputation year, and the new mapping is bound to the old mapping. The old mapping is replaced in the reactive value data and at the end of the process a window opens informing the user of the update.</p>
-<pre><code>##-- Update primary production mapping ----
+<pre><code> # -- Update primary production mapping ----
   
   observeEvent(input$update_production_mapping, {
     
@@ -2375,7 +2605,6 @@ id_prod &lt;- NULL</code></pre>
     
     commodity_label &lt;- rv_data$commodity_label
     map_prod_prod &lt;- rv_mappingtable$map_prod_prod
-    
     sel_country &lt;- country_input[country_input$label == input$btn_country, code]
     sel_commodity &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, code]
     sel_years &lt;- input$btn_start_year:input$btn_year
@@ -2386,6 +2615,10 @@ id_prod &lt;- NULL</code></pre>
     tab_updated_prod &lt;- tab_updated_prod[, c(&quot;geographicAreaM49_fi&quot;, &quot;end_year&quot;, &quot;start_year&quot;,
                                              &quot;Ratio&quot;) := list(sel_country, &quot;LAST&quot;, input$btn_year,
                                                               ifelse(is.na(Ratio), 1, Ratio)) ]
+    tab_updated_prod[is.na(Selection) , Selection := FALSE]
+    tab_updated_prod[is.na(fisheriesAsfis) , fisheriesAsfis := &#39;all&#39;]
+    tab_updated_prod[is.na(measuredItemISSCFC) , measuredItemISSCFC := sel_isscfc]
+    tab_updated_prod[is.na(type) , type := &#39;provided&#39;]
     
     corresponding_mapping_prod &lt;- map_prod_prod[ geographicAreaM49_fi == sel_country &amp;
                                                    measuredItemISSCFC %in% unique(tab_updated_prod$measuredItemISSCFC) &amp;
@@ -2405,9 +2638,16 @@ id_prod &lt;- NULL</code></pre>
     # 2) adding an isscaap
     # 3) changes in the current period mapping
     # 4) all other cases
+    names(corresponding_mapping_prod)
     
-    if(all(tab_updated_prod$Selection == TRUE) &amp; all(corresponding_mapping_prod$fisheriesAsfis == &#39;all&#39;) &amp;
-       all(tab_updated_prod$Ratio == corresponding_mapping_prod$Ratio) &amp; 
+    if(all(length(tab_updated_prod[ , unique(Selection), by = isscaap]$V1) == length(corresponding_mapping_prod$Selection)) &amp; 
+       all(tab_updated_prod[ , unique(Selection), by = isscaap] == corresponding_mapping_prod$Selection) &amp;
+       all(corresponding_mapping_prod$fisheriesAsfis == &#39;all&#39;) &amp;
+       all(unique(tab_updated_prod[ ,.(geographicAreaM49_fi, 
+                                       end_year, 
+                                       measuredItemISSCFC, 
+                                       isscaap, 
+                                       Ratio)]$Ratio) == unique(corresponding_mapping_prod$Ratio)) &amp; 
        nrow(tab_updated_prod[!isscaap %in% unique(corresponding_mapping_prod$isscaap), ]) == 0){
       
       prod_mapping_upd &lt;- map_prod_prod
@@ -2416,17 +2656,62 @@ id_prod &lt;- NULL</code></pre>
       
       tab2add &lt;- tab_updated_prod[!isscaap %in% unique(corresponding_mapping_prod$isscaap), ]
       
+      # if it is the same one commodity that is modified then the mapping has to change start date also with the old commodity
+      if(length(unique(corresponding_mapping_prod$measuredItemISSCFC)) == 1 &amp; unique(corresponding_mapping_prod$measuredItemISSCFC) == unique(tab_updated_prod$measuredItemISSCFC)){
+      
+        map_prod_prod &lt;- map_prod_prod[geographicAreaM49_fi == sel_country &amp;
+                            measuredItemISSCFC %in% unique(tab_updated_prod$measuredItemISSCFC) &amp; 
+                            end_year == &quot;LAST&quot;, end_year := as.character(as.numeric(input$btn_year)-1)]
+          
+      }
+      
+      corresponding_mapping_prod_renewed &lt;- copy(corresponding_mapping_prod)
+      corresponding_mapping_prod_renewed[ , start_year := input$btn_year]
+      
+      # Isscaap not new
+      groups &lt;- unique(corresponding_mapping_prod_renewed$isscaap)
+      
+      # For each pre-mapped ISSCAAP see if:
+      # 1. Selection stays the same, nothing happens
+      # 2. Selection &#39;all&#39; changes 
+      # 3. Selection not &#39;all&#39; anymore
+      for(i in seq_len(length(unique(corresponding_mapping_prod_renewed$isscaap)))){
+      
+      if(length(unique(tab_updated_prod[isscaap == groups[i]]$Selection)) == 1 &amp;
+         unique(corresponding_mapping_prod_renewed[isscaap == groups[i]]$Selection) == unique(tab_updated_prod[isscaap == groups[i]]$Selection)){
+        
+        corresponding_mapping_prod_renewed[isscaap == groups[i]] &lt;- corresponding_mapping_prod_renewed[isscaap == groups[i]]
+        
+      } else if(length(unique(tab_updated_prod[isscaap == groups[i]]$Selection)) == 1 &amp;
+                unique(corresponding_mapping_prod_renewed[isscaap == groups[i]]$Selection) != unique(tab_updated_prod[isscaap == groups[i]]$Selection)){
+        
+        Selupd &lt;- unique(tab_updated_prod[isscaap == groups[i]]$Selection)
+        
+        corresponding_mapping_prod_renewed[isscaap == groups[i]]$Selection &lt;- Selupd 
+        
+      } else if(length(unique(tab_updated_prod[isscaap == groups[i]]$Selection)) &gt; 1){
+        
+        corresponding_mapping_prod_renewed[isscaap == groups[i]] &lt;- tab_updated_prod[isscaap == groups[i]]
+        
+      }
+    
+      }
       prod_mapping_upd &lt;- rbind(map_prod_prod[ , .(geographicAreaM49_fi, start_year, end_year, measuredItemISSCFC, isscaap, 
                                                    fisheriesAsfis, Ratio, Selection, type)], 
                                 tab2add[ , .(geographicAreaM49_fi, start_year, end_year, measuredItemISSCFC, isscaap, 
-                                             fisheriesAsfis, Ratio, Selection, type)])
+                                             fisheriesAsfis, Ratio, Selection, type)],
+                                corresponding_mapping_prod_renewed)
+
+      setkey(prod_mapping_upd)
+      prod_mapping_upd &lt;- unique(prod_mapping_upd)       
+      
+      
       
       
     } else if(all(tab_updated_prod$start_year %in% 
                   unique(map_prod_prod[ geographicAreaM49_fi == sel_country &amp;
                                         measuredItemISSCFC %in% unique(tab_updated_prod$measuredItemISSCFC) &amp;
                                         end_year == &quot;LAST&quot;,]$start_year))){
-      
       
       new_map_prod &lt;- merge(map_prod_prod, tab_updated_prod, by = c(&quot;geographicAreaM49_fi&quot;,
                                                                     &quot;start_year&quot;,
@@ -2435,6 +2720,33 @@ id_prod &lt;- NULL</code></pre>
                                                                     &quot;isscaap&quot;, 
                                                                     &quot;fisheriesAsfis&quot;),
                             all = TRUE, suffixes = c(&quot;_previous&quot;, &quot;_updated&quot;))
+      
+      
+      new_map_prod_last &lt;- new_map_prod[end_year == &#39;LAST&#39; ]
+      groups &lt;- unique(tab_updated_prod$isscaap)
+
+      for(i in seq_len(length(unique(tab_updated_prod$isscaap)))){
+        
+        
+        #If &#39;all&#39; species i.e. selection  all FALSE or all TRUE
+      if(length(unique(new_map_prod_last[!is.na(Selection_updated) &amp; isscaap == groups[i]]$Selection_updated)) == 1 &amp;
+         any(new_map_prod_last[isscaap == groups[i]]$fisheriesAsfis == &#39;all&#39;)){
+        
+        Selupd &lt;- unique(new_map_prod_last[!is.na(Selection_updated) &amp; isscaap == groups[i]]$Selection_updated)
+        
+        new_map_prod &lt;- new_map_prod[!new_map_prod_last[isscaap == groups[i] &amp; fisheriesAsfis != &#39;all&#39;]]
+        new_map_prod &lt;- new_map_prod[new_map_prod_last[isscaap == groups[i] &amp; fisheriesAsfis == &#39;all&#39;], Selection_updated := Selupd ]
+        
+      } else if(length(unique(tab_updated_prod[isscaap == groups[i]]$Selection)) &gt; 1 &amp;
+                any(new_map_prod_last[isscaap == groups[i]]$fisheriesAsfis == &#39;all&#39;)){
+        
+        new_map_prod &lt;- new_map_prod[!new_map_prod_last[isscaap == groups[i] &amp; fisheriesAsfis == &#39;all&#39;]]
+        
+      } else {
+        new_map_prod &lt;- new_map_prod
+      }
+        
+      }
       
       new_map_prod$Selection &lt;- ifelse(is.na(new_map_prod$Selection_updated), new_map_prod$Selection_previous, new_map_prod$Selection_updated)
       new_map_prod$Ratio &lt;- ifelse(is.na(new_map_prod$Ratio_updated), new_map_prod$Ratio_previous, new_map_prod$Ratio_updated)
@@ -2446,10 +2758,10 @@ id_prod &lt;- NULL</code></pre>
       
       startyear &lt;- unique(tab_updated_prod$start_year)
       
-      new_map_prod[geographicAreaM49_fi == sel_country &amp;
-                     measuredItemISSCFC == sel_isscfc &amp;
-                     end_year == &quot;LAST&quot; &amp; start_year == startyear &amp;
-                     !fisheriesAsfis %in% tab_updated_prod$fisheriesAsfis ]$Selection &lt;- FALSE
+      # new_map_prod[geographicAreaM49_fi == sel_country &amp;
+      #                measuredItemISSCFC == sel_isscfc &amp;
+      #                end_year == &quot;LAST&quot; &amp; start_year == startyear &amp;
+      #                !fisheriesAsfis %in% tab_updated_prod$fisheriesAsfis ]$Selection &lt;- FALSE
       
       
       prod_mapping_upd &lt;- new_map_prod[ , .(geographicAreaM49_fi,
@@ -2483,21 +2795,23 @@ id_prod &lt;- NULL</code></pre>
     
     showModal(modalDialog(
       title = &quot;Update primary production-based approach mapping.&quot; ,
-      sprintf(&quot;The mapping table has been updated and it is diplayed in the tab: Check mapping prod approach.&quot;)
+      sprintf(&quot;The mapping table has been updated and it is diplayed in the tab: Save Primary Prod. Mapping.&quot;)
     ))
     
   })
+  
 </code></pre>
 </div>
 <div id="imputing-new-values-and-saving-changes-into-the-sws" class="section level3">
 <h3><span class="header-section-number">3.3.5</span> Imputing new values and saving changes into the SWS</h3>
 <p>In order to update the <code>processed_prod_national_detail_imputed</code> data table the input approach has to be identified (‘approach_number’) and the imputed value assigned to the variable ‘imput_value’. The right flag has to be assigned according to the approach chosen, and the new data table built merging the old data table with the new one (‘newImputedData’). The data table in the SWS can now be updated along with the imputed data table stored in the app. With this second update the user can see the new value directly in the Shiny without reloading it.</p>
-<pre><code> ##-- Impute value ----
+<pre><code>  # -- Impute value ----
   
   observeEvent(input$btn_imputation, {
-    
+   
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
     input$btn_approach
+   
     imput_value &lt;- ifelse(input$btn_approach == 4, input$btn_manual,
                           gg_estimate[input$btn_approach, &#39;Value&#39;])
     
@@ -2540,10 +2854,10 @@ id_prod &lt;- NULL</code></pre>
     procprod_copy &lt;- procprod_copy[timePointYears == as.character(input$btn_year) &amp;
                                      Scheda == sel_commodity &amp;
                                      geographicAreaM49_fi == sel_country &amp;
-                                     measuredElement == &quot;5510&quot;, c(&quot;Value&quot;,
+                                     measuredElement == &quot;5510&quot;, c(&quot;remarks&quot;, &quot;Value&quot;,
                                                                   &quot;flagObservationStatus&quot;,
                                                                   &quot;flagMethod&quot;, &quot;approach&quot;,
-                                                                  &quot;measureditemnational&quot;) := list(imput_value, sel_flagObs,
+                                                                  &quot;measureditemnational&quot;) := list(input$btn_manual_remark, imput_value, sel_flagObs,
                                                                                                   sel_flagMeth, sel_approach,
                                                                                                   paste(sel_country, sel_commodity, sep = &quot;.&quot;))]
     
@@ -2561,12 +2875,12 @@ id_prod &lt;- NULL</code></pre>
                                    &quot;id_isscfc&quot;, &quot;measureditemisscfc&quot;, &quot;id_nationalcode&quot;), 
                             all = TRUE)
     newImputedData$timepointyears &lt;- as.character(newImputedData$timepointyears)
-    newImputedData &lt;- newImputedData[flagMethod != &#39;u&#39;]
+    newImputedData &lt;- newImputedData[flagmethod != &#39;u&#39;]
     # needed as for some reason the merge is not working properly
     setkey(newImputedData)
     newImputedData &lt;- unique(newImputedData)
     
-    withProgress(message = &#39;Data updating in progress&#39;,
+    withProgress(message = &#39;Updating data&#39;,
                  value = 0, {
                    
                    Sys.sleep(0.25)
@@ -2596,10 +2910,69 @@ id_prod &lt;- NULL</code></pre>
                    procprod_imp$flagObservationStatus &lt;- factor(procprod_imp$flagObservationStatus, 
                                                                 levels = c(&#39;M&#39;, &#39;O&#39;, &#39;N&#39;, &#39;&#39;, &#39;X&#39;, &#39;T&#39;, &#39;E&#39;, &#39;I&#39;), 
                                                                 ordered = TRUE)
+                   ################
+                   procprod_imp_upd &lt;- merge(procprod_imp[ , .(geographicAreaM49_fi, 
+                                                               measuredElement, 
+                                                               timePointYears, 
+                                                               measuredItemISSCFC, 
+                                                               remarks, Value, 
+                                                               flagObservationStatus,
+                                                               flagMethod, Scheda, 
+                                                               measureditemnational,
+                                                               approach)], 
+                                             procprodimp, 
+                                             by = c( &quot;geographicAreaM49_fi&quot;, 
+                                                     &quot;measuredElement&quot;, 
+                                                     &quot;timePointYears&quot;, 
+                                                     &quot;measuredItemISSCFC&quot;, 
+                                                     &quot;Scheda&quot;), 
+                                             all = TRUE, suffixes = c(&quot;_upd&quot;, &quot;_old&quot;))
                    
-                   # Update rv_data
+                   
+                   # If upd is NA then leave old one (whether it is NA or not)
+                   procprod_imp_upd[, remarks := remarks_upd]
+                   procprod_imp_upd[is.na(remarks_upd), remarks := remarks_old]
+                   procprod_imp_upd[, Value := Value_upd]
+                   procprod_imp_upd[is.na(Value_upd), Value := Value_old]
+                   procprod_imp_upd[, flagObservationStatus := flagObservationStatus_upd]
+                   procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus &lt;- procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus_old
+                  # procprod_imp_upd[flagObservationStatus_upd %in% c(&#39;&#39;, &#39;X&#39;), ]$flagObservationStatus &lt;- procprod_imp_upd[flagObservationStatus_upd %in% c(&#39;&#39;, &#39;X&#39;), ]$flagObservationStatus_upd
+                   
+                   procprod_imp_upd$flagObservationStatus &lt;- factor(procprod_imp_upd$flagObservationStatus, 
+                                                                    levels = c(&#39;M&#39;, &#39;O&#39;, &#39;N&#39;, &#39;&#39;, &#39;X&#39;, &#39;T&#39;, &#39;E&#39;, &#39;I&#39;), 
+                                                                    ordered = TRUE)
+                   procprod_imp_upd &lt;- procprod_imp_upd[, flagMethod := flagMethod_upd]
+                   procprod_imp_upd &lt;- procprod_imp_upd[is.na(flagMethod_upd), flagMethod := flagMethod_old]
+                   
+                   procprod_imp_upd &lt;- procprod_imp_upd[ , measureditemnational := measureditemnational_upd]
+                   procprod_imp_upd &lt;- procprod_imp_upd[is.na(measureditemnational_upd) , measureditemnational := measureditemnational_old]
+                   
+                   procprod_imp_upd &lt;- procprod_imp_upd[ , approach := approach_upd]
+                   procprod_imp_upd &lt;- procprod_imp_upd[is.na(approach_upd) , approach := approach_old]
+                   
+                   procprod_imp_upd &lt;- procprod_imp_upd[ , c(&#39;remarks_old&#39;, &#39;Value_old&#39;, &#39;flagObservationStatus_old&#39;, &#39;flagMethod_old&#39;,
+                                                             &#39;approach_old&#39;, &#39;measureditemnational_old&#39;,
+                                         &#39;remarks_upd&#39;, &#39;Value_upd&#39;, &#39;flagObservationStatus_upd&#39;, &#39;flagMethod_upd&#39;, &#39;approach_upd&#39;,
+                                         &#39;measureditemnational_upd&#39;) := NULL]
+                   
+                   imputYear &lt;- input$btn_year
+                   # missingO &lt;- procprod_imp_upd[flagObservationStatus == &#39;O&#39; &amp; timePointYears == as.character((as.numeric(imputYear) - 1)), ]
+                   # 
+                   # if(nrow(missingO) &gt; 0){
+                   #   schede2change &lt;- unique(missingO$Scheda)
+                   #   procprod_imp_upd[timePointYears == imputYear &amp; Scheda %in% schede2change &amp;
+                   #                      flagObservationStatus == &#39;M&#39; &amp; flagMethod == &#39;u&#39;, 
+                   #                    c(&quot;Value&quot;, &quot;flagObservationStatus&quot;, &quot;flagMethod&quot;) := list(0, &#39;O&#39;, &#39;-&#39;)]
+                   # }
+                   
                    rv_data$procprod_imp0 &lt;- procprod_imp0
-                   rv_data$procprod_imp &lt;- procprod_imp
+                   rv_data$procprod_imp &lt;- procprod_imp_upd
+                   
+                   ###################
+               
+                   # # Update rv_data
+                   # rv_data$procprod_imp0 &lt;- procprod_imp0
+                   # rv_data$procprod_imp &lt;- procprod_imp
                    
                    Sys.sleep(0.25)
                    incProgress(0.95)
@@ -2612,15 +2985,15 @@ id_prod &lt;- NULL</code></pre>
     
     showModal(modalDialog(
       title = &quot;Updated national commodity datatable.&quot;,
-      
       sprintf(&quot;Approach: %s. SWS datatable name: processed_prod_national_detail_imputed&quot;, 
               as.character(gg_estimate[input$btn_approach, &#39;Approach&#39;]))
     ))
     
   })
-</code></pre>
+  </code></pre>
 <p>To save the new mapping a new <code>reactiveValues</code> object is created to store the new tables, both for the export and the primary production approach. A <code>reactive</code> object is created where the export mapping (in the current status, i.e. updated or original) is recalled. This object is then used by a <code>renderDataTable</code> object that shows the mapping table to the user in a dedicated tab (‘Check mapping export approach’). Note that this was a <code>renderRHandsontable</code> that could have been modified by the user (commented line ‘<code>editable = TRUE</code>’). The code could be changed once the <code>rhandsontable</code> package version is updated. Once the user has checked the data table the changes can be performed also in the SWS by clicking the button ‘Save mapping in SWS’. Clicking the button the initial export mapping data table (‘map_prod_exp0’) is deleted from the data table in SWS (the whole mapping for the country is deleted) and the new mapping saved in the <code>mapping_rv</code> object replaces it. The data table is also updated in the other mapping object for Shiny computation purpose without having the user reloading the Shiny. A window then shows up informing the user the mapping has been updated.</p>
-<pre><code>##-- Save export mapping ----
+<p>The option to add lines to the export mapping is also with a <code>renderRHandsontable</code> object and the <code>add_export_mapping</code> button.</p>
+<pre><code> # -- Save export mapping ----
   
   mapping_rv &lt;- reactiveValues(mapping_table_exp = data.table(),
                                mapping_table_prod = data.table())
@@ -2634,8 +3007,6 @@ id_prod &lt;- NULL</code></pre>
     
     return(map_prod_exp[geographicAreaM49_fi == sel_country, ])
   })
-  
-  
   
   output$check_export_mapping_data &lt;- DT::renderDataTable( server = FALSE, { # renderRHandsontable({
     
@@ -2653,6 +3024,211 @@ id_prod &lt;- NULL</code></pre>
     # rhandsontable(table_out, rowHeaders = NULL, width = &#39;auto&#39;, height = &#39;auto&#39;) 
   })
   
+  
+  #-- Add row to Export mapping ----
+  
+  expAdd_reac &lt;- reactive({ 
+    
+    req(input$btn_country, input$btn_year, input$btn_commodity)
+
+    # parameters explicited from buttons
+    commodity_label &lt;- rv_data$commodity_label
+    sel_years &lt;- input$btn_start_year:input$btn_year
+    sel_country &lt;- country_input[country_input$label == input$btn_country, code]
+    sel_commodity &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, code]
+    sel_isscfc &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, isscfc]
+    
+    if(nrow(rv_mappingtable$map_prod_exp)  &gt; 0){
+    map_prod_exp &lt;- rv_mappingtable$map_prod_exp
+    
+    map_prod_exp_filtered &lt;- map_prod_exp[start_year &lt;= input$btn_year &amp; 
+                                            input$btn_year &lt; end_year &amp; 
+                                            measuredItemISSCFC %in% sel_isscfc, ]
+    
+    if(nrow(map_prod_exp_filtered) &gt; 0){
+      exp_map &lt;- map_prod_exp_filtered[ ,.(# geographicAreaM49_fi,
+                                           # start_year,
+                                           # end_year,
+                                           measuredItemISSCFC,
+                                           measuredItemISSCFC_exp,
+                                           Selection, type)]
+    } else{
+      
+      exp_map &lt;-  data.table(# geographicAreaM49_fi = sel_country,
+                             # start_year = input$btn_year, 
+                             # end_year = &#39;LAST&#39;,
+                             measuredItemISSCFC = &#39;&#39;,
+                             measuredItemISSCFC_exp = &#39;&#39;,
+                             Selection = FALSE,
+                             type = &#39;provided&#39;) 
+    }
+    
+    } else {
+    exp_map &lt;-  data.table(# geographicAreaM49_fi = sel_country,
+                           # start_year = input$btn_year, 
+                           # end_year = &#39;LAST&#39;,
+                           measuredItemISSCFC = &#39;&#39;,
+                           measuredItemISSCFC_exp = &#39;&#39;,
+                           Selection = FALSE,
+                           type = &#39;provided&#39;) 
+    }
+    
+  return(exp_map)
+  
+})
+  
+  output$expAdd &lt;-  renderRHandsontable({
+    
+    req(input$btn_country, input$btn_year, input$btn_commodity)
+    
+    exp_map &lt;- expAdd_reac()
+    rhandsontable(exp_map, rowHeaders = NULL, width = &#39;auto&#39;, height = &#39;auto&#39;)
+    
+  })
+  
+  # -- Update add export mapping ----
+  
+  observeEvent(input$add_export_mapping, {
+    
+    if(is.null(input$expAdd)) return(NULL)
+    # Needed element (transform from label + code to just code)
+    commodity_label &lt;- rv_data$commodity_label
+    
+    map_prod_exp &lt;- rv_mappingtable$map_prod_exp
+    
+    sel_country &lt;- country_input[country_input$label == input$btn_country, code]
+    sel_commodity &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, code]
+    sel_isscfc &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, isscfc]
+    
+    ## Select the export mapping part updated and reshape it according to the initial mapping
+    # copy of the table on the shiny and customize it according to the mapping table
+    exp_part_upd &lt;- rhandsontable::hot_to_r(input$expAdd)
+    # exp_part_upd &lt;- exp_part_upd[, c(&quot;description&quot;, &quot;Value_exp&quot;, &quot;flagObservationStatus_exp&quot;, &quot;flagMethod_exp&quot; ):= NULL]
+    exp_part_upd &lt;- exp_part_upd[, c(&quot;geographicAreaM49_fi&quot;, &quot;end_year&quot;, &quot;start_year&quot;) := list(sel_country, &quot;LAST&quot;, input$btn_year) ]
+    
+    exp_part_upd &lt;- exp_part_upd[, .( geographicAreaM49_fi,
+                                      start_year,
+                                      end_year,
+                                      measuredItemISSCFC,
+                                      measuredItemISSCFC_exp,
+                                      Selection, type)]
+    
+    # Take the corresponding part of the original mapping to compare
+    corresponding_mapping_export &lt;- map_prod_exp[ geographicAreaM49_fi == sel_country &amp;
+                                                    measuredItemISSCFC %in% unique(exp_part_upd$measuredItemISSCFC) &amp;
+                                                    end_year == &quot;LAST&quot;, .(geographicAreaM49_fi,
+                                                                          end_year,
+                                                                          measuredItemISSCFC,
+                                                                          measuredItemISSCFC_exp,
+                                                                          Selection, type)]
+    
+    # Update mapping, 4 cases considered: 
+    # 1. The mapping does not change
+    # 2. The mapping for the selected commodity does not change but other row are added for new commodities
+    # N.B. if a mapping already existing is added but already existing nothing happens since nrow(setdiff)=0 
+    # 3. The mapping changes but for the same period, i.e. the user changes his/her mind about the mapping
+    # 4. Everything changes
+    
+    
+    if(nrow(setdiff(exp_part_upd[, .(geographicAreaM49_fi, 
+                                     measuredItemISSCFC, 
+                                     measuredItemISSCFC_exp,
+                                     end_year,
+                                     Selection, type)], 
+                    corresponding_mapping_export[, .(geographicAreaM49_fi, 
+                                                     measuredItemISSCFC, 
+                                                     measuredItemISSCFC_exp,
+                                                     end_year,
+                                                     Selection, type)]))==0  &amp; 
+       nrow(exp_part_upd) == nrow(corresponding_mapping_export) &amp;
+       all(exp_part_upd$measuredItemISSCFC_exp == corresponding_mapping_export$measuredItemISSCFC_exp)){ 
+      # case of no update (no selection or unselection and no new entry)
+      # nothing changes
+      export_mapping_upd &lt;- map_prod_exp
+      
+    } else if(nrow(setdiff(exp_part_upd[, .(geographicAreaM49_fi, measuredItemISSCFC, 
+                                            measuredItemISSCFC_exp, end_year,
+                                            Selection, type)], 
+                           corresponding_mapping_export[ , .(geographicAreaM49_fi, measuredItemISSCFC, 
+                                                             measuredItemISSCFC_exp, end_year, Selection, type)])) == 0 &amp; 
+              nrow(exp_part_upd) != nrow(corresponding_mapping_export) ) { 
+      # case of adding commodities without changing mapping of selected commodity
+      
+      # identify additional part
+      exp_part2upd &lt;- exp_part_upd[!measuredItemISSCFC %in% unique(corresponding_mapping_export$measuredItemISSCFC), ]
+      #if an export commodity has been added
+      exp_part3upd &lt;- exp_part_upd[!measuredItemISSCFC_exp %in% unique(corresponding_mapping_export$measuredItemISSCFC_exp), ]
+      
+      # if a row has been deleted then FALSE is placed at the corresponding row
+      if(corresponding_mapping_export[!measuredItemISSCFC_exp %in% exp_part_upd$measuredItemISSCFC_exp] |
+         corresponding_mapping_export[!measuredItemISSCFC %in% exp_part_upd$measuredItemISSCFC] ){
+        
+        isscfc_expNo &lt;- corresponding_mapping_export[!measuredItemISSCFC_exp %in% exp_part_upd$measuredItemISSCFC_exp]$measuredItemISSCFC_exp
+        isscfcNo &lt;- corresponding_mapping_export[!measuredItemISSCFC %in% exp_part_upd$measuredItemISSCFC]$measuredItemISSCFC
+        
+        map_prod_exp[geographicAreaM49_fi == sel_country &amp;
+                       measuredItemISSCFC == isscfcNo &amp;
+                       end_year == &quot;LAST&quot;, ]$Selection &lt;- FALSE
+        
+        map_prod_exp[geographicAreaM49_fi == sel_country &amp;
+                       measuredItemISSCFC_exp == isscfc_expNo &amp;
+                       end_year == &quot;LAST&quot;, ]$Selection &lt;- FALSE
+      }
+      
+      export_mapping_upd &lt;- rbind(map_prod_exp[ , .(geographicAreaM49_fi, start_year, end_year, measuredItemISSCFC, measuredItemISSCFC_exp, Selection, type)], 
+                                  exp_part2upd, exp_part3upd)
+      
+    } else if(any(exp_part_upd$start_year %in% map_prod_exp[ geographicAreaM49_fi == sel_country &amp;
+                                                             measuredItemISSCFC == unique(exp_part_upd$measuredItemISSCFC) &amp;
+                                                             end_year == &quot;LAST&quot;,]$start_year)){ 
+      # changing mapping for the same imputation year
+      
+      new_map &lt;- merge(map_prod_exp, exp_part_upd, by = c(&quot;geographicAreaM49_fi&quot;,
+                                                          &quot;start_year&quot;,
+                                                          &quot;end_year&quot;,
+                                                          &quot;measuredItemISSCFC&quot;,
+                                                          &quot;measuredItemISSCFC_exp&quot;),
+                       all = TRUE, suffixes = c(&quot;_previous&quot;, &quot;_updated&quot;))
+      
+      new_map$Selection &lt;- ifelse(is.na(new_map$Selection_updated), new_map$Selection_previous, new_map$Selection_updated)
+      new_map$type &lt;- ifelse(is.na(new_map$type_updated), new_map$type_previous, new_map$type_updated)
+      
+      new_map[ , c(&quot;Selection_previous&quot;, &quot;Selection_updated&quot;, &quot;type_previous&quot;, &quot;type_updated&quot;) := NULL]
+      
+      startyear &lt;- exp_part_upd[measuredItemISSCFC == sel_isscfc, ]$start_year
+      
+      new_map[geographicAreaM49_fi == sel_country &amp;
+                measuredItemISSCFC %in% unique(exp_part_upd$measuredItemISSCFC) &amp;
+                end_year == &quot;LAST&quot; &amp; start_year == startyear &amp;
+                !measuredItemISSCFC_exp %in% exp_part_upd$measuredItemISSCFC_exp ]$Selection &lt;- FALSE
+      
+      
+      export_mapping_upd &lt;- new_map
+      
+    } else {
+      
+      map_prod_exp_mod &lt;- copy(map_prod_exp)
+      
+      map_prod_exp_mod[geographicAreaM49_fi == sel_country &amp;
+                         measuredItemISSCFC %in% unique(exp_part_upd$measuredItemISSCFC) &amp; 
+                         end_year == &quot;LAST&quot;, end_year := as.character(as.numeric(input$btn_year)-1)]
+      
+      export_mapping_upd &lt;- rbind(map_prod_exp_mod[ , .(geographicAreaM49_fi, type, start_year, end_year, measuredItemISSCFC, measuredItemISSCFC_exp, Selection)],
+                                  exp_part_upd)
+      
+    }
+    
+    rv_mappingtable$map_prod_exp &lt;- export_mapping_upd
+    
+    showModal(modalDialog(
+      title = &quot;Update export-based approach mapping.&quot; ,
+      sprintf(&quot;The mapping table has been updated and it is diplayed in the bottom table.&quot;)
+    ))
+    
+  })
+
+  
+  #-- Save export mapping in SWS ----
   observeEvent(input$save_export_mapping, {
     
     if(is.null(input$isscfc_check_data)) return(NULL)
@@ -2661,12 +3237,13 @@ id_prod &lt;- NULL</code></pre>
     
     sel_country &lt;- country_input[country_input$label == input$btn_country, code]
     sel_commodity &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, code]
-    
+ 
     map_prod_exp0 &lt;- rv_mappingtable$map_prod_exp0
     
     export_mapping_upd &lt;- mapping_rv$mapping_table_exp #input$check_export_mapping_data # rhandsontable::hot_to_r(input$check_export_mapping_data)
     
-    export_mapping_upd_sws_compliant &lt;- setnames(export_mapping_upd,
+    export_mapping_upd_sws_compliant &lt;- copy(export_mapping_upd)
+    export_mapping_upd_sws_compliant &lt;- setnames(export_mapping_upd_sws_compliant,
                                                  c(&quot;geographicAreaM49_fi&quot;, &quot;start_year&quot;,
                                                    &quot;end_year&quot;, &quot;measuredItemISSCFC&quot;,
                                                    &quot;measuredItemISSCFC_exp&quot;, &quot;Selection&quot;),
@@ -2676,7 +3253,7 @@ id_prod &lt;- NULL</code></pre>
     setkey(export_mapping_upd_sws_compliant, geographic_area_m49_fi, start_year, end_year, measured_item_isscfc, measured_item_isscfc_exp, selection, type)
     export_mapping_upd_sws_compliant &lt;- unique(export_mapping_upd_sws_compliant)
     
-    withProgress(message = &#39;Mapping updating in progress&#39;,
+    withProgress(message = &#39;Updating Export Mapping&#39;,
                  value = 0, {
                    
                    Sys.sleep(0.25)
@@ -2720,13 +3297,185 @@ id_prod &lt;- NULL</code></pre>
     
     showModal(modalDialog(
       title = &quot;Update export-based approach mapping.&quot; ,
-      sprintf(&quot;The export approach mapping table has been updated in the SWS. SWS datatable name: ISSCFC Mapping - Export Approach.&quot;)
+      sprintf(&quot;The export approach mapping table has been updated in the SWS. SWS datatable name: Save Export Mapping.&quot;)
     ))
     
   })
 </code></pre>
 <p>The same code structure applies to the primary production mapping approach shown in the ‘Check mapping prod approach’ tab.</p>
-<pre><code> ##-- Save production mapping ----
+<pre><code> #-- Add row to Prod mapping ----
+  
+  prodAdd_reac &lt;- reactive({ 
+    
+    req(input$btn_country, input$btn_year, input$btn_commodity)
+    
+    # parameters explicited from buttons
+    commodity_label &lt;- rv_data$commodity_label
+    sel_years &lt;- input$btn_start_year:input$btn_year
+    sel_country &lt;- country_input[country_input$label == input$btn_country, code]
+    sel_commodity &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, code]
+    sel_isscfc &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, isscfc]
+
+    if(nrow(rv_mappingtable$map_prod_prod)  &gt; 0){
+      map_prod_prod &lt;- rv_mappingtable$map_prod_prod
+      
+      map_prod_filtered &lt;- map_prod_prod[start_year &lt;= input$btn_year &amp; 
+                                              input$btn_year &lt; end_year &amp; 
+                                              measuredItemISSCFC %in% sel_isscfc, ]
+      
+      if(nrow(map_prod_filtered) &gt; 0){
+        prod_map &lt;- map_prod_filtered[ ,.(# geographicAreaM49_fi,
+          # start_year,
+          # end_year,
+          measuredItemISSCFC,
+          isscaap,
+          fisheriesAsfis,
+          Ratio,
+          Selection, type)]
+      } else{
+        
+        prod_map &lt;-  data.table(# geographicAreaM49_fi = sel_country,
+          # start_year = input$btn_year, 
+          # end_year = &#39;LAST&#39;,
+          measuredItemISSCFC = &#39;&#39;,
+          isscaap = &#39;&#39;,
+          fisheriesAsfis = &#39;all&#39;,
+          Ratio = 1,
+          Selection = FALSE,
+          type = &#39;provided&#39;) 
+      }
+      
+    } else {
+      prod_map &lt;-  data.table(# geographicAreaM49_fi = sel_country,
+        # start_year = input$btn_year, 
+        # end_year = &#39;LAST&#39;,
+        measuredItemISSCFC = &#39;&#39;,
+        isscaap = &#39;&#39;,
+        fisheriesAsfis = &#39;all&#39;,
+        Ratio = 1,
+        Selection = FALSE,
+        type = &#39;provided&#39;) 
+    }
+    
+    return(prod_map)
+    
+  })
+  
+  output$prodAdd &lt;-  renderRHandsontable({
+    
+    req(input$btn_country, input$btn_year, input$btn_commodity)
+    
+    prod_map &lt;- prodAdd_reac()
+    rhandsontable(prod_map, rowHeaders = NULL, width = &#39;auto&#39;, height = &#39;auto&#39;)
+    
+  })
+  
+  # -- Update Prod mapping ----
+  
+  observeEvent(input$add_prod_mapping, {
+    
+    if(is.null(input$prodAdd)) return(NULL)
+    
+    commodity_label &lt;- rv_data$commodity_label
+    map_prod_prod &lt;- rv_mappingtable$map_prod_prod
+    sel_country &lt;- country_input[country_input$label == input$btn_country, code]
+    sel_commodity &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, code]
+    sel_years &lt;- input$btn_start_year:input$btn_year
+    sel_isscfc &lt;- commodity_label[M49 == sel_country &amp; commodity_label$label == input$btn_commodity, isscfc]
+    imputYear &lt;- input$btn_year
+    
+    prod_part_upd &lt;- rhandsontable::hot_to_r(input$prodAdd)
+    prod_part_upd[is.na(fisheriesAsfis), fisheriesAsfis := &#39;all&#39;]
+    prod_part_upd[is.na(Ratio), Ratio := 1]
+    prod_part_upd[is.na(type), type := &#39;provided&#39;]
+    
+    prod_part_upd &lt;- prod_part_upd[, c(&quot;geographicAreaM49_fi&quot;, &quot;end_year&quot;, &quot;start_year&quot;) := list(sel_country, &quot;LAST&quot;, input$btn_year) ]
+    
+    prod_part_upd &lt;- prod_part_upd[, .(geographicAreaM49_fi,
+                                      start_year,
+                                      end_year,
+                                      measuredItemISSCFC,
+                                      isscaap,
+                                      fisheriesAsfis, Ratio,
+                                      Selection, type)]
+    
+    corresponding_mapping_prod &lt;- map_prod_prod[ geographicAreaM49_fi == sel_country &amp;
+                                                   measuredItemISSCFC %in% unique(prod_part_upd$measuredItemISSCFC) &amp;
+                                                   end_year == &quot;LAST&quot;, .(geographicAreaM49_fi,
+                                                                         start_year,
+                                                                         end_year,
+                                                                         measuredItemISSCFC,
+                                                                         isscaap,
+                                                                         fisheriesAsfis,
+                                                                         Ratio,
+                                                                         Selection,
+                                                                         type)]
+    
+    if(nrow(corresponding_mapping_prod) &gt; 0 &amp; all(corresponding_mapping_prod$start_year != prod_part_upd$start_year)){
+      
+      map_prod_prod[measuredItemISSCFC %in% unique(prod_part_upd$measuredItemISSCFC), end_year :=  as.character((as.numeric(imputYear) - 1))]
+      
+    } 
+    
+    if(all(corresponding_mapping_prod$start_year != prod_part_upd$start_year)){
+    prod_mapping_upd &lt;- rbind(map_prod_prod[ , .(geographicAreaM49_fi, start_year, end_year, 
+                                                     measuredItemISSCFC, isscaap, fisheriesAsfis, 
+                                                     Ratio, Selection, type)],
+                              prod_part_upd[ , .(geographicAreaM49_fi, start_year, end_year, 
+                                                    measuredItemISSCFC, isscaap, fisheriesAsfis, 
+                                                    Ratio, Selection, type)])
+    } else {
+      
+      
+      new_map_prod &lt;- merge(corresponding_mapping_prod, prod_part_upd, by = c(&quot;geographicAreaM49_fi&quot;,
+                                                                              &quot;start_year&quot;,
+                                                                              &quot;end_year&quot;,
+                                                                              &quot;measuredItemISSCFC&quot;,
+                                                                              &quot;isscaap&quot;, 
+                                                                              &quot;fisheriesAsfis&quot;),
+                            all.y = TRUE, suffixes = c(&quot;_previous&quot;, &quot;_updated&quot;))
+    
+      
+      
+      new_map_prod$Selection &lt;- ifelse(is.na(new_map_prod$Selection_updated), new_map_prod$Selection_previous, new_map_prod$Selection_updated)
+      new_map_prod$Ratio &lt;- ifelse(is.na(new_map_prod$Ratio_updated), new_map_prod$Ratio_previous, new_map_prod$Ratio_updated)
+      new_map_prod$type &lt;- ifelse(is.na(new_map_prod$type_updated), new_map_prod$type_previous, new_map_prod$type_updated)
+      
+      new_map_prod[ , c(&quot;Selection_previous&quot;, &quot;Selection_updated&quot;, 
+                        &quot;Ratio_previous&quot;, &quot;Ratio_updated&quot;,
+                        &quot;type_previous&quot;, &quot;type_updated&quot;) := NULL]
+      
+      new_map_prod &lt;- new_map_prod[ , .(geographicAreaM49_fi,
+                                            start_year,
+                                            end_year,
+                                            measuredItemISSCFC,
+                                            isscaap,
+                                            fisheriesAsfis,
+                                            Ratio,
+                                            Selection,
+                                            type)]
+      
+      setkey(corresponding_mapping_prod)
+      setkey(map_prod_prod)
+      prod_mapping_upd &lt;- rbind(map_prod_prod[!corresponding_mapping_prod, .(geographicAreaM49_fi, start_year, end_year, 
+                                                   measuredItemISSCFC, isscaap, fisheriesAsfis, 
+                                                   Ratio, Selection, type)],
+                                new_map_prod[ , .(geographicAreaM49_fi, start_year, end_year, 
+                                                   measuredItemISSCFC, isscaap, fisheriesAsfis, 
+                                                   Ratio, Selection, type)])
+    }
+    
+    rv_mappingtable$map_prod_prod &lt;- prod_mapping_upd
+    
+    showModal(modalDialog(
+      title = &quot;Update Primary Production-based approach mapping.&quot; ,
+      sprintf(&quot;The mapping table has been updated and it is diplayed in the bottom table.&quot;)
+    ))
+    
+  })
+  
+  
+  # -- Save production mapping ----
   
   check_prod_mapping_reac &lt;- reactive({
     
@@ -2755,7 +3504,7 @@ id_prod &lt;- NULL</code></pre>
   
   observeEvent(input$save_prod_mapping, {
     
-    if(is.null(input$asfis_check_data)) return(NULL)
+    if(nrow(rv_mappingtable$map_prod_prod) == 0) return(NULL)
     # Needed element (transform from label + code to just code)
     sel_country &lt;- country_input[country_input$label == input$btn_country, code]
     
@@ -2763,8 +3512,9 @@ id_prod &lt;- NULL</code></pre>
     
     tab_updated_prod &lt;- mapping_rv$mapping_table_prod
     
-    tab_updated_prod_sws_compliant &lt;- setnames(tab_updated_prod, 
-                                               c( &quot;geographicAreaM49_fi&quot;, &quot;start_year&quot;,
+    tab_updated_prod_sws_compliant &lt;- copy(tab_updated_prod)
+    tab_updated_prod_sws_compliant &lt;- setnames(tab_updated_prod_sws_compliant, 
+                                               c(&quot;geographicAreaM49_fi&quot;, &quot;start_year&quot;,
                                                   &quot;end_year&quot;, &quot;measuredItemISSCFC&quot;, 
                                                   &quot;isscaap&quot;, &quot;fisheriesAsfis&quot;, &quot;Ratio&quot;, &quot;Selection&quot;),
                                                c(&quot;geographic_area_m49_fi&quot;, &quot;start_year&quot;,
@@ -2773,15 +3523,18 @@ id_prod &lt;- NULL</code></pre>
     
     setkey(tab_updated_prod_sws_compliant, geographic_area_m49_fi, start_year, end_year, measured_item_isscfc, isscaap, asfis)
     
-    validate(
-      need(nrow(tab_updated_prod_sws_compliant[duplicated(tab_updated_prod_sws_compliant)])==0,
-           paste(&#39;Duplicates in primary production mapping rows:&#39;, 
-                 tab_updated_prod_sws_compliant[duplicated(tab_updated_prod_sws_compliant)])))
+    if(nrow(tab_updated_prod_sws_compliant[duplicated(tab_updated_prod_sws_compliant)]) &gt;0){
+      showModal(modalDialog(
+        title = &quot;Saving not possible. Duplicates in primary production mapping table.&quot; ,
+        paste(&#39;Check mapping rows:&#39;, 
+              tab_updated_prod_sws_compliant[duplicated(tab_updated_prod_sws_compliant)])
+        ))
+    } else {
     
     setkey(tab_updated_prod_sws_compliant, geographic_area_m49_fi, start_year, end_year, measured_item_isscfc, isscaap, asfis, ratio, selection, type)
     tab_updated_prod_sws_compliant &lt;- unique(tab_updated_prod_sws_compliant)
     
-    withProgress(message = &#39;Mapping updating in progress&#39;,
+    withProgress(message = &#39;Updating Primary production Mapping&#39;,
                  value = 0, {
                    
                    Sys.sleep(0.25)
@@ -2824,18 +3577,19 @@ id_prod &lt;- NULL</code></pre>
     showModal(modalDialog(
       title = &quot;Update primary production-based approach mapping.&quot; ,
       paste(&quot;The primary production approach mapping table has been updated in the SWS. 
-            SWS datatable name: ISSCFC Mapping - Primary Prod Approach.&quot;)
+            SWS datatable name: Save Primary Prod. Mapping.&quot;)
     ))
+    }
     
   })
   
-} # end of the function</code></pre>
+</code></pre>
 </div>
 </div>
 <div id="aggregate-data-tab" class="section level2">
 <h2><span class="header-section-number">3.4</span> <strong>Aggregate data tab</strong></h2>
 <p>The aggregation tab sum the current state of processed produciton values, including the latest ones modified, and aggregate them according to the chosen level of aggregation (‘Grand Total’, ‘Yearbook Total’, ‘Main groups’, ‘ISSCFC Total’). A plot is available when choosing the ISSCFC aggregation to see the time series of the ISSCFC commodity disaggregated by all the scheda for the chosen country.</p>
-<pre><code>  # -- Total by ISSCFC ----
+<pre><code> # -- Total by ISSCFC ----
   
   aggregates_reac &lt;- reactive({
     
@@ -2900,7 +3654,7 @@ id_prod &lt;- NULL</code></pre>
       tab2show &lt;-  dcast(tab2show, geographicAreaM49_fi + measuredItemISSCFC ~ timePointYears, value.var = c(&quot;Value&quot;))
       
     } else if(input$btn_total == &#39;&#39;){
-    
+      #  # NEED NEW DATATABLE FOR ISSCFC GROUPS!!! isscfc2fao &lt;- ReadDatatable(&#39;fi_commodity_aggregates_comm&#39;)
       tab2show &lt;- data.table()
     }
     
@@ -2942,19 +3696,60 @@ id_prod &lt;- NULL</code></pre>
         labs(y = &#39;Quantity (in tonnes)&#39;, color = &#39;&#39;, title = &#39;Scheda aggregation by ISSCFC series&#39;) +
         theme_minimal()
     }
+    # ggplot(data = xxx, aes(x = timePointYears, y = Value)) +
+    #   geom_line(aes(group = Scheda, color = Scheda), size = 1) +
+    #   labs(y = &#39;Quantity (in tonnes)&#39;, color = &#39;&#39;, title = &#39;Scheda aggregation by ISSCFC series&#39;) +
+    #   theme_minimal() +
+    #   theme(legend.position = &#39;bottom&#39;)
+    
     
   })
   
-} # end of the whole server function</code></pre>
+} # end of the function
+</code></pre>
 </div>
 <div id="functionsExp" class="section level2">
 <h2><span class="header-section-number">3.5</span> <strong>‘external_functions.R’ file</strong></h2>
-<p>The R file <code>external_functions</code> contains seven functions. Two of them <code>expandYear</code> and <code>computeEnsemble</code> are only updated versions of existing functions in the <code>faoswsProcessing</code> and <code>faoswsImputation</code> packages. Until the original packages are not updated the function is sourced from this file. Only small changes have been made, so the main purpose of the functions remains the same as explained in the package help documents.</p>
+<p>The R file <code>external_functions</code> contains eight functions. Two of them <code>expandYear</code> and <code>computeEnsemble</code> are only updated versions of existing functions in the <code>faoswsProcessing</code> and <code>faoswsImputation</code> packages. Until the original packages are not updated the function is sourced from this file. Only small changes have been made, so the main purpose of the functions remains the same as explained in the package help documents. The function <code>myAggregate</code> to aggregate Capture and Aqualculture data is also included. This last function has been copied from the Fisheries plugin developed by Thomas Berger.</p>
+<pre><code>#-- myAggregate by Thomas Berger to aggregate Capture and Aqualculture data ----
+
+myAggregate&lt;- function(quantity, flag) {
+  if (length(quantity) == 1) {
+    # for a single observation, just use the flag
+    return (as.character(flag))
+  }
+  
+  # for more than 1 observation: aggregate by flags
+  agg1 &lt;- aggregate(quantity, by=list(flag), FUN=sum)
+  # agg1 has 2 variables: group, num
+  
+  # order by quantity, largest quantity first
+  agg1 &lt;- agg1[ order(-agg1[,2]), ]
+  
+  
+  # if the total quantity&gt;0 and the flag of te largest value is &#39;E&#39; or &#39;&#39; then use it
+  if (sum(quantity)&gt;0  &amp; (agg1[1,1] == &quot;E&quot; | agg1[1,1] == &quot;&quot; | agg1[1,1] == &quot;I&quot;)) {
+    return (as.character(agg1[1,1]))
+  }
+  
+  # if there is a single &quot;N&quot; use it (takes precedence)
+  if (nrow(agg1[agg1[,1] == &quot;N&quot;,])&gt;0) {
+    return(&quot;N&quot;)
+  }
+  
+  # if there is one &quot;M&quot; use it
+  if (nrow(agg1[agg1[,1] == &quot;M&quot;,])&gt;0) {
+    return(&quot;M&quot;)
+  }
+  
+  # otherwise it&#39;s &#39; &#39;
+  return(&quot;&quot;)
+}</code></pre>
+<p>The <code>expandYear</code> and <code>computeEnsemble</code> functions:</p>
 <pre><code>#-- expandYear function ----
 # This function is sourced from this loca file instead of the proper package faoswsProcessing
 # because of recent updates not yet included in the CRAN version of the faoswsProcessing package.
 # This file should disappear once faoswsProcessing is up-to-date in the CRAN
-
 expandYear &lt;- function (data, areaVar = &quot;geographicAreaM49&quot;, elementVar = &quot;measuredElement&quot;, 
                         itemVar = &quot;measuredItemCPC&quot;, yearVar = &quot;timePointYears&quot;, 
                         valueVar = &quot;Value&quot;, obsflagVar = &quot;flagObservationStatus&quot;, 
@@ -3001,7 +3796,6 @@ expandYear &lt;- function (data, areaVar = &quot;geographicAreaM49&quot;, elemen
   expandedData
 }
 
-
 #-- computeEnsemble ----
 # This function is sourced from this loca file instead of the proper package faoswsImputation
 # because of recent updates not yet included in the CRAN version of the faoswsImputation package.
@@ -3031,6 +3825,8 @@ computeEnsemble &lt;- function (fits, weights, errors)
   }
   ensemble
 }
+
+
 </code></pre>
 <p>The <code>replaceforeignchars</code> function is used only once to replace non UTF-8 characters.</p>
 <pre><code>#-- Encoding ----
@@ -3083,7 +3879,8 @@ from to
     dat &lt;- gsub(fromto$from[i],fromto$to[i],dat)
   }
   dat
-}</code></pre>
+}
+</code></pre>
 <p>The <code>export_imputation</code> function aims to create the second reactive table in the export tab. The first step is to aggregate export commodities to compute the commodity processed production. Aggregation is performed by: “geographicAreaM49_fi”, “Scheda”, “measuredItemISSCFC”, “timePointYears”, “Value_prod”, “flagObservationStatus_prod”, “flagMethod_prod”. Then for each year the ratio between the aggregate export and the processed production data available is computed. Average values are computed for ratio, processed production and export and added to the table. The value calculated for the chosen missing figure depends on the variables: if neither a manual input nor the original data is available, the value is calculated multiplying the average aggregate export by the average ratio and the ratio is set equal to NA. If the value is not missing then it is shown in the table and the ratio for the imputation year is calculated with actual data. If a manual ratio is inserted, the aggregate export is multiplied by this ratio and the result is set as processed production estimate and the ratio is the manual ratio inserted. Afterwards, flags are inserted next to each figure and column and row names are set.</p>
 <pre><code>#-- Export approach function ----
 export_imputation &lt;- function(datatab, sel_year, manual_ratio_exp_input = NULL,
@@ -3201,6 +3998,7 @@ export_imputation &lt;- function(datatab, sel_year, manual_ratio_exp_input = NUL
   return(finaltab)
   
 }
+
 </code></pre>
 <p>The primary production approach involves two functions: <code>primaryprod_imputation1</code> and <code>primaryprod_imputation2</code>. The first function firstly connects the processed production data with the primary production mapping and with the species mapping. The species mapping (‘<code>map_asfis</code>’) is used both to have the species description and to expand the table in case the mapping include generically ‘all’ the species. Once the processed production part and the mapping are ready they can be related to the Global Production dataset to have the primary production figures of interest. The function returns the table to display and the full data needed to carry on computations.</p>
 <pre><code>#-- Primary production approach function ----
@@ -3464,30 +4262,27 @@ method_imputation &lt;- function(procprod, # Datasets
         </div>
       </div>
 <a href="Rawcode.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="Aggregation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
+<a href="Aggregation.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
-gitbook.require(["gitbook"], function(gitbook) {
+require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,
 "facebook": true,
 "twitter": true,
-"linkedin": false,
+"google": false,
 "weibo": false,
-"instapaper": false,
+"instapper": false,
 "vk": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -3495,14 +4290,6 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
 "link": null,
 "text": null
 },

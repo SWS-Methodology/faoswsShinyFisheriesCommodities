@@ -1,4 +1,4 @@
-gitbook.require(["gitbook", "lodash", "jQuery"], function(gitbook, _, $) {
+require(["gitbook", "lodash", "jQuery"], function(gitbook, _, $) {
     var SITES = {
         'github': {
             'label': 'Github',
@@ -15,7 +15,7 @@ gitbook.require(["gitbook", "lodash", "jQuery"], function(gitbook, _, $) {
             'icon': 'fa fa-facebook',
             'onClick': function(e) {
                 e.preventDefault();
-                window.open("http://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(location.href));
+                window.open("http://www.facebook.com/sharer/sharer.php?s=100&p[url]="+encodeURIComponent(location.href));
             }
         },
         'twitter': {
@@ -23,15 +23,15 @@ gitbook.require(["gitbook", "lodash", "jQuery"], function(gitbook, _, $) {
             'icon': 'fa fa-twitter',
             'onClick': function(e) {
                 e.preventDefault();
-                window.open("http://twitter.com/intent/tweet?text="+document.title+"&url="+encodeURIComponent(location.href)+"&hashtags=rmarkdown,bookdown");
+                window.open("http://twitter.com/home?status="+encodeURIComponent(document.title+" "+location.href));
             }
         },
-        'linkedin': {
-            'label': 'LinkedIn',
-            'icon': 'fa fa-linkedin',
+        'google': {
+            'label': 'Google+',
+            'icon': 'fa fa-google-plus',
             'onClick': function(e) {
                 e.preventDefault();
-                window.open("https://www.linkedin.com/shareArticle?mini=true&url="+encodeURIComponent(location.href)+"&title="+encodeURIComponent(document.title));
+                window.open("https://plus.google.com/share?url="+encodeURIComponent(location.href));
             }
         },
         'weibo': {
@@ -44,7 +44,7 @@ gitbook.require(["gitbook", "lodash", "jQuery"], function(gitbook, _, $) {
         },
         'instapaper': {
             'label': 'Instapaper',
-            'icon': 'fa fa-italic',
+            'icon': 'fa fa-instapaper',
             'onClick': function(e) {
                 e.preventDefault();
                 window.open("http://www.instapaper.com/text?u="+encodeURIComponent(location.href));
@@ -70,7 +70,7 @@ gitbook.require(["gitbook", "lodash", "jQuery"], function(gitbook, _, $) {
         var menu = _.chain(opts.all)
             .map(function(id) {
                 var site = SITES[id];
-                if (!site) return;
+
                 return {
                     text: site.label,
                     onClick: site.onClick
@@ -95,8 +95,7 @@ gitbook.require(["gitbook", "lodash", "jQuery"], function(gitbook, _, $) {
 
             gitbook.toolbar.createButton({
                 icon: site.icon,
-                label: site.label,
-                title: site.label,
+                label: site.text,
                 position: 'right',
                 onClick: site.onClick
             });

@@ -174,10 +174,9 @@ The questionnaire data are stored into the '`processed_prod_national_detail_ques
 With the Shiny app the user performs the checking, validation and imputation process. The data tables used by the Shiny app for the processes are described below.
 The '`processed_prod_National_detail_raw`' data table contains the whole time series for all countries. This implies that new data are appended every year to the same table. This way of storing data has been discussed with the technical unit and the structure of the *raw* data table has been chosen by the technical unit. The *imputed* data table copies the same structure with two additional columns (*measureditemnational* and *approach*). 
 
-|**processed_prod_national_detail_quest**|                                                   |
-|**processed_prod_national_detail_raw**|                                                   |
-|:------------------------------------:|---------------------------------------------------|
-| *Dimension id*                       | *Description* |
+|**processed_prod_national_detail_quest(or _raw)**| | 
+|:--------------------:|------------------------------------------|
+| *Dimension id* | *Description* |
 | geographicaream49_fi | M49 standard country code |
 | measuredelement | Element code (*5510* production) |
 | timepointyears | Year of the data point |
@@ -256,8 +255,8 @@ The user can customize the three last approaches, whereas the ensemble model bas
 As starting point the user sets these parameters from the interactive menu on the left side and visualize data accordingly.
 Once the user has compared the different approaches and chosen the value to impute a validation button is available to impute the value directly in the *imputed* data table in the SWS (`processed_prod_national_detail_imputed`).
 
-The application has six working tabs, all sharing the same side menu where the user select data, plus an 'About' tab.
-The tab names are: 'National mapping', 'Export approach', 'Primary Prod. approach', 'Summary', 'Check export approach mapping', 'Check prod approach mapping' and 'About'.
+The application has seven working tabs, all sharing the same side menu where the user select data, plus an 'About' tab.
+The tab names are: 'National mapping', 'Export approach', 'Primary Prod. approach', 'Summary', 'Save Export Mapping', 'Save Primary Prod. Mapping', 'Data aggregates' and 'About'.
 
 The side menu has six fields to help the user select the data:
 
@@ -513,6 +512,9 @@ knitr::include_graphics("img/ShinySumm.png")
 ```
 
 There are then two checking tabs where the user can see the result of the mapping updates performed in the export and primary production tabs. This last step is necessary to ensure errors in the updates or unwanted updates are saved into the SWS and used for the next imputations. The tables shown in the app exactly reproduce the data tables stored in the SWS and can be seen in figures \@ref(fig:cME) and \@ref(fig:cMP).
+In case links are available for the commodity selected they will be displayed in a modifiable tab at the top of the page. The purpose of this table is to allow the user to add mappings in case no link in shown in the Export/Primary Prod. approach tab.
+It is therefore a **last resort tool** to avoid changing the mapping table directly in SWS but if possible the user should always prefer to make changes in the Export/Primary Prod. approach tab.
+
 
 ```{r  cME, echo=FALSE, out.width="100%", fig.cap=' Shiny application, Check mapping export approach tab.'}
 knitr::include_graphics("img/ShinyExpMap.png")

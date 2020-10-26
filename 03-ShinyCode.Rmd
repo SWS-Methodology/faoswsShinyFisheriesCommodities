@@ -21,9 +21,11 @@ The `global.R` file first lists the path access the needed packages. There are t
 ```
 # packages
  
- .libPaths( c("/usr/local/lib64/R-3.1.2/library","/work/SWS_R_Share/shiny/Rlib/3.1",.libPaths()))
+ .libPaths( c("/usr/local/lib64/R-3.1.2/library","/work/SWS_R_Share/shiny/Rlib/3.1",
+              .libPaths()))
 
 suppressMessages({
+library(dplyr)
 library(data.table)
 library(DT)
 library(faosws)
@@ -37,27 +39,50 @@ library(shiny)
 library(shinyWidgets)
 })
 
-source('external_functions.R')
+local <- TRUE
 
 #-- Token QA ----
+if(local){
+  setwd('C:/Users/Taglionic/OneDrive - Food and Agriculture Organization/Github/shinyFisheriesCommodities/shinyFisheriesCommodities')
+  
+  if(CheckDebug()){
 
+  library(faoswsModules)
+  SETTINGS = ReadSettings("sws.yml")
+
+  ## If you're not on the system, your settings will overwrite any others
+  R_SWS_SHARE_PATH = SETTINGS[["share"]]
+
+  ## Define where your certificates are stored
+  SetClientFiles(SETTINGS[["certdir"]])
+
+  ## Get session information from SWS. Token must be obtained from web interface
+  GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+                     token = 'dd142b17-6b58-440c-8b94-d578c7500e50')#'27ded447-71ec-413b-bcd4-87669ac20c70')
+}
+
+ } else {
 R_SWS_SHARE_PATH = "Z:"
-SetClientFiles("/srv/shiny-server/shinyFisheriesCommodities")
-GetTestEnvironment(baseUrl = "https://hqlqasws1.hq.un.fao.org:8181/sws",
+SetClientFiles("/srv/shiny-server/.R/QA/")
+GetTestEnvironment(baseUrl = "https://swsqa.aws.fao.org:8181",
                    token = "04fc0c00-a4f3-4640-bee6-49a906863095")
+}
+
+source('external_functions.R')
 
 #-- Get the M49 countries from dimension ----
-
 M49 <- GetCodeList(domain ="FisheriesCommodities", dataset = "commodities_total", 
-dimension = "geographicAreaM49_fi")
+                   dimension = "geographicAreaM49_fi")
 M49 <- M49[ type == "country", .( description, code)]
+# M49$description <- iconv(M49$description, to = 'UTF-8', '')
+
 M49$description <- replaceforeignchars(M49$description)
 
 country_input <-  sort(sprintf("%s - %s", M49$description, as.numeric(M49$code)))
-country_input <- data.table(label = country_input, 
-code = sub(" ", "", sub(".*-", "", country_input)))
-country_input <- rbind(data.table(label = "Select country", code = "-"), country_input)
-
+country_input <- data.table(label = country_input, code = sub(" ", "", sub(".*-", "", 
+                                                                           country_input)))
+country_input <- rbind(data.table(label = "", code = "-"), country_input)
+Encoding(country_input$label)
 #-- Mappings ----
 
 # Isscaap-isscfc-ics mapping
@@ -69,8 +94,9 @@ map_asfis[, ics := NULL]
 setnames(map_asfis, 'asfis', 'fisheriesAsfis')
 
 # Get list of commodities and create labels for shiny app
-map_isscfc <- GetCodeList("FisheriesCommodities", "commodities_total",
-"measuredItemISSCFC" )[,.(code, description)]
+map_isscfc <- GetCodeList("FisheriesCommodities", 
+                          "commodities_total",
+                          "measuredItemISSCFC")[,.(code, description)]
 
 #-- Variables for messages from action buttons ----
 
@@ -82,6 +108,7 @@ id_exp <- NULL
 
 # variable for primary production approach shiny messages
 id_prod <- NULL
+
 ```
 
 ## **'ui.R' file**
@@ -105,7 +132,8 @@ fluidPage(
                        uiOutput('btn_year'),
                        uiOutput('btn_start_year'),
                        uiOutput('btn_missing'),
-                       uiOutput('btn_commodity')
+                       uiOutput('btn_commodity'),
+                       width = 3
                        )
                      ),
     
@@ -156,9 +184,9 @@ fluidPage(
                  br(),
                  br(),
                  actionBttn("update_production_mapping", 
-                                 label = "Update mapping",
-                                 color = "primary",
-                                 style = "bordered"),
+                            label = "Update mapping",
+                            color = "primary",
+                            style = "bordered"),
                  br(),
                  br(),
                  uiOutput('ratio_choice_prod'),
@@ -170,7 +198,8 @@ fluidPage(
                  br(),
                  plotOutput('gg_prod_estimates', width = '80%')
                  ),
-        tags$head(tags$style(".buttclass{background-color: #288ffe;} .buttclass{color: #fcf8e3;}")),
+        tags$head(tags$style(
+          ".buttclass{background-color: #288ffe;} .buttclass{color: #fcf8e3;}")),
         tabPanel("Summary",
                  br(),
                  uiOutput('summary_check_data'),
@@ -178,16 +207,19 @@ fluidPage(
                                   uiOutput('out_btn_manual')),
                  fluidPage(
                    fluidRow(
-                     column(width = 8, 
+                     column(width = 6, 
+                            uiOutput('out_btn_manual_remark'),
                             plotOutput('gg_methods')),
                      column(width = 6, 
+                            h4('Choose the approach to impute the value'),
+                            conditionalPanel("input.btn_approach != '6'",
                             actionBttn('btn_imputation', label = 'Impute value',
                                        style = "gradient",
-                                       color = "success"))
+                                       color = "success")))
                      )
                    )
                  ),
-        tabPanel("Check mapping export approach", 
+        tabPanel("Save Export Mapping", 
                  br(),
                  actionBttn("save_export_mapping", 
                             label = "Save mapping in SWS",
@@ -195,9 +227,17 @@ fluidPage(
                             style = "bordered"),
                  br(),
                  br(),
+                 actionBttn("add_export_mapping", 
+                            label = "Add to mapping",
+                            color = "danger",
+                            style = "bordered"),
+                 br(),
+                 br(),
+                 rHandsontableOutput('expAdd'),
+                 br(),
                  DT::dataTableOutput('check_export_mapping_data')
                  ),
-        tabPanel("Check mapping prod approach", 
+        tabPanel("Save Primary Prod. Mapping", 
                  br(),
                  actionBttn("save_prod_mapping", 
                             label = "Save mapping in SWS",
@@ -205,17 +245,45 @@ fluidPage(
                             style = "bordered"),
                  br(),
                  br(),
+                 actionBttn("add_prod_mapping", 
+                            label = "Add to mapping",
+                            color = "danger",
+                            style = "bordered"),
+                 br(),
+                 br(),
+                 rHandsontableOutput('prodAdd'),
+                 br(),
                  DT::dataTableOutput('check_prod_mapping_data')
                  ),
+        ## Aggregates panel
+        tabPanel("Data aggregates", value = 'tot_isscfc',
+                 br(),
+                 selectInput(inputId = "btn_total", 
+                             label = 'Aggregation', 
+                             choices = c('', 
+                                         'Grand Total', 
+                                         'Yearbook Total', 
+                                         'Main groups', 
+                                         'ISSCFC Total'), 
+                             selected = NULL),
+                 br(),
+                 
+                 DT::dataTableOutput('aggregates_data'),
+                 br(),
+                 plotOutput('gg_tot_isscfc', width = '80%')
+                 
+        ),
         ## Tab with markdown file presenting the Shiny App
         tabPanel("About",value = "intro",
                  br(),
                  shiny::includeMarkdown("App_description.Rmd")
-                 )
+                 #withMathJax (includeHTML(rmarkdown::render('App_description.Rmd')))
+        )
         )
       )
     )
   )
+
 
 ```
 
@@ -229,7 +297,7 @@ The data table containing the raw data (`processed_prod_national_detail_raw`) is
 ```
 function(input, output) { 
   
-  #-- Get data and select variables ----
+  # -- Get data and select variables ----
   
   # Data needed
   rv_data <- reactiveValues(procprod_raw0 = data.table(),
@@ -248,10 +316,13 @@ function(input, output) {
                                     map_prod_prod = data.table()
   )
   
+  checkPassed <- reactiveValues(Exp = 'No',
+                                Prim = 'No')
+  
   # Select INITIAL needed dataset
   
   observeEvent(input$btn_country, { 
-    
+  
     # Selected country
     sel_country <- country_input[label == input$btn_country, code]
     
@@ -260,12 +331,12 @@ function(input, output) {
       where <- paste("geographicaream49_fi = '", sel_country, "' ", 
                      sep = "")
       
-      withProgress(message = 'Data loading in progress',
+      withProgress(message = 'Loading raw data',
                    value = 0, {
                      
                      Sys.sleep(0.25)
                      incProgress(0.25)
-                     
+                    
                      # Original datatable
                      procprodraw0 <- ReadDatatable('processed_prod_national_detail_raw', 
                                                    where = where)
@@ -277,6 +348,7 @@ function(input, output) {
                      
                      Encoding(procprodraw0$nationaldescription) <- "unknown" 
                      Encoding(procprodraw0$remarks) <- "unknown" 
+                     
                      # Copied datatable to work on
                      procprodraw <- copy(procprodraw0)
                      setnames(procprodraw, 
@@ -307,7 +379,7 @@ function(input, output) {
                      procprodrawExp <- expandYear(procprodraw[as.numeric(timePointYears) < end_year, ], 
                                                   areaVar = "geographicAreaM49_fi", 
                                                   elementVar = "measuredElement", 
-                                                  itemVar = c("measuredItemISSCFC", "id_isscfc", "Scheda"), 
+                                                  itemVar = c("measuredItemISSCFC", "id_isscfc", "Scheda", "nationaldescription"), 
                                                   yearVar = "timePointYears" , 
                                                   valueVar = "Value",
                                                   newYears = end_year)
@@ -339,6 +411,7 @@ function(input, output) {
     }
     
   })
+  
 ```
 
 Before the user has access to the year button the app checks if the user has selected a country and if there are data for the selected country. If the country has not been selected then the message shown is 'Please choose a country.'. And if there are no data for the country the message is 'Processed production data not available for this country. Choose another country.' will appear. The imputation year button is then defined sorting the years available for the chosen country in decreasing order.
@@ -348,7 +421,7 @@ Once the start year is chosen, the imputed data table with processed production 
 With the 'missing' button the user is enabled to choose what data category to visualize. The user has three choices "Yes", "No" and "Not to impute". This choice influences the list of commodities the user visualizes when clicking the commodity button. For the commodity button a list with codes and labels is created (`commodity_label`) with the available commodities in the imputed table of processed production and the ISSCFC map. The list shown depends on the missing button choice. If the missing button value is 'Yes' then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have flags (M, u). If the missing button value is 'No' then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have observation flags different from 'M', 'O' or 'Q'. If the missing button value is 'Not to impute' then the commodities selected from the imputed processed production table are those that for the chosen country and imputation year have flags (M, -) or (O, -).
 
 ```
-  #-- Year ----
+  # -- Year ----
   output$btn_year <- renderUI({
     # country button required
     validate(need(country_input[country_input$label == input$btn_country, code] != "-", 
@@ -382,7 +455,7 @@ With the 'missing' button the user is enabled to choose what data category to vi
     
   })
   
-  #-- Start year ----
+  # -- Start year ----
   output$btn_start_year <- renderUI({
     
     # Country and year buttons required
@@ -404,9 +477,9 @@ With the 'missing' button the user is enabled to choose what data category to vi
   })
   
   
-  #-- Charge imputed table ----
+  # -- Charge imputed table ----
   observeEvent(input$btn_start_year, { 
-    
+
     sel_country <- country_input[country_input$label == input$btn_country, code]
     
     if(!is.null(input$btn_start_year) & input$btn_start_year != ""){
@@ -414,8 +487,8 @@ With the 'missing' button the user is enabled to choose what data category to vi
       procprodraw <- rv_data$procprod_raw
       procprodraw <- procprodraw[timePointYears %in% sel_years, ]
       where <- paste("geographicaream49_fi = '", sel_country, "' ", sep = "")
-      
-      withProgress(message = 'Data loading in progress',
+
+      withProgress(message = 'Loading complete (official + imputed) data',
                    value = 0, {
                      
                      Sys.sleep(0.25)
@@ -476,24 +549,40 @@ With the 'missing' button the user is enabled to choose what data category to vi
                                                all = TRUE, suffixes = c("_old", "_upd"))
                      
                      
-                     # Value: if in raw table is NA either is true NA or already imputed.
-                     # If true missing then both old and upd are missing otherwise odl has a figure.
-                     # So if is.na(Value_upd) then take old value which is either missing or not
-                     # If upd is not missing and official then Value_upd, otherwise leave old.
-                     procprod_imp_upd[, remarks := remarks_upd]
-                     procprod_imp_upd[, Value := ifelse(is.na(Value_upd), Value_old, Value_upd)]
-                     procprod_imp_upd[, flagObservationStatus := flagObservationStatus_old]
+                     # Remarks are the old ones, if the row was empty in the imputed table, 
+                     # i.e. the remark cell was empty then the raw updated one is assigned
+                     procprod_imp_upd[ , remarks := remarks_old]
+                     procprod_imp_upd[is.na(remarks_old), remarks := remarks_upd]
+                     
+                     # Values are the old ones, if the row was empty in the imputed table, 
+                     # i.e. the Values cell was empty then the raw updated one is assigned
+                     procprod_imp_upd[ , Value := as.numeric(Value_old)]
+                     procprod_imp_upd[is.na(Value_old), Value := as.numeric(Value_upd)]
+                     
+                     # flagObservationStatus are the old ones, if the row was empty in the imputed table, 
+                     # i.e. the flagObservationStatus cell was empty then the raw updated one is assigned
+                     procprod_imp_upd[ , flagObservationStatus := flagObservationStatus_old]
                      procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus <- procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus_upd
-                     procprod_imp_upd[flagObservationStatus_upd %in% c('', 'X'), ]$flagObservationStatus <- procprod_imp_upd[flagObservationStatus_upd %in% c('', 'X'), ]$flagObservationStatus_upd
+                     
+                     procprod_imp_upd[, flagMethod := flagMethod_old]
+                     procprod_imp_upd[is.na(flagMethod_old), flagMethod := flagMethod_upd]
+                     
+                     # If official data in updated table than it overwrites 
+                     procprod_imp_upd[flagObservationStatus_upd %in% c('', 'X'), 
+                                      c('Value', 'flagObservationStatus', 'flagMethod', 'remarks') := list(Value_upd,
+                                                                                                           flagObservationStatus_upd,
+                                                                                                           flagMethod_upd,
+                                                                                                           remarks_upd)]
+                     
                      
                      procprod_imp_upd$flagObservationStatus <- factor(procprod_imp_upd$flagObservationStatus, 
                                                                       levels = c('M', 'O', 'N', '', 'X', 'T', 'E', 'I'), 
                                                                       ordered = TRUE)
-                     procprod_imp_upd[, flagMethod := ifelse(is.na(flagMethod_old), flagMethod_upd, flagMethod_old)]
-                     
+                    
                      procprod_imp_upd[ , c('remarks_old', 'Value_old', 'flagObservationStatus_old', 'flagMethod_old',
                                            'remarks_upd', 'Value_upd', 'flagObservationStatus_upd', 'flagMethod_upd') := NULL]
                    
+                     # If previous year the data was (O, -) then if this year it was considered (M, u) the figure is set back to (O, -)
                      imputYear <- input$btn_year
                      missingO <- procprod_imp_upd[flagObservationStatus == 'O' & timePointYears == as.character((as.numeric(imputYear) - 1)), ]
                      
@@ -516,7 +605,7 @@ With the 'missing' button the user is enabled to choose what data category to vi
     
   })
   
-  #-- Missing ----
+  # -- Missing ----
   output$btn_missing <- renderUI({
     
     # Country and years buttons required
@@ -530,11 +619,11 @@ With the 'missing' button the user is enabled to choose what data category to vi
     
   })
   
-  #-- Commodities ----
+  # -- Commodities ----
   output$btn_commodity <- renderUI({
     # Country, years and missing buttons required
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_missing)
-    
+  
     input$btn_imputation
     
     # load parameters and raw data
@@ -598,13 +687,14 @@ The following code chunk contains the first tab. The imputed table is recalled, 
 There is the '`check_new_items`' button that compares the ISSCFC and the scheda codes contained in the processed production raw table and those in the initial processed production imputed table. If an ISSCFC code or a Scheda code found in the raw table is not found in the imputed table it means there is a new commodity that was not present for the country before the last year. Clicking the button the user sees the messages. 
 
 ```
-#-- First tab showing imputed table----
+  # -- First tab showing imputed table----
   output$imputed_data <- DT::renderDataTable(server = FALSE, {
     req(input$btn_country, input$btn_year, input$btn_start_year)
     if(is.null(input$btn_start_year)) return(NULL)
     
     tab2display <- copy(rv_data$procprod_imp)
     
+    if(nrow(tab2display) > 0){
     setcolorder(tab2display, c("geographicAreaM49_fi", "Scheda", "timePointYears", 
                                "id_isscfc", "measuredItemISSCFC", "nationalquantity",
                                "nationalquantityunit", "Value", "flagObservationStatus",
@@ -620,7 +710,7 @@ There is the '`check_new_items`' button that compares the ISSCFC and the scheda 
                "N. unit", "Value", "Obs.flag",
                "Met.flag", "Approach", "N.code", "N.description",
                "Remarks", "N.Item", "Element"))
-    
+    }
     DT::datatable(tab2display, extensions = 'Buttons', filter = 'top',
                   options = list(
                     dom = 'Bfrtip',
@@ -670,63 +760,171 @@ There is the '`check_new_items`' button that compares the ISSCFC and the scheda 
     }
     
   })
+  
 ```
 
-In order to complete the preparation part of the app, the part of the 'Global production' and 'Commodity (total)' datasets involved in the computations are loaded, followed by the data table of the export approach mapping. From the 'Global production' dataset all the data for the country and time series selected are loaded. Column names are then adapted and data are aggregated by the '`fisheriesCatchArea`' variable (data for the same area are summed and the lowest observation flag is assigned to the cell); from the 'Commodity (total)' datasets only export data ('5910' code) for the mapped commodities are selected for the country and time series selected. Note that both datasets when loaded are accompanied by a progress bar. 
+In order to complete the preparation part of the app, the part of the 'Capture', 'Aquaculture' and 'Commodity (total)' datasets involved in the computations are loaded, followed by the data table of the export approach mapping. From the 'Capture' and 'Aquaculture' datasets all the data for the country and time series selected are loaded and merged. Column names are then adapted and data are aggregated by the '`fisheriesCatchArea`' variable (data for the same area are summed and the lowest observation flag is assigned to the cell); from the 'Commodity (total)' datasets only export data ('5910' code) for the mapped commodities are selected for the country and time series selected. Note that both datasets when loaded are accompanied by a progress bar. 
 The export mapping data table is also loaded for the selected country and a copy with dataset compatible column names is made. A check for duplicates is included but not for the user (these checks are performed in the next tabs).
 
 ```
-  #-- Get commodity and global production datasets ----
-  observeEvent(input$btn_commodity, { 
+  # -- Get commodity and global production datasets ----
+  observeEvent(input$btn_start_year, { 
     req(input$btn_country, input$btn_year, input$btn_start_year)
     commodity_label <- rv_data$commodity_label
     
     sel_country <- country_input[country_input$label == input$btn_country, code]
     sel_years <- input$btn_start_year:input$btn_year
-    sel_isscfc <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, isscfc]
-    
-    if(input$btn_commodity != ""){
+    # sel_isscfc <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, isscfc]
+
+    #if(input$btn_commodity != ""){
       ## Get Global production
-      KeyGlobal <- DatasetKey(domain = "Fisheries", dataset = "fi_global_production", dimensions = list(
-        geographicAreaM49_fi = Dimension(name = "geographicAreaM49_fi", keys = sel_country), # GetCodeList("Fisheries", "fi_global_production","geographicAreaM49_fi" )[,code]),
-        fisheriesAsfis = Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "fi_global_production","fisheriesAsfis" )[,code]),
-        fisheriesCatchArea = Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "fi_global_production","fisheriesCatchArea" )[,code]),
-        measuredElement = Dimension(name = "measuredElement", keys = c("FI_001")),
-        timePointYears = Dimension(name = "timePointYears", keys =  as.character(sel_years) )))
-      withProgress(message = 'Global production data loading in progress',
+      # KeyGlobal <- DatasetKey(domain = "Fisheries", dataset = "fi_global_production", dimensions = list(
+      #   geographicAreaM49_fi = Dimension(name = "geographicAreaM49_fi", keys = sel_country), # GetCodeList("Fisheries", "fi_global_production","geographicAreaM49_fi" )[,code]),
+      #   fisheriesAsfis = Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "fi_global_production","fisheriesAsfis" )[,code]),
+      #   fisheriesCatchArea = Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "fi_global_production","fisheriesCatchArea" )[,code]),
+      #   measuredElement = Dimension(name = "measuredElement", keys = c("FI_001")),
+      #   timePointYears = Dimension(name = "timePointYears", keys =  as.character(sel_years) )))
+      browser()
+      # Now getting capture and aquaculture frome production and merging
+    if(local){
+      
+      if(CheckDebug()){
+        
+        library(faoswsModules)
+        SETTINGS = ReadSettings("sws1.yml")
+        
+        ## If you're not on the system, your settings will overwrite any others
+        R_SWS_SHARE_PATH = SETTINGS[["share"]]
+        
+        ## Define where your certificates are stored
+        SetClientFiles(SETTINGS[["certdir"]])
+        
+        ## Get session information from SWS. Token must be obtained from web interface
+        GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+                           token = 'b830f39c-253d-4d6f-9978-ff6f00d47765')#'27ded447-71ec-413b-bcd4-87669ac20c70')
+      }
+      
+    } else {
+      R_SWS_SHARE_PATH = "Z:"
+      SetClientFiles("/srv/shiny-server/.R/PROD/")
+      GetTestEnvironment(baseUrl = "https://sws.fao.org:8181",
+                         token = "04fc0c00-a4f3-4640-bee6-49a906863095")
+    }  
+    
+    
+      withProgress(message = 'Loading Global Production data',
                    value = 0, {
+                    
+                     Sys.sleep(0.05)
+                     incProgress(0.15)
+                  
+                     dim1aqua <- Dimension(name = "geographicAreaM49_fi", keys = sel_country) # GetCodeList("Fisheries", "aqua", "geographicAreaM49_fi")$code)
+                     dim2aqua <- Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "aqua", "fisheriesAsfis")$code)
+                     dim3aqua <- Dimension(name = "fisheriesProductionSource", keys = GetCodeList("Fisheries", "aqua", "fisheriesProductionSource")$code)
+                     dim4aqua <- Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "aqua", "fisheriesCatchArea")$code)
+                     dim5aqua <- Dimension(name = "measuredElement", keys = "FI_001")
+                     dim6aqua <- Dimension(name = "timePointYears", keys = as.character(sel_years)) # GetCodeList("Fisheries", "aqua", "timePointYears")$code) 
+                     key1 <- DatasetKey(domain = "Fisheries", dataset = "aqua", dimensions = list(dim1aqua, dim2aqua, dim3aqua, dim4aqua, dim5aqua, dim6aqua))
+                     aqua_quantity <- GetData(key1)
                      
-                     Sys.sleep(0.25)
-                     incProgress(0.25)
+                     Sys.sleep(0.05)
+                     incProgress(0.35)
+                     #[1] "geographicAreaM49_fi" "fisheriesAsfis"       "fisheriesCatchArea"   "measuredElement"     
+                     #[5] "timePointYears"   
+                     dim1capture <- Dimension(name = "geographicAreaM49_fi", keys = sel_country) #  GetCodeList("Fisheries", "capture", "geographicAreaM49_fi")$code)
+                     dim2capture <- Dimension(name = "fisheriesAsfis", keys = GetCodeList("Fisheries", "capture", "fisheriesAsfis")$code)
+                     dim3capture <- Dimension(name = "fisheriesCatchArea", keys = GetCodeList("Fisheries", "capture", "fisheriesCatchArea")$code)
+                     dim4capture <- Dimension(name = "measuredElement", keys = "FI_001")
+                     dim5capture <- Dimension(name = "timePointYears", keys = as.character(sel_years)) # GetCodeList("Fisheries", "aqua", "timePointYears")$code) 
+                     key2 <- DatasetKey(domain = "Fisheries", dataset = "capture", dimensions = list(dim1capture, dim2capture, dim3capture, dim4capture, dim5capture))
+                     cap_quantity <- GetData(key2)
                      
-                     globalProduction <- GetData(KeyGlobal)
-                     Sys.sleep(0.75)
+                     Sys.sleep(0.05)
+                     incProgress(0.55)
+                     
+                     dim4capture = Dimension(name = "measuredElement", keys = "FI_002")
+                     key2 <- DatasetKey(domain = "Fisheries", dataset = "capture", dimensions = list(dim1capture, dim2capture, dim3capture, dim4capture, dim5capture))
+                     cap_numbers <- GetData(key2)
+                     
+                     aqua_quantity$flagCurrency <- NULL
+                     aqua_quantity$fisheriesProductionSource <- NULL
+                    
+                     globalprod_new <- rbind (aqua_quantity, cap_quantity) 
+                     globalprod_new <- rbind (globalprod_new, cap_numbers)
+                     
+                     globalprod_new <- globalprod_new %>% 
+                       group_by(geographicAreaM49_fi,fisheriesAsfis,fisheriesCatchArea,measuredElement,timePointYears) %>% 
+                       summarise(Flag=myAggregate(Value,flagObservationStatus), Quantity=sum(Value))
+                     globalprod_new <- globalprod_new %>% ungroup()
+                     
+                     colnames(globalprod_new)[colnames(globalprod_new)=="Quantity"]  <- "Value"
+                     colnames(globalprod_new)[colnames(globalprod_new)=="Flag"]  <- "flagObservationStatus"
+                     globalprod_new$flagMethod <- "-"
+                     
+                     # for aggregated Values>0,status=N is no longer correct
+                     globalprod_new$flagObservationStatus[which(globalprod_new$Value>0 & globalprod_new$flagObservationStatus=='N')] <- ''
+                     Sys.sleep(0.05)
+                     incProgress(0.75)
+                     # order columns
+                     globalprod_new <- globalprod_new[,c('geographicAreaM49_fi','fisheriesAsfis','fisheriesCatchArea','measuredElement','timePointYears','Value','flagObservationStatus','flagMethod') ]
+                     
+                     # remove grouping
+                     globalProduction <- as.data.table(globalprod_new)
+                     
+                     # Convert flags into ordinal factor so that simple aggregation is possible
+                     # The function aggregateObservationFlag is too slow so flag are transformed into factors
+                     globalProduction$flagObservationStatus <- ifelse(is.na(globalProduction$flagObservationStatus), '', globalProduction$flagObservationStatus)
+                     globalProduction$flagObservationStatus <- factor(globalProduction$flagObservationStatus, levels = c('M', 'O', 'N', '', 'X', 'T', 'E', 'I'), ordered = TRUE)
+                     
+                     # Aggregate by fisheriesCatchArea
+                     globalProduction <- globalProduction[, list(ValueAggr = sum(Value, na.rm = TRUE),
+                                                                 flagObservationStatusAggr = max(flagObservationStatus),
+                                                                 flagMethodAggr = "s"),
+                                                          by=c("geographicAreaM49_fi",
+                                                               "fisheriesAsfis",
+                                                               "measuredElement",
+                                                               "timePointYears")]
+                     Sys.sleep(0.05)
                      incProgress(0.95)
-                   })
+                     setnames(globalProduction, 
+                              c("ValueAggr", "flagObservationStatusAggr", "flagMethodAggr"),
+                              c("Value", "flagObservationStatus", "flagMethod"))
+                     
+                     globalProduction[ , c("measuredElement"):=NULL]     
+      })
+    
+      if(local){
+        
+        if(CheckDebug()){
+          
+          library(faoswsModules)
+          SETTINGS = ReadSettings("sws.yml")
+          
+          ## If you're not on the system, your settings will overwrite any others
+          R_SWS_SHARE_PATH = SETTINGS[["share"]]
+          
+          ## Define where your certificates are stored
+          SetClientFiles(SETTINGS[["certdir"]])
+          
+          ## Get session information from SWS. Token must be obtained from web interface
+          GetTestEnvironment(baseUrl = SETTINGS[["server"]],
+                             token = 'dd142b17-6b58-440c-8b94-d578c7500e50')#'27ded447-71ec-413b-bcd4-87669ac20c70')
+        }
+        
+      } else {
+        R_SWS_SHARE_PATH = "Z:"
+        SetClientFiles("/srv/shiny-server/.R/QA/")
+        GetTestEnvironment(baseUrl = "https://swsqa.aws.fao.org:8181",
+                           token = "04fc0c00-a4f3-4640-bee6-49a906863095")
+      }
       
-      # Convert flags into ordinal factor so that simple aggregation is possible
-      # The function aggregateObservationFlag is too slow so flag are transformed into factors
-      globalProduction$flagObservationStatus <- ifelse(is.na(globalProduction$flagObservationStatus), '', globalProduction$flagObservationStatus)
-      
-      globalProduction$flagObservationStatus <- factor(globalProduction$flagObservationStatus, levels = c('M', 'O', 'N', '', 'X', 'T', 'E', 'I'), ordered = TRUE)
-      
-      # Aggregate by fisheriesCatchArea
-      globalProduction <- globalProduction[, list(ValueAggr = sum(Value, na.rm = TRUE),
-                                                  flagObservationStatusAggr = max(flagObservationStatus),
-                                                  flagMethodAggr = "s"),
-                                           by=c("geographicAreaM49_fi",
-                                                "fisheriesAsfis",
-                                                "measuredElement",
-                                                "timePointYears")]
-      
-      setnames(globalProduction, 
-               c("ValueAggr", "flagObservationStatusAggr", "flagMethodAggr"),
-               c("Value", "flagObservationStatus", "flagMethod"))
-      
-      globalProduction[ , c("measuredElement"):=NULL]
-      
-      ## Get export mapping table
+      withProgress(message = 'Loading Commodity data',
+                                value = 0, {
+                                  ## Get export mapping table
       whereMap <- paste("geographic_area_m49_fi = '", sel_country, "' ", sep = "") 
+      
+      Sys.sleep(0.10)
+      incProgress(0.15)
       
       map_prod_exp0 <- ReadDatatable('isscfc_mapping_export_approach', readOnly = FALSE, where = whereMap)
       map_prod_exp <- copy(map_prod_exp0)
@@ -748,26 +946,39 @@ The export mapping data table is also loaded for the selected country and a copy
   
       ##Get Commodity Data
       
-      onlyExport <- '5910'
-      commodity2load <- as.vector(map_prod_exp[measuredItemISSCFC == sel_isscfc, ]$measuredItemISSCFC_exp)
+      onlyExport <- c('5910', '5912')
+      # commodity2load <- as.vector(map_prod_exp[measuredItemISSCFC == sel_isscfc, ]$measuredItemISSCFC_exp)
+      # commodity2load <- as.vector(map_prod_exp$measuredItemISSCFC_exp)
+      Sys.sleep(0.10)
+      incProgress(0.25)
       
       KeyComm <- DatasetKey(domain = "Fisheries Commodities", dataset = "commodities_total", dimensions = list(
         geographicAreaM49_fi = Dimension(name = "geographicAreaM49_fi", keys = sel_country), 
-        measuredItemISSCFC = Dimension(name = "measuredItemISSCFC", keys = commodity2load),
+        measuredItemISSCFC = Dimension(name = "measuredItemISSCFC", keys =  GetCodeList("FisheriesCommodities", 
+                                                                                        "commodities_total",
+                                                                                        "measuredItemISSCFC")$code ),#commodity2load),
         measuredElement = Dimension(name = "measuredElement", keys = onlyExport),
         timePointYears = Dimension(name = "timePointYears", keys = as.character(sel_years) ))) 
-      withProgress(message = 'Commodity data loading in progress',
-                   value = 0, {
+      
                      
-                     Sys.sleep(0.25)
-                     incProgress(0.25)
-                     
+                     Sys.sleep(0.10)
+                     incProgress(0.4)
+                     6
                      commodityDB <- GetData(KeyComm)
                      Sys.sleep(0.75)
                      incProgress(0.95)
                    })
       
       commodityDB$flagObservationStatus <- factor(commodityDB$flagObservationStatus, levels = c('M', 'O', 'N', '', 'X', 'T', 'E', 'I'), ordered = TRUE)
+      
+      
+      commodityDB <- commodityDB[ , list(Value = sum(Value, na.rm = TRUE),
+                                         measuredElement = '5910',
+                                         flagObservationStatus = max(flagObservationStatus),
+                                         flagMethod = "-"),
+                                  by=c("geographicAreaM49_fi",
+                                       "measuredItemISSCFC",
+                                       "timePointYears")]
       
       # Save into the rv_data object so to recall it when needed
       rv_data$globalProduction <- globalProduction
@@ -776,8 +987,12 @@ The export mapping data table is also loaded for the selected country and a copy
       rv_mappingtable$map_prod_exp0 <- map_prod_exp0
       rv_mappingtable$map_prod_exp <- map_prod_exp
       
-    }
+    
+      
+      
+      # }
   })
+  
 
 ```
 
@@ -790,7 +1005,7 @@ Other checks are made to see if the chosen time series is available. If the seri
 The data from the imputed processed production and the commodity dataset are merged through the export approach mapping table. Before the merge, the three objects are filtered in order to select only the needed rows: the processed production table is filtered by country, years and Scheda selected; the mapping table rows selected are those corresponding to the ISSCFC (production) code corresponding to the selected Scheda for the country and the period selected is the one corresponding to the selected year; the commodity dataset selected contains only non-missing export data (i.e. observation flag different from 'O', 'M', 'Q' and code '5910') for the country selected and the commodity listed in the mapping table (ISSCFC export). The function then returns the whole merged data tables and the one to display in the Shiny tab which has commodity description and ordered columns.
 
 ```
-#-- Export method approach ----
+  # -- Export method approach ----
   
   #-- Get first tab with mapping
   isscfc_check_reac <- reactive({
@@ -807,7 +1022,7 @@ The data from the imputed processed production and the commodity dataset are mer
     globalProduction <- rv_data$globalProduction
     commodityDB <- rv_data$commodityDB
     map_prod_exp <- rv_mappingtable$map_prod_exp
-    
+
     validate(
       need(nrow(map_prod_exp) > 0,
            "Export approach not applicable. No available mapping for the chosen country.")
@@ -821,7 +1036,9 @@ The data from the imputed processed production and the commodity dataset are mer
     
     ## Checks
     # Select export commodities linked to the selected commodity to check if there are export data available 
-    commodities2check <- map_prod_exp[ start_year < input$btn_year &
+    map_prod_exp_mod <- copy(map_prod_exp)
+    map_prod_exp_mod <- map_prod_exp_mod[ end_year == 'LAST', end_year := '9999']
+    commodities2check <- map_prod_exp_mod[ start_year <= input$btn_year & input$btn_year < end_year &
                                          measuredItemISSCFC %in% sel_isscfc, ]
     
     commodities2check <-  commodities2check[start_year == max(as.numeric(start_year))]$measuredItemISSCFC_exp
@@ -829,8 +1046,8 @@ The data from the imputed processed production and the commodity dataset are mer
     # Filter commodity db chunk needed
     commodityDB_filtered <- commodityDB[geographicAreaM49_fi == sel_country & 
                                           measuredElement == "5910" &
-                                          measuredItemISSCFC %in% commodities2check &
-                                          !flagObservationStatus %in% c('O', 'M', 'Q'), ]
+                                          measuredItemISSCFC %in% commodities2check, ]  # &
+                                        #  !flagObservationStatus %in% c('O', 'M', 'Q'), ]
     
     # Commodity DB with needed data change dimension name so not confunded with production codes
     setnames(commodityDB_filtered, old = "measuredItemISSCFC", new = "measuredItemISSCFC_exp")
@@ -838,24 +1055,16 @@ The data from the imputed processed production and the commodity dataset are mer
     # Years available among those selected 
     avail_years <- unique(commodityDB_filtered$timePointYears)
     
-    validate(
-      need(length(avail_years) > 0,
-           "Export approach not applicable. No available export value for the chosen input combination.")
-    )
-    
-    validate(
-      need(all(sel_years %in% avail_years),
-           sprintf("Export data for the time range and commodity selected are not available. Years available: %s",
-                   ifelse(length(avail_years)>0, paste(avail_years, collapse = ", "),"None")))
-    )
-    
     # Processed production chunk needed
     procprod_filtered <- procprodimp[geographicAreaM49_fi %in% sel_country & 
                                        timePointYears %in% sel_years &
                                        Scheda %in% sel_commodity, ]
     
     # Mapping chunk needed
-    map_prod_exp_filtered <- map_prod_exp[end_year == "LAST" & measuredItemISSCFC %in% sel_isscfc, ]
+    map_prod_exp_filtered <- map_prod_exp[start_year <= input$btn_year & 
+                                            input$btn_year < end_year & 
+                                            measuredItemISSCFC %in% sel_isscfc, ]
+    
     # Delete unnecessary columns
     map_prod_exp_filtered[ , c('__id', '__ts') := NULL]
     
@@ -902,19 +1111,38 @@ The data from the imputed processed production and the commodity dataset are mer
                                      "measuredItemISSCFC"
     ))
     
+    if(nrow(map_prod_exp) == 0| length(avail_years) == 0| any(!sel_years %in% avail_years)){
+    imputed_year_data <- NA
+    prod_exp_data_tab <- NA
+    checkPassed$Exp <- 'No'
+    } else {
+      checkPassed$Exp <- 'Yes'
+    }
+    
     out_exp <- list(DF_display = imputed_year_data, DF_full = prod_exp_data_tab)
+    
+    validate(
+      need(length(avail_years) > 0,
+           "Export approach not applicable. No available export value for the chosen input combination.")
+    )
+    
+    validate(
+      need(all(sel_years %in% avail_years),
+           sprintf("Export data for the time range and commodity selected are not available. Years available: %s",
+                   ifelse(length(avail_years)>0, paste(avail_years, collapse = ", "),"None")))
+    )
+    
     return(out_exp)
   })
-
+  
 ```
 The next code chunk includes the '`rhandsontable`' object needed to modify the table shown at the top of the tab to change the export mapping and the button to select the ratio used to calculate the missing data (keep the 'Original data', use the 'Average ratio' or choose a 'Manual ratio'). If the manual ratio is chosen then a panel is shown to insert the value.
 
 ```
-#-- Export selection table
+ #-- Export selection table
   
   output$isscfc_check_data <- renderRHandsontable({
     data_out <- isscfc_check_reac()
-    
     rhandsontable(data_out$DF_display, rowHeaders = NULL, width = 'auto', height = 'auto') 
   })
   
@@ -953,7 +1181,7 @@ The next code chunk includes the '`rhandsontable`' object needed to modify the t
     numericInput(inputId = 'btn_manual_exp', label = 'Manual ratio', value = NA)
     
   })
-
+  
 ```
 The table containing value of processed production, exports and ratio for the time series selected and the average values can now be built. First, all the needed datasets and parameters are recalled along with the table where mapping modification can have been performed and the output of the `isscfc_check_reac` containing the needed table. Checks for new commodities in the production and export columns are performed so to have all commodities included in the mapping. The old and the new data are compared and the missing values are inserted. Old and new data are then bound together and manual inputs are checked. The function `export_imputation2` is applied to build the table shown in the middle of the export tab. The function is described in the \@ref(functionsExp) paragraph.
 
@@ -979,12 +1207,20 @@ The table containing value of processed production, exports and ratio for the ti
     tab_updated <- rhandsontable::hot_to_r(input$isscfc_check_data)
     # ISSCFC description code no more needed
     tab_updated <- tab_updated[ , description := NULL]
-    
+    tab_updated$measuredItemISSCFC_exp <- gsub(' ', '', tab_updated$measuredItemISSCFC_exp)
+    tab_updated$measuredItemISSCFC <- gsub(' ', '', tab_updated$measuredItemISSCFC)
+
     # Tables as from 'out_exp'
     data_out <- isscfc_check_reac()
     # Complete table for imputed year
     data4update <- data_out$DF_full[timePointYears == input$btn_year, ]
+    data4update$measuredItemISSCFC_exp <- gsub(' ', '', data4update$measuredItemISSCFC_exp)
+    data4update$measuredItemISSCFC <- gsub(' ', '', data4update$measuredItemISSCFC)
+    
     data_prev <- data_out$DF_full[timePointYears != input$btn_year, ]
+    data_prev$measuredItemISSCFC_exp <- gsub(' ', '', data_prev$measuredItemISSCFC_exp)
+    data_prev$measuredItemISSCFC <- gsub(' ', '', data_prev$measuredItemISSCFC)
+    
     ## check the commodities inserted in the new table
     
     # If unknown commodity inserted in production codes
@@ -1062,12 +1298,13 @@ The table containing value of processed production, exports and ratio for the ti
                     right = list(width = 2, color = "red"))))
     
   })
+  
 ```
 
 The same process applies to create the plot (*ggplot*) showing the time series for both the processed production and the export figures.
 
 ```
-#-- Export approach plot ----
+  #-- Export approach plot ----
   output$gg_exp_estimates <- renderPlot({
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
     
@@ -1113,6 +1350,11 @@ The same process applies to create the plot (*ggplot*) showing the time series f
       )
     )
     
+    validate(
+      need (all(!is.na(tab_updated[ , .(type, measuredItemISSCFC_exp, timePointYears, measuredItemISSCFC)])),
+            "One of the key mapping information is missing (type, measuredItemISSCFC_exp, timePointYears, measuredItemISSCFC)."
+      )
+    )
     
     # # Fill missing columns and update start and end year. Start year is the year of imputation and end_year is last by default
     # tab_updated <- tab_updated[, c("start_year", "end_year"):= list(input$btn_year, 'LAST')]
@@ -1164,18 +1406,20 @@ The same process applies to create the plot (*ggplot*) showing the time series f
     # Prepare table for plot
     export_out2 <- export_out[, -which(names(export_out) == "Flag"), with = FALSE]
     export_out_aux <- melt(export_out2, 1, variable.name = 'Year')
-    
+
     suppressWarnings(export_out_aux[, Year := as.numeric(as.character(Year))])
     suppressWarnings(export_out_aux[, value := as.numeric(as.character(value))])
     
     ggplot(data = export_out_aux[Stats != 'Ratio'], aes(x = Year, y = value)) +
       geom_line(aes(group = Stats, color = Stats), size = 1) +
       geom_point(aes(color = Stats), size = 2) +
+      scale_color_manual(values=c("blue","red")) +
       labs(y = 'Quantity (in tonnes)', color = '', title = 'Export approach imputation') +
       theme_minimal() +
       theme(legend.position = 'bottom')
     
   })
+  
 
 ```
 
@@ -1184,7 +1428,7 @@ At the beginning and at the end of the process the user can use the 'Check mappi
 Each check is described in the code comments:
 
 ```
-#-- Check export mapping ----
+ # -- Check export mapping ----
   observeEvent(input$check_consistency_exp, {
     # If there's currently a notification, don't add another
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
@@ -1375,6 +1619,7 @@ Each check is described in the code comments:
     }
     
   })
+  
 ```
 
 ### Primary production approach tab
@@ -1382,7 +1627,7 @@ Each check is described in the code comments:
 The primary production approach tab has almost the same structure as the export approach one. First the mapping is loaded for the selected country and, along with the original version, a version compatible with the datasets is stored. Then, as with the export approach, there is a `reactive`, two `renderRHandsontable`, two `renderUI`, a `renderPlot` chunks and the mapping checks as an `observeEvent` chunk.
 
 ```
-#-- Primary production approach ----
+ # -- Primary production approach ----
   
   # Get primary production mapping table 
   
@@ -1390,7 +1635,7 @@ The primary production approach tab has almost the same structure as the export 
     
     sel_country <- country_input[country_input$label == input$btn_country, code]
     whereMap <- paste("geographic_area_m49_fi = '", sel_country, "' ", sep = "") 
-    
+   
     # Get primary production mapping
     map_prod_prod0 <-  ReadDatatable('isscfc_mapping_prod_approach', readOnly = FALSE, where = whereMap)
     map_prod_prod <- copy(map_prod_prod0)
@@ -1414,6 +1659,7 @@ The primary production approach tab has almost the same structure as the export 
     rv_mappingtable$map_prod_prod <- map_prod_prod
     
   })
+  
 
 ```
 
@@ -1421,23 +1667,19 @@ After recalling data and parameters, data from the processed production data tab
 
 
 ```
-#-- Get first tab with mapping
+ #-- Get first tab with mapping
   
   asfis_check_reac <- reactive({
     
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
-    
+
     commodity_label <- rv_data$commodity_label
     procprodimp <- rv_data$procprod_imp
     globalProduction <- rv_data$globalProduction
     commodityDB <- rv_data$commodityDB
-    
+  
     map_prod_prod <- rv_mappingtable$map_prod_prod
     
-    validate(
-      need(nrow(map_prod_prod) > 0,
-           "Primary production approach not applicable. No available mapping for the chosen country.")
-    )
     # Buttons
     sel_country <- country_input[country_input$label == input$btn_country, code]
     sel_years <- input$btn_start_year:input$btn_year
@@ -1448,19 +1690,15 @@ After recalling data and parameters, data from the processed production data tab
     
     avail_years <- unique(globalProduction$timePointYears)
 
-    validate(
-      need(all(sel_years %in% avail_years),
-           sprintf("Primary production data for the time range and commodity selected are not available. Years available: %s",
-                   ifelse(length(avail_years)>0, paste(avail_years, collapse = ", "),"None")))
-    )
-    
-    
     # As calculations are slow, a progress bar is needed
     withProgress(message = 'Calculation in progress',
                  value = 0, {
                    
                    Sys.sleep(0.25)
                    incProgress(0.25)
+                   
+                   mapforfunction <- copy(map_prod_prod)
+                   mapforfunction <- mapforfunction[end_year == "LAST", end_year := gsub('-.*', '', Sys.Date())]
                    
                    # The output of this function consists of a list of two items 
                    # (associated to cdb_prod_isscaap and cdb_cfc_asfis_full in the following lines)
@@ -1471,7 +1709,8 @@ After recalling data and parameters, data from the processed production data tab
                                                                                                   !flagObservationStatus %in% c('O', 'M', 'Q')], # Dataset 
                                                             sel_year = input$btn_year,
                                                             map_asfis = map_asfis,
-                                                            mappingTable  = map_prod_prod[end_year == "LAST" & measuredItemISSCFC %in% sel_isscfc ])
+                                                            mappingTable  = mapforfunction[end_year >= input$btn_start_year &
+                                                                                          end_year >= input$btn_year & measuredItemISSCFC %in% sel_isscfc ])
                    
                    
                    Sys.sleep(0.75)
@@ -1494,23 +1733,44 @@ After recalling data and parameters, data from the processed production data tab
                                                             Scheda, measuredItemISSCFC)]
                    
                    # If no primary production is available for the chosen commodity an error is displayed
-                   validate(
-                     need( nrow(cdb_cfc_asfis) > 0,
-                           paste0("Primary production data for the country, time range and commodity 
-                                  selected are not available. Please select different inputs or 
-                                  ignore this approach."))
-                   )
-                   
                    
                    # Add imputation year and select needed columns
                    cdb_cfc_asfis <- cdb_cfc_asfis[timePointYears == input$btn_year]
                    
                    setkey(cdb_cfc_asfis)
                    cdb_cfc_asfis <- unique(cdb_cfc_asfis)
+                  
+                   if(nrow(map_prod_prod) == 0| nrow(cdb_cfc_asfis) == 0| any(!sel_years %in% avail_years)){
+                     cdb_prod_isscaap <- NA
+                     cdb_cfc_asfis_full <- NA
+                     cdb_cfc_asfis <- NA
+                     checkPassed$Prim <- 'No'
+                   } else {
+                     checkPassed$Prim <- 'Yes'
+                   }
                    
                    out_prod <- list(prod_isscaap = cdb_prod_isscaap, # processed production for selected years with mapping
                                     prod_asfis_full = cdb_cfc_asfis_full, # full table with processed and primary production
                                     prod_asfis_display = cdb_cfc_asfis) # table to display in the shiny
+                   
+                   
+                   validate(
+                     need(nrow(map_prod_prod) > 0,
+                          "Primary production approach not applicable. No available mapping for the chosen country.")
+                   )
+                   
+                   validate(
+                     need(all(sel_years %in% avail_years),
+                          sprintf("Primary production data for the time range and commodity selected are not available. Years available: %s",
+                                  ifelse(length(avail_years)>0, paste(avail_years, collapse = ", "),"None")))
+                   )
+                   
+                   validate(
+                     need( nrow(cdb_cfc_asfis) > 0,
+                           paste0("Primary production data for the country, time range and commodity 
+                                  selected are not available. Please select different inputs or 
+                                  ignore this approach."))
+                   )
                    
                    Sys.sleep(0.75)
                    incProgress(0.95)
@@ -1526,7 +1786,7 @@ After recalling data and parameters, data from the processed production data tab
 The chunks for the modified table, the ratio choice button and the manual ratio button follow:
 
 ```
-##-- Primary production selection table ----
+ ##-- Primary production selection table ----
   output$asfis_check_data <- renderRHandsontable({
     data_out_prod <- asfis_check_reac()
     rhandsontable(data_out_prod$prod_asfis_display, rowHeaders = NULL, width = 'auto', height = 'auto') 
@@ -1567,7 +1827,6 @@ The chunks for the modified table, the ratio choice button and the manual ratio 
     if(is.null(input$btn_commodity)) return(NULL)
     numericInput(inputId = 'btn_manual_prod', label = 'Manual ratio', value = NA)
   })
-  
 
 ```
 
@@ -1579,7 +1838,7 @@ After the first checks, the data are updated with the new mapping and data, and 
   output$table_prod_estimates <- renderRHandsontable({
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
     if(is.null(input$asfis_check_data)) return(NULL)
-    
+  
     commodity_label <- rv_data$commodity_label
     procprodimp <- rv_data$procprod_imp
     globalProduction <- rv_data$globalProduction
@@ -1719,6 +1978,7 @@ After the first checks, the data are updated with the new mapping and data, and 
     
     
   })
+
 ```
 
 The same process is applied for the plot displayed at the bottom of the tab.
@@ -1841,18 +2101,20 @@ The same process is applied for the plot displayed at the bottom of the tab.
     ggplot(data = prim_prod_out_aux[Stats != 'Ratio'], aes(x = Year, y = value)) +
       geom_line(aes(group = Stats, color = Stats), size = 1) +
       geom_point(aes(color = Stats), size = 2) +
+      scale_color_manual(values=c("blue","red")) +
       labs(y = 'Quantity (in tonnes)', color = '', title = 'Primary production approach imputation') +
       theme_minimal() +
       theme(legend.position = 'bottom')
     
   })
+  
 
 ```
 
 As in the export approach tab, a 'Check mapping' button is inserted and it performs the checks commented in the code below: 
 
 ```
-#-- Check production mapping ----
+ # -- Check production mapping ----
   observeEvent(input$check_consistency_prod, {
     
     # If there's currently a notification, don't add another
@@ -1970,6 +2232,7 @@ As in the export approach tab, a 'Check mapping' button is inserted and it perfo
     }
     
   })
+  
 
 ```
 
@@ -2071,7 +2334,7 @@ Once the data and parameters are recalled, the code makes sure all the variables
 A very similar code defines the plot to display all the possible values that can be imputed. The time series shown is taken from the primary production tab series.
 
 ```
-  # Plot
+ # Plot
   
   output$gg_methods <- renderPlot({
     
@@ -2087,7 +2350,7 @@ A very similar code defines the plot to display all the possible values that can
     sel_commodity <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, code]
     sel_isscfc <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, isscfc]
     
-    if(is.null(input$table_exp_estimates)){
+    if(is.null(input$table_exp_estimates) | checkPassed$Exp == 'No'){
       tab_exp_prod <- NA
       export_app <- NA
     } else {
@@ -2095,7 +2358,7 @@ A very similar code defines the plot to display all the possible values that can
       export_app <- tab_exp_prod[1, input$btn_year, with = F]
     }
     
-    primary_app <- ifelse(!is.null(input$table_prod_estimates),
+    primary_app <- ifelse(!is.null(input$table_prod_estimates) & checkPassed$Prim != 'No',
                           unlist(input$table_prod_estimates$data[[1]])[(length(sel_years)*2)],
                           NA)
     
@@ -2176,7 +2439,9 @@ A very similar code defines the plot to display all the possible values that can
       
       
     }
+    
   })
+  
 
 ```
 
@@ -2185,8 +2450,9 @@ A very similar code defines the plot to display all the possible values that can
 The updating process of the mapping tables is similar for the export and the primary production mappings. 
 For the export mapping, once the parameters and data have been recalled, the new mapping appearing in the first table of the export tab is compared with the corresponding chunk of the original mapping table (selected country, production commodities included in the new mapping, last available period). Four cases are considered in the mapping change: (i) if nothing changes the table stays the same; (ii) if rows are added (or removed) to the original mapping then they are added with `Selection` cell turned to `FALSE`; (iii) if the mapping changes for a period already existing, the `Selection` and `type` variables are compared and the latest is chosen. If a row has been deleted then the `Selection` value is turned into `FALSE`; (iv) in all the remaining cases, i.e. the mapping is completely new, the previous corresponding mapping gets the end_year variable changed from 'LAST' to the year before the imputation year, and the new mapping is bound to the old mapping. The old mapping is replaced in the reactive value data and at the end of the process a window opens informing the user of the update.  
 
+
 ```
-  ##-- Update export mapping ----
+# -- Update export mapping ----
   
   observeEvent(input$update_export_mapping, {
     
@@ -2322,17 +2588,17 @@ For the export mapping, once the parameters and data have been recalled, the new
     
     showModal(modalDialog(
       title = "Update export-based approach mapping." ,
-      sprintf("The mapping table has been updated and it is diplayed in the tab: Check mapping export approach.")
+      sprintf("The mapping table has been updated and it is diplayed in the tab: Save Export Mapping.")
     ))
     
   })
-
+  
 ```
 
 Also the primary production mapping approach considers four update cases: (i) if the mapping does not change; (ii) if an ISSCAAP group is added then the additional part is bound to the old one with the species listed by the user; (iii) if changes are performed for a period with an already existing start_year (i.e. the mapping is only modified and does not need to be added) then the previous and new `Selection`, `Ratio` and `type` variables are compared and the updated is chosen if available. If a row has been deleted then the `Selection` value is turned into `FALSE`; (iv) in the remaining cases, as for the export mapping, the previous corresponding mapping gets the end_year variable changed from 'LAST' to the year before the imputation year, and the new mapping is bound to the old mapping. The old mapping is replaced in the reactive value data and at the end of the process a window opens informing the user of the update. 
 
 ```
-##-- Update primary production mapping ----
+ # -- Update primary production mapping ----
   
   observeEvent(input$update_production_mapping, {
     
@@ -2340,7 +2606,6 @@ Also the primary production mapping approach considers four update cases: (i) if
     
     commodity_label <- rv_data$commodity_label
     map_prod_prod <- rv_mappingtable$map_prod_prod
-    
     sel_country <- country_input[country_input$label == input$btn_country, code]
     sel_commodity <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, code]
     sel_years <- input$btn_start_year:input$btn_year
@@ -2351,6 +2616,10 @@ Also the primary production mapping approach considers four update cases: (i) if
     tab_updated_prod <- tab_updated_prod[, c("geographicAreaM49_fi", "end_year", "start_year",
                                              "Ratio") := list(sel_country, "LAST", input$btn_year,
                                                               ifelse(is.na(Ratio), 1, Ratio)) ]
+    tab_updated_prod[is.na(Selection) , Selection := FALSE]
+    tab_updated_prod[is.na(fisheriesAsfis) , fisheriesAsfis := 'all']
+    tab_updated_prod[is.na(measuredItemISSCFC) , measuredItemISSCFC := sel_isscfc]
+    tab_updated_prod[is.na(type) , type := 'provided']
     
     corresponding_mapping_prod <- map_prod_prod[ geographicAreaM49_fi == sel_country &
                                                    measuredItemISSCFC %in% unique(tab_updated_prod$measuredItemISSCFC) &
@@ -2370,9 +2639,16 @@ Also the primary production mapping approach considers four update cases: (i) if
     # 2) adding an isscaap
     # 3) changes in the current period mapping
     # 4) all other cases
+    names(corresponding_mapping_prod)
     
-    if(all(tab_updated_prod$Selection == TRUE) & all(corresponding_mapping_prod$fisheriesAsfis == 'all') &
-       all(tab_updated_prod$Ratio == corresponding_mapping_prod$Ratio) & 
+    if(all(length(tab_updated_prod[ , unique(Selection), by = isscaap]$V1) == length(corresponding_mapping_prod$Selection)) & 
+       all(tab_updated_prod[ , unique(Selection), by = isscaap] == corresponding_mapping_prod$Selection) &
+       all(corresponding_mapping_prod$fisheriesAsfis == 'all') &
+       all(unique(tab_updated_prod[ ,.(geographicAreaM49_fi, 
+                                       end_year, 
+                                       measuredItemISSCFC, 
+                                       isscaap, 
+                                       Ratio)]$Ratio) == unique(corresponding_mapping_prod$Ratio)) & 
        nrow(tab_updated_prod[!isscaap %in% unique(corresponding_mapping_prod$isscaap), ]) == 0){
       
       prod_mapping_upd <- map_prod_prod
@@ -2381,17 +2657,62 @@ Also the primary production mapping approach considers four update cases: (i) if
       
       tab2add <- tab_updated_prod[!isscaap %in% unique(corresponding_mapping_prod$isscaap), ]
       
+      # if it is the same one commodity that is modified then the mapping has to change start date also with the old commodity
+      if(length(unique(corresponding_mapping_prod$measuredItemISSCFC)) == 1 & unique(corresponding_mapping_prod$measuredItemISSCFC) == unique(tab_updated_prod$measuredItemISSCFC)){
+      
+        map_prod_prod <- map_prod_prod[geographicAreaM49_fi == sel_country &
+                            measuredItemISSCFC %in% unique(tab_updated_prod$measuredItemISSCFC) & 
+                            end_year == "LAST", end_year := as.character(as.numeric(input$btn_year)-1)]
+          
+      }
+      
+      corresponding_mapping_prod_renewed <- copy(corresponding_mapping_prod)
+      corresponding_mapping_prod_renewed[ , start_year := input$btn_year]
+      
+      # Isscaap not new
+      groups <- unique(corresponding_mapping_prod_renewed$isscaap)
+      
+      # For each pre-mapped ISSCAAP see if:
+      # 1. Selection stays the same, nothing happens
+      # 2. Selection 'all' changes 
+      # 3. Selection not 'all' anymore
+      for(i in seq_len(length(unique(corresponding_mapping_prod_renewed$isscaap)))){
+      
+      if(length(unique(tab_updated_prod[isscaap == groups[i]]$Selection)) == 1 &
+         unique(corresponding_mapping_prod_renewed[isscaap == groups[i]]$Selection) == unique(tab_updated_prod[isscaap == groups[i]]$Selection)){
+        
+        corresponding_mapping_prod_renewed[isscaap == groups[i]] <- corresponding_mapping_prod_renewed[isscaap == groups[i]]
+        
+      } else if(length(unique(tab_updated_prod[isscaap == groups[i]]$Selection)) == 1 &
+                unique(corresponding_mapping_prod_renewed[isscaap == groups[i]]$Selection) != unique(tab_updated_prod[isscaap == groups[i]]$Selection)){
+        
+        Selupd <- unique(tab_updated_prod[isscaap == groups[i]]$Selection)
+        
+        corresponding_mapping_prod_renewed[isscaap == groups[i]]$Selection <- Selupd 
+        
+      } else if(length(unique(tab_updated_prod[isscaap == groups[i]]$Selection)) > 1){
+        
+        corresponding_mapping_prod_renewed[isscaap == groups[i]] <- tab_updated_prod[isscaap == groups[i]]
+        
+      }
+    
+      }
       prod_mapping_upd <- rbind(map_prod_prod[ , .(geographicAreaM49_fi, start_year, end_year, measuredItemISSCFC, isscaap, 
                                                    fisheriesAsfis, Ratio, Selection, type)], 
                                 tab2add[ , .(geographicAreaM49_fi, start_year, end_year, measuredItemISSCFC, isscaap, 
-                                             fisheriesAsfis, Ratio, Selection, type)])
+                                             fisheriesAsfis, Ratio, Selection, type)],
+                                corresponding_mapping_prod_renewed)
+
+      setkey(prod_mapping_upd)
+      prod_mapping_upd <- unique(prod_mapping_upd)       
+      
+      
       
       
     } else if(all(tab_updated_prod$start_year %in% 
                   unique(map_prod_prod[ geographicAreaM49_fi == sel_country &
                                         measuredItemISSCFC %in% unique(tab_updated_prod$measuredItemISSCFC) &
                                         end_year == "LAST",]$start_year))){
-      
       
       new_map_prod <- merge(map_prod_prod, tab_updated_prod, by = c("geographicAreaM49_fi",
                                                                     "start_year",
@@ -2400,6 +2721,33 @@ Also the primary production mapping approach considers four update cases: (i) if
                                                                     "isscaap", 
                                                                     "fisheriesAsfis"),
                             all = TRUE, suffixes = c("_previous", "_updated"))
+      
+      
+      new_map_prod_last <- new_map_prod[end_year == 'LAST' ]
+      groups <- unique(tab_updated_prod$isscaap)
+
+      for(i in seq_len(length(unique(tab_updated_prod$isscaap)))){
+        
+        
+        #If 'all' species i.e. selection  all FALSE or all TRUE
+      if(length(unique(new_map_prod_last[!is.na(Selection_updated) & isscaap == groups[i]]$Selection_updated)) == 1 &
+         any(new_map_prod_last[isscaap == groups[i]]$fisheriesAsfis == 'all')){
+        
+        Selupd <- unique(new_map_prod_last[!is.na(Selection_updated) & isscaap == groups[i]]$Selection_updated)
+        
+        new_map_prod <- new_map_prod[!new_map_prod_last[isscaap == groups[i] & fisheriesAsfis != 'all']]
+        new_map_prod <- new_map_prod[new_map_prod_last[isscaap == groups[i] & fisheriesAsfis == 'all'], Selection_updated := Selupd ]
+        
+      } else if(length(unique(tab_updated_prod[isscaap == groups[i]]$Selection)) > 1 &
+                any(new_map_prod_last[isscaap == groups[i]]$fisheriesAsfis == 'all')){
+        
+        new_map_prod <- new_map_prod[!new_map_prod_last[isscaap == groups[i] & fisheriesAsfis == 'all']]
+        
+      } else {
+        new_map_prod <- new_map_prod
+      }
+        
+      }
       
       new_map_prod$Selection <- ifelse(is.na(new_map_prod$Selection_updated), new_map_prod$Selection_previous, new_map_prod$Selection_updated)
       new_map_prod$Ratio <- ifelse(is.na(new_map_prod$Ratio_updated), new_map_prod$Ratio_previous, new_map_prod$Ratio_updated)
@@ -2411,10 +2759,10 @@ Also the primary production mapping approach considers four update cases: (i) if
       
       startyear <- unique(tab_updated_prod$start_year)
       
-      new_map_prod[geographicAreaM49_fi == sel_country &
-                     measuredItemISSCFC == sel_isscfc &
-                     end_year == "LAST" & start_year == startyear &
-                     !fisheriesAsfis %in% tab_updated_prod$fisheriesAsfis ]$Selection <- FALSE
+      # new_map_prod[geographicAreaM49_fi == sel_country &
+      #                measuredItemISSCFC == sel_isscfc &
+      #                end_year == "LAST" & start_year == startyear &
+      #                !fisheriesAsfis %in% tab_updated_prod$fisheriesAsfis ]$Selection <- FALSE
       
       
       prod_mapping_upd <- new_map_prod[ , .(geographicAreaM49_fi,
@@ -2448,10 +2796,11 @@ Also the primary production mapping approach considers four update cases: (i) if
     
     showModal(modalDialog(
       title = "Update primary production-based approach mapping." ,
-      sprintf("The mapping table has been updated and it is diplayed in the tab: Check mapping prod approach.")
+      sprintf("The mapping table has been updated and it is diplayed in the tab: Save Primary Prod. Mapping.")
     ))
     
   })
+  
 
 ```
 
@@ -2460,12 +2809,13 @@ Also the primary production mapping approach considers four update cases: (i) if
 In order to update the `processed_prod_national_detail_imputed` data table the input approach has to be identified ('approach_number') and the imputed value assigned to the variable 'imput_value'. The right flag has to be assigned according to the approach chosen, and the new data table built merging the old data table with the new one ('newImputedData'). The data table in the SWS can now be updated along with the imputed data table stored in the app. With this second update the user can see the new value directly in the Shiny without reloading it.
 
 ```
- ##-- Impute value ----
+  # -- Impute value ----
   
   observeEvent(input$btn_imputation, {
-    
+   
     req(input$btn_country, input$btn_year, input$btn_start_year, input$btn_commodity, input$btn_missing)
     input$btn_approach
+   
     imput_value <- ifelse(input$btn_approach == 4, input$btn_manual,
                           gg_estimate[input$btn_approach, 'Value'])
     
@@ -2508,10 +2858,10 @@ In order to update the `processed_prod_national_detail_imputed` data table the i
     procprod_copy <- procprod_copy[timePointYears == as.character(input$btn_year) &
                                      Scheda == sel_commodity &
                                      geographicAreaM49_fi == sel_country &
-                                     measuredElement == "5510", c("Value",
+                                     measuredElement == "5510", c("remarks", "Value",
                                                                   "flagObservationStatus",
                                                                   "flagMethod", "approach",
-                                                                  "measureditemnational") := list(imput_value, sel_flagObs,
+                                                                  "measureditemnational") := list(input$btn_manual_remark, imput_value, sel_flagObs,
                                                                                                   sel_flagMeth, sel_approach,
                                                                                                   paste(sel_country, sel_commodity, sep = "."))]
     
@@ -2529,12 +2879,12 @@ In order to update the `processed_prod_national_detail_imputed` data table the i
                                    "id_isscfc", "measureditemisscfc", "id_nationalcode"), 
                             all = TRUE)
     newImputedData$timepointyears <- as.character(newImputedData$timepointyears)
-    newImputedData <- newImputedData[flagMethod != 'u']
+    newImputedData <- newImputedData[flagmethod != 'u']
     # needed as for some reason the merge is not working properly
     setkey(newImputedData)
     newImputedData <- unique(newImputedData)
     
-    withProgress(message = 'Data updating in progress',
+    withProgress(message = 'Updating data',
                  value = 0, {
                    
                    Sys.sleep(0.25)
@@ -2564,10 +2914,69 @@ In order to update the `processed_prod_national_detail_imputed` data table the i
                    procprod_imp$flagObservationStatus <- factor(procprod_imp$flagObservationStatus, 
                                                                 levels = c('M', 'O', 'N', '', 'X', 'T', 'E', 'I'), 
                                                                 ordered = TRUE)
+                   ################
+                   procprod_imp_upd <- merge(procprod_imp[ , .(geographicAreaM49_fi, 
+                                                               measuredElement, 
+                                                               timePointYears, 
+                                                               measuredItemISSCFC, 
+                                                               remarks, Value, 
+                                                               flagObservationStatus,
+                                                               flagMethod, Scheda, 
+                                                               measureditemnational,
+                                                               approach)], 
+                                             procprodimp, 
+                                             by = c( "geographicAreaM49_fi", 
+                                                     "measuredElement", 
+                                                     "timePointYears", 
+                                                     "measuredItemISSCFC", 
+                                                     "Scheda"), 
+                                             all = TRUE, suffixes = c("_upd", "_old"))
                    
-                   # Update rv_data
+                   
+                   # If upd is NA then leave old one (whether it is NA or not)
+                   procprod_imp_upd[, remarks := remarks_upd]
+                   procprod_imp_upd[is.na(remarks_upd), remarks := remarks_old]
+                   procprod_imp_upd[, Value := Value_upd]
+                   procprod_imp_upd[is.na(Value_upd), Value := Value_old]
+                   procprod_imp_upd[, flagObservationStatus := flagObservationStatus_upd]
+                   procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus <- procprod_imp_upd[is.na(procprod_imp_upd$flagObservationStatus), ]$flagObservationStatus_old
+                  # procprod_imp_upd[flagObservationStatus_upd %in% c('', 'X'), ]$flagObservationStatus <- procprod_imp_upd[flagObservationStatus_upd %in% c('', 'X'), ]$flagObservationStatus_upd
+                   
+                   procprod_imp_upd$flagObservationStatus <- factor(procprod_imp_upd$flagObservationStatus, 
+                                                                    levels = c('M', 'O', 'N', '', 'X', 'T', 'E', 'I'), 
+                                                                    ordered = TRUE)
+                   procprod_imp_upd <- procprod_imp_upd[, flagMethod := flagMethod_upd]
+                   procprod_imp_upd <- procprod_imp_upd[is.na(flagMethod_upd), flagMethod := flagMethod_old]
+                   
+                   procprod_imp_upd <- procprod_imp_upd[ , measureditemnational := measureditemnational_upd]
+                   procprod_imp_upd <- procprod_imp_upd[is.na(measureditemnational_upd) , measureditemnational := measureditemnational_old]
+                   
+                   procprod_imp_upd <- procprod_imp_upd[ , approach := approach_upd]
+                   procprod_imp_upd <- procprod_imp_upd[is.na(approach_upd) , approach := approach_old]
+                   
+                   procprod_imp_upd <- procprod_imp_upd[ , c('remarks_old', 'Value_old', 'flagObservationStatus_old', 'flagMethod_old',
+                                                             'approach_old', 'measureditemnational_old',
+                                         'remarks_upd', 'Value_upd', 'flagObservationStatus_upd', 'flagMethod_upd', 'approach_upd',
+                                         'measureditemnational_upd') := NULL]
+                   
+                   imputYear <- input$btn_year
+                   # missingO <- procprod_imp_upd[flagObservationStatus == 'O' & timePointYears == as.character((as.numeric(imputYear) - 1)), ]
+                   # 
+                   # if(nrow(missingO) > 0){
+                   #   schede2change <- unique(missingO$Scheda)
+                   #   procprod_imp_upd[timePointYears == imputYear & Scheda %in% schede2change &
+                   #                      flagObservationStatus == 'M' & flagMethod == 'u', 
+                   #                    c("Value", "flagObservationStatus", "flagMethod") := list(0, 'O', '-')]
+                   # }
+                   
                    rv_data$procprod_imp0 <- procprod_imp0
-                   rv_data$procprod_imp <- procprod_imp
+                   rv_data$procprod_imp <- procprod_imp_upd
+                   
+                   ###################
+               
+                   # # Update rv_data
+                   # rv_data$procprod_imp0 <- procprod_imp0
+                   # rv_data$procprod_imp <- procprod_imp
                    
                    Sys.sleep(0.25)
                    incProgress(0.95)
@@ -2580,19 +2989,21 @@ In order to update the `processed_prod_national_detail_imputed` data table the i
     
     showModal(modalDialog(
       title = "Updated national commodity datatable.",
-      
       sprintf("Approach: %s. SWS datatable name: processed_prod_national_detail_imputed", 
               as.character(gg_estimate[input$btn_approach, 'Approach']))
     ))
     
   })
-
+  
 ```
 
 To save the new mapping a new `reactiveValues` object is created to store the new tables, both for the export and the primary production approach. A `reactive` object is created where the export mapping (in the current status, i.e. updated or original) is recalled. This object is then used by a `renderDataTable` object that shows the mapping table to the user in a dedicated tab ('Check mapping export approach'). Note that this was a `renderRHandsontable` that could have been modified by the user (commented line '`editable = TRUE`'). The code could be changed once the `rhandsontable` package version is updated. Once the user has checked the data table the changes can be performed also in the SWS by clicking the button 'Save mapping in SWS'. Clicking the button the initial export mapping data table ('map_prod_exp0') is deleted from the data table in SWS (the whole mapping for the country is deleted) and the new mapping saved in the `mapping_rv` object replaces it. The data table is also updated in the other mapping object for Shiny computation purpose without having the user reloading the Shiny. A window then shows up informing the user the mapping has been updated.
 
+The option to add lines to the export mapping is also with a `renderRHandsontable` object and the `add_export_mapping` button.
+
+
 ```
-##-- Save export mapping ----
+ # -- Save export mapping ----
   
   mapping_rv <- reactiveValues(mapping_table_exp = data.table(),
                                mapping_table_prod = data.table())
@@ -2606,8 +3017,6 @@ To save the new mapping a new `reactiveValues` object is created to store the ne
     
     return(map_prod_exp[geographicAreaM49_fi == sel_country, ])
   })
-  
-  
   
   output$check_export_mapping_data <- DT::renderDataTable( server = FALSE, { # renderRHandsontable({
     
@@ -2625,6 +3034,211 @@ To save the new mapping a new `reactiveValues` object is created to store the ne
     # rhandsontable(table_out, rowHeaders = NULL, width = 'auto', height = 'auto') 
   })
   
+  
+  #-- Add row to Export mapping ----
+  
+  expAdd_reac <- reactive({ 
+    
+    req(input$btn_country, input$btn_year, input$btn_commodity)
+
+    # parameters explicited from buttons
+    commodity_label <- rv_data$commodity_label
+    sel_years <- input$btn_start_year:input$btn_year
+    sel_country <- country_input[country_input$label == input$btn_country, code]
+    sel_commodity <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, code]
+    sel_isscfc <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, isscfc]
+    
+    if(nrow(rv_mappingtable$map_prod_exp)  > 0){
+    map_prod_exp <- rv_mappingtable$map_prod_exp
+    
+    map_prod_exp_filtered <- map_prod_exp[start_year <= input$btn_year & 
+                                            input$btn_year < end_year & 
+                                            measuredItemISSCFC %in% sel_isscfc, ]
+    
+    if(nrow(map_prod_exp_filtered) > 0){
+      exp_map <- map_prod_exp_filtered[ ,.(# geographicAreaM49_fi,
+                                           # start_year,
+                                           # end_year,
+                                           measuredItemISSCFC,
+                                           measuredItemISSCFC_exp,
+                                           Selection, type)]
+    } else{
+      
+      exp_map <-  data.table(# geographicAreaM49_fi = sel_country,
+                             # start_year = input$btn_year, 
+                             # end_year = 'LAST',
+                             measuredItemISSCFC = '',
+                             measuredItemISSCFC_exp = '',
+                             Selection = FALSE,
+                             type = 'provided') 
+    }
+    
+    } else {
+    exp_map <-  data.table(# geographicAreaM49_fi = sel_country,
+                           # start_year = input$btn_year, 
+                           # end_year = 'LAST',
+                           measuredItemISSCFC = '',
+                           measuredItemISSCFC_exp = '',
+                           Selection = FALSE,
+                           type = 'provided') 
+    }
+    
+  return(exp_map)
+  
+})
+  
+  output$expAdd <-  renderRHandsontable({
+    
+    req(input$btn_country, input$btn_year, input$btn_commodity)
+    
+    exp_map <- expAdd_reac()
+    rhandsontable(exp_map, rowHeaders = NULL, width = 'auto', height = 'auto')
+    
+  })
+  
+  # -- Update add export mapping ----
+  
+  observeEvent(input$add_export_mapping, {
+    
+    if(is.null(input$expAdd)) return(NULL)
+    # Needed element (transform from label + code to just code)
+    commodity_label <- rv_data$commodity_label
+    
+    map_prod_exp <- rv_mappingtable$map_prod_exp
+    
+    sel_country <- country_input[country_input$label == input$btn_country, code]
+    sel_commodity <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, code]
+    sel_isscfc <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, isscfc]
+    
+    ## Select the export mapping part updated and reshape it according to the initial mapping
+    # copy of the table on the shiny and customize it according to the mapping table
+    exp_part_upd <- rhandsontable::hot_to_r(input$expAdd)
+    # exp_part_upd <- exp_part_upd[, c("description", "Value_exp", "flagObservationStatus_exp", "flagMethod_exp" ):= NULL]
+    exp_part_upd <- exp_part_upd[, c("geographicAreaM49_fi", "end_year", "start_year") := list(sel_country, "LAST", input$btn_year) ]
+    
+    exp_part_upd <- exp_part_upd[, .( geographicAreaM49_fi,
+                                      start_year,
+                                      end_year,
+                                      measuredItemISSCFC,
+                                      measuredItemISSCFC_exp,
+                                      Selection, type)]
+    
+    # Take the corresponding part of the original mapping to compare
+    corresponding_mapping_export <- map_prod_exp[ geographicAreaM49_fi == sel_country &
+                                                    measuredItemISSCFC %in% unique(exp_part_upd$measuredItemISSCFC) &
+                                                    end_year == "LAST", .(geographicAreaM49_fi,
+                                                                          end_year,
+                                                                          measuredItemISSCFC,
+                                                                          measuredItemISSCFC_exp,
+                                                                          Selection, type)]
+    
+    # Update mapping, 4 cases considered: 
+    # 1. The mapping does not change
+    # 2. The mapping for the selected commodity does not change but other row are added for new commodities
+    # N.B. if a mapping already existing is added but already existing nothing happens since nrow(setdiff)=0 
+    # 3. The mapping changes but for the same period, i.e. the user changes his/her mind about the mapping
+    # 4. Everything changes
+    
+    
+    if(nrow(setdiff(exp_part_upd[, .(geographicAreaM49_fi, 
+                                     measuredItemISSCFC, 
+                                     measuredItemISSCFC_exp,
+                                     end_year,
+                                     Selection, type)], 
+                    corresponding_mapping_export[, .(geographicAreaM49_fi, 
+                                                     measuredItemISSCFC, 
+                                                     measuredItemISSCFC_exp,
+                                                     end_year,
+                                                     Selection, type)]))==0  & 
+       nrow(exp_part_upd) == nrow(corresponding_mapping_export) &
+       all(exp_part_upd$measuredItemISSCFC_exp == corresponding_mapping_export$measuredItemISSCFC_exp)){ 
+      # case of no update (no selection or unselection and no new entry)
+      # nothing changes
+      export_mapping_upd <- map_prod_exp
+      
+    } else if(nrow(setdiff(exp_part_upd[, .(geographicAreaM49_fi, measuredItemISSCFC, 
+                                            measuredItemISSCFC_exp, end_year,
+                                            Selection, type)], 
+                           corresponding_mapping_export[ , .(geographicAreaM49_fi, measuredItemISSCFC, 
+                                                             measuredItemISSCFC_exp, end_year, Selection, type)])) == 0 & 
+              nrow(exp_part_upd) != nrow(corresponding_mapping_export) ) { 
+      # case of adding commodities without changing mapping of selected commodity
+      
+      # identify additional part
+      exp_part2upd <- exp_part_upd[!measuredItemISSCFC %in% unique(corresponding_mapping_export$measuredItemISSCFC), ]
+      #if an export commodity has been added
+      exp_part3upd <- exp_part_upd[!measuredItemISSCFC_exp %in% unique(corresponding_mapping_export$measuredItemISSCFC_exp), ]
+      
+      # if a row has been deleted then FALSE is placed at the corresponding row
+      if(corresponding_mapping_export[!measuredItemISSCFC_exp %in% exp_part_upd$measuredItemISSCFC_exp] |
+         corresponding_mapping_export[!measuredItemISSCFC %in% exp_part_upd$measuredItemISSCFC] ){
+        
+        isscfc_expNo <- corresponding_mapping_export[!measuredItemISSCFC_exp %in% exp_part_upd$measuredItemISSCFC_exp]$measuredItemISSCFC_exp
+        isscfcNo <- corresponding_mapping_export[!measuredItemISSCFC %in% exp_part_upd$measuredItemISSCFC]$measuredItemISSCFC
+        
+        map_prod_exp[geographicAreaM49_fi == sel_country &
+                       measuredItemISSCFC == isscfcNo &
+                       end_year == "LAST", ]$Selection <- FALSE
+        
+        map_prod_exp[geographicAreaM49_fi == sel_country &
+                       measuredItemISSCFC_exp == isscfc_expNo &
+                       end_year == "LAST", ]$Selection <- FALSE
+      }
+      
+      export_mapping_upd <- rbind(map_prod_exp[ , .(geographicAreaM49_fi, start_year, end_year, measuredItemISSCFC, measuredItemISSCFC_exp, Selection, type)], 
+                                  exp_part2upd, exp_part3upd)
+      
+    } else if(any(exp_part_upd$start_year %in% map_prod_exp[ geographicAreaM49_fi == sel_country &
+                                                             measuredItemISSCFC == unique(exp_part_upd$measuredItemISSCFC) &
+                                                             end_year == "LAST",]$start_year)){ 
+      # changing mapping for the same imputation year
+      
+      new_map <- merge(map_prod_exp, exp_part_upd, by = c("geographicAreaM49_fi",
+                                                          "start_year",
+                                                          "end_year",
+                                                          "measuredItemISSCFC",
+                                                          "measuredItemISSCFC_exp"),
+                       all = TRUE, suffixes = c("_previous", "_updated"))
+      
+      new_map$Selection <- ifelse(is.na(new_map$Selection_updated), new_map$Selection_previous, new_map$Selection_updated)
+      new_map$type <- ifelse(is.na(new_map$type_updated), new_map$type_previous, new_map$type_updated)
+      
+      new_map[ , c("Selection_previous", "Selection_updated", "type_previous", "type_updated") := NULL]
+      
+      startyear <- exp_part_upd[measuredItemISSCFC == sel_isscfc, ]$start_year
+      
+      new_map[geographicAreaM49_fi == sel_country &
+                measuredItemISSCFC %in% unique(exp_part_upd$measuredItemISSCFC) &
+                end_year == "LAST" & start_year == startyear &
+                !measuredItemISSCFC_exp %in% exp_part_upd$measuredItemISSCFC_exp ]$Selection <- FALSE
+      
+      
+      export_mapping_upd <- new_map
+      
+    } else {
+      
+      map_prod_exp_mod <- copy(map_prod_exp)
+      
+      map_prod_exp_mod[geographicAreaM49_fi == sel_country &
+                         measuredItemISSCFC %in% unique(exp_part_upd$measuredItemISSCFC) & 
+                         end_year == "LAST", end_year := as.character(as.numeric(input$btn_year)-1)]
+      
+      export_mapping_upd <- rbind(map_prod_exp_mod[ , .(geographicAreaM49_fi, type, start_year, end_year, measuredItemISSCFC, measuredItemISSCFC_exp, Selection)],
+                                  exp_part_upd)
+      
+    }
+    
+    rv_mappingtable$map_prod_exp <- export_mapping_upd
+    
+    showModal(modalDialog(
+      title = "Update export-based approach mapping." ,
+      sprintf("The mapping table has been updated and it is diplayed in the bottom table.")
+    ))
+    
+  })
+
+  
+  #-- Save export mapping in SWS ----
   observeEvent(input$save_export_mapping, {
     
     if(is.null(input$isscfc_check_data)) return(NULL)
@@ -2633,12 +3247,13 @@ To save the new mapping a new `reactiveValues` object is created to store the ne
     
     sel_country <- country_input[country_input$label == input$btn_country, code]
     sel_commodity <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, code]
-    
+ 
     map_prod_exp0 <- rv_mappingtable$map_prod_exp0
     
     export_mapping_upd <- mapping_rv$mapping_table_exp #input$check_export_mapping_data # rhandsontable::hot_to_r(input$check_export_mapping_data)
     
-    export_mapping_upd_sws_compliant <- setnames(export_mapping_upd,
+    export_mapping_upd_sws_compliant <- copy(export_mapping_upd)
+    export_mapping_upd_sws_compliant <- setnames(export_mapping_upd_sws_compliant,
                                                  c("geographicAreaM49_fi", "start_year",
                                                    "end_year", "measuredItemISSCFC",
                                                    "measuredItemISSCFC_exp", "Selection"),
@@ -2648,7 +3263,7 @@ To save the new mapping a new `reactiveValues` object is created to store the ne
     setkey(export_mapping_upd_sws_compliant, geographic_area_m49_fi, start_year, end_year, measured_item_isscfc, measured_item_isscfc_exp, selection, type)
     export_mapping_upd_sws_compliant <- unique(export_mapping_upd_sws_compliant)
     
-    withProgress(message = 'Mapping updating in progress',
+    withProgress(message = 'Updating Export Mapping',
                  value = 0, {
                    
                    Sys.sleep(0.25)
@@ -2692,16 +3307,189 @@ To save the new mapping a new `reactiveValues` object is created to store the ne
     
     showModal(modalDialog(
       title = "Update export-based approach mapping." ,
-      sprintf("The export approach mapping table has been updated in the SWS. SWS datatable name: ISSCFC Mapping - Export Approach.")
+      sprintf("The export approach mapping table has been updated in the SWS. SWS datatable name: Save Export Mapping.")
     ))
     
   })
 
 ```
+
 The same code structure applies to the primary production mapping approach shown in the 'Check mapping prod approach' tab.
 
 ```
- ##-- Save production mapping ----
+ #-- Add row to Prod mapping ----
+  
+  prodAdd_reac <- reactive({ 
+    
+    req(input$btn_country, input$btn_year, input$btn_commodity)
+    
+    # parameters explicited from buttons
+    commodity_label <- rv_data$commodity_label
+    sel_years <- input$btn_start_year:input$btn_year
+    sel_country <- country_input[country_input$label == input$btn_country, code]
+    sel_commodity <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, code]
+    sel_isscfc <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, isscfc]
+
+    if(nrow(rv_mappingtable$map_prod_prod)  > 0){
+      map_prod_prod <- rv_mappingtable$map_prod_prod
+      
+      map_prod_filtered <- map_prod_prod[start_year <= input$btn_year & 
+                                              input$btn_year < end_year & 
+                                              measuredItemISSCFC %in% sel_isscfc, ]
+      
+      if(nrow(map_prod_filtered) > 0){
+        prod_map <- map_prod_filtered[ ,.(# geographicAreaM49_fi,
+          # start_year,
+          # end_year,
+          measuredItemISSCFC,
+          isscaap,
+          fisheriesAsfis,
+          Ratio,
+          Selection, type)]
+      } else{
+        
+        prod_map <-  data.table(# geographicAreaM49_fi = sel_country,
+          # start_year = input$btn_year, 
+          # end_year = 'LAST',
+          measuredItemISSCFC = '',
+          isscaap = '',
+          fisheriesAsfis = 'all',
+          Ratio = 1,
+          Selection = FALSE,
+          type = 'provided') 
+      }
+      
+    } else {
+      prod_map <-  data.table(# geographicAreaM49_fi = sel_country,
+        # start_year = input$btn_year, 
+        # end_year = 'LAST',
+        measuredItemISSCFC = '',
+        isscaap = '',
+        fisheriesAsfis = 'all',
+        Ratio = 1,
+        Selection = FALSE,
+        type = 'provided') 
+    }
+    
+    return(prod_map)
+    
+  })
+  
+  output$prodAdd <-  renderRHandsontable({
+    
+    req(input$btn_country, input$btn_year, input$btn_commodity)
+    
+    prod_map <- prodAdd_reac()
+    rhandsontable(prod_map, rowHeaders = NULL, width = 'auto', height = 'auto')
+    
+  })
+  
+  # -- Update Prod mapping ----
+  
+  observeEvent(input$add_prod_mapping, {
+    
+    if(is.null(input$prodAdd)) return(NULL)
+    
+    commodity_label <- rv_data$commodity_label
+    map_prod_prod <- rv_mappingtable$map_prod_prod
+    sel_country <- country_input[country_input$label == input$btn_country, code]
+    sel_commodity <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, code]
+    sel_years <- input$btn_start_year:input$btn_year
+    sel_isscfc <- commodity_label[M49 == sel_country & commodity_label$label == input$btn_commodity, isscfc]
+    imputYear <- input$btn_year
+    
+    prod_part_upd <- rhandsontable::hot_to_r(input$prodAdd)
+    prod_part_upd[is.na(fisheriesAsfis), fisheriesAsfis := 'all']
+    prod_part_upd[is.na(Ratio), Ratio := 1]
+    prod_part_upd[is.na(type), type := 'provided']
+    
+    prod_part_upd <- prod_part_upd[, c("geographicAreaM49_fi", "end_year", "start_year") := list(sel_country, "LAST", input$btn_year) ]
+    
+    prod_part_upd <- prod_part_upd[, .(geographicAreaM49_fi,
+                                      start_year,
+                                      end_year,
+                                      measuredItemISSCFC,
+                                      isscaap,
+                                      fisheriesAsfis, Ratio,
+                                      Selection, type)]
+    
+    corresponding_mapping_prod <- map_prod_prod[ geographicAreaM49_fi == sel_country &
+                                                   measuredItemISSCFC %in% unique(prod_part_upd$measuredItemISSCFC) &
+                                                   end_year == "LAST", .(geographicAreaM49_fi,
+                                                                         start_year,
+                                                                         end_year,
+                                                                         measuredItemISSCFC,
+                                                                         isscaap,
+                                                                         fisheriesAsfis,
+                                                                         Ratio,
+                                                                         Selection,
+                                                                         type)]
+    
+    if(nrow(corresponding_mapping_prod) > 0 & all(corresponding_mapping_prod$start_year != prod_part_upd$start_year)){
+      
+      map_prod_prod[measuredItemISSCFC %in% unique(prod_part_upd$measuredItemISSCFC), end_year :=  as.character((as.numeric(imputYear) - 1))]
+      
+    } 
+    
+    if(all(corresponding_mapping_prod$start_year != prod_part_upd$start_year)){
+    prod_mapping_upd <- rbind(map_prod_prod[ , .(geographicAreaM49_fi, start_year, end_year, 
+                                                     measuredItemISSCFC, isscaap, fisheriesAsfis, 
+                                                     Ratio, Selection, type)],
+                              prod_part_upd[ , .(geographicAreaM49_fi, start_year, end_year, 
+                                                    measuredItemISSCFC, isscaap, fisheriesAsfis, 
+                                                    Ratio, Selection, type)])
+    } else {
+      
+      
+      new_map_prod <- merge(corresponding_mapping_prod, prod_part_upd, by = c("geographicAreaM49_fi",
+                                                                              "start_year",
+                                                                              "end_year",
+                                                                              "measuredItemISSCFC",
+                                                                              "isscaap", 
+                                                                              "fisheriesAsfis"),
+                            all.y = TRUE, suffixes = c("_previous", "_updated"))
+    
+      
+      
+      new_map_prod$Selection <- ifelse(is.na(new_map_prod$Selection_updated), new_map_prod$Selection_previous, new_map_prod$Selection_updated)
+      new_map_prod$Ratio <- ifelse(is.na(new_map_prod$Ratio_updated), new_map_prod$Ratio_previous, new_map_prod$Ratio_updated)
+      new_map_prod$type <- ifelse(is.na(new_map_prod$type_updated), new_map_prod$type_previous, new_map_prod$type_updated)
+      
+      new_map_prod[ , c("Selection_previous", "Selection_updated", 
+                        "Ratio_previous", "Ratio_updated",
+                        "type_previous", "type_updated") := NULL]
+      
+      new_map_prod <- new_map_prod[ , .(geographicAreaM49_fi,
+                                            start_year,
+                                            end_year,
+                                            measuredItemISSCFC,
+                                            isscaap,
+                                            fisheriesAsfis,
+                                            Ratio,
+                                            Selection,
+                                            type)]
+      
+      setkey(corresponding_mapping_prod)
+      setkey(map_prod_prod)
+      prod_mapping_upd <- rbind(map_prod_prod[!corresponding_mapping_prod, .(geographicAreaM49_fi, start_year, end_year, 
+                                                   measuredItemISSCFC, isscaap, fisheriesAsfis, 
+                                                   Ratio, Selection, type)],
+                                new_map_prod[ , .(geographicAreaM49_fi, start_year, end_year, 
+                                                   measuredItemISSCFC, isscaap, fisheriesAsfis, 
+                                                   Ratio, Selection, type)])
+    }
+    
+    rv_mappingtable$map_prod_prod <- prod_mapping_upd
+    
+    showModal(modalDialog(
+      title = "Update Primary Production-based approach mapping." ,
+      sprintf("The mapping table has been updated and it is diplayed in the bottom table.")
+    ))
+    
+  })
+  
+  
+  # -- Save production mapping ----
   
   check_prod_mapping_reac <- reactive({
     
@@ -2730,7 +3518,7 @@ The same code structure applies to the primary production mapping approach shown
   
   observeEvent(input$save_prod_mapping, {
     
-    if(is.null(input$asfis_check_data)) return(NULL)
+    if(nrow(rv_mappingtable$map_prod_prod) == 0) return(NULL)
     # Needed element (transform from label + code to just code)
     sel_country <- country_input[country_input$label == input$btn_country, code]
     
@@ -2738,8 +3526,9 @@ The same code structure applies to the primary production mapping approach shown
     
     tab_updated_prod <- mapping_rv$mapping_table_prod
     
-    tab_updated_prod_sws_compliant <- setnames(tab_updated_prod, 
-                                               c( "geographicAreaM49_fi", "start_year",
+    tab_updated_prod_sws_compliant <- copy(tab_updated_prod)
+    tab_updated_prod_sws_compliant <- setnames(tab_updated_prod_sws_compliant, 
+                                               c("geographicAreaM49_fi", "start_year",
                                                   "end_year", "measuredItemISSCFC", 
                                                   "isscaap", "fisheriesAsfis", "Ratio", "Selection"),
                                                c("geographic_area_m49_fi", "start_year",
@@ -2748,15 +3537,18 @@ The same code structure applies to the primary production mapping approach shown
     
     setkey(tab_updated_prod_sws_compliant, geographic_area_m49_fi, start_year, end_year, measured_item_isscfc, isscaap, asfis)
     
-    validate(
-      need(nrow(tab_updated_prod_sws_compliant[duplicated(tab_updated_prod_sws_compliant)])==0,
-           paste('Duplicates in primary production mapping rows:', 
-                 tab_updated_prod_sws_compliant[duplicated(tab_updated_prod_sws_compliant)])))
+    if(nrow(tab_updated_prod_sws_compliant[duplicated(tab_updated_prod_sws_compliant)]) >0){
+      showModal(modalDialog(
+        title = "Saving not possible. Duplicates in primary production mapping table." ,
+        paste('Check mapping rows:', 
+              tab_updated_prod_sws_compliant[duplicated(tab_updated_prod_sws_compliant)])
+        ))
+    } else {
     
     setkey(tab_updated_prod_sws_compliant, geographic_area_m49_fi, start_year, end_year, measured_item_isscfc, isscaap, asfis, ratio, selection, type)
     tab_updated_prod_sws_compliant <- unique(tab_updated_prod_sws_compliant)
     
-    withProgress(message = 'Mapping updating in progress',
+    withProgress(message = 'Updating Primary production Mapping',
                  value = 0, {
                    
                    Sys.sleep(0.25)
@@ -2799,12 +3591,13 @@ The same code structure applies to the primary production mapping approach shown
     showModal(modalDialog(
       title = "Update primary production-based approach mapping." ,
       paste("The primary production approach mapping table has been updated in the SWS. 
-            SWS datatable name: ISSCFC Mapping - Primary Prod Approach.")
+            SWS datatable name: Save Primary Prod. Mapping.")
     ))
+    }
     
   })
   
-} # end of the function
+
 ```
 
 ## **Aggregate data tab**
@@ -2812,7 +3605,7 @@ The same code structure applies to the primary production mapping approach shown
 The aggregation tab sum the current state of processed produciton values, including the latest ones modified, and aggregate them according to the chosen level of aggregation ('Grand Total', 'Yearbook Total', 'Main groups', 'ISSCFC Total'). A plot is available when choosing the ISSCFC aggregation to see the time series of the ISSCFC commodity disaggregated by all the scheda for the chosen country.
 
 ```
-  # -- Total by ISSCFC ----
+ # -- Total by ISSCFC ----
   
   aggregates_reac <- reactive({
     
@@ -2877,7 +3670,7 @@ The aggregation tab sum the current state of processed produciton values, includ
       tab2show <-  dcast(tab2show, geographicAreaM49_fi + measuredItemISSCFC ~ timePointYears, value.var = c("Value"))
       
     } else if(input$btn_total == ''){
-    
+      #  # NEED NEW DATATABLE FOR ISSCFC GROUPS!!! isscfc2fao <- ReadDatatable('fi_commodity_aggregates_comm')
       tab2show <- data.table()
     }
     
@@ -2919,22 +3712,69 @@ The aggregation tab sum the current state of processed produciton values, includ
         labs(y = 'Quantity (in tonnes)', color = '', title = 'Scheda aggregation by ISSCFC series') +
         theme_minimal()
     }
+    # ggplot(data = xxx, aes(x = timePointYears, y = Value)) +
+    #   geom_line(aes(group = Scheda, color = Scheda), size = 1) +
+    #   labs(y = 'Quantity (in tonnes)', color = '', title = 'Scheda aggregation by ISSCFC series') +
+    #   theme_minimal() +
+    #   theme(legend.position = 'bottom')
+    
     
   })
   
-} # end of the whole server function
+} # end of the function
+
 ```
 
 ## **'external_functions.R' file** {#functionsExp}
 
-The R file `external_functions` contains seven functions. Two of them `expandYear` and `computeEnsemble` are only updated versions of existing functions in the `faoswsProcessing` and `faoswsImputation` packages. Until the original packages are not updated the function is sourced from this file. Only small changes have been made, so the main purpose of the functions remains the same as explained in the package help documents.
+The R file `external_functions` contains eight functions. Two of them `expandYear` and `computeEnsemble` are only updated versions of existing functions in the `faoswsProcessing` and `faoswsImputation` packages. Until the original packages are not updated the function is sourced from this file. Only small changes have been made, so the main purpose of the functions remains the same as explained in the package help documents. The function `myAggregate` to aggregate Capture and Aqualculture data is also included. This last function has been copied from the Fisheries plugin developed by Thomas Berger.
+
+
+```
+#-- myAggregate by Thomas Berger to aggregate Capture and Aqualculture data ----
+
+myAggregate<- function(quantity, flag) {
+  if (length(quantity) == 1) {
+    # for a single observation, just use the flag
+    return (as.character(flag))
+  }
+  
+  # for more than 1 observation: aggregate by flags
+  agg1 <- aggregate(quantity, by=list(flag), FUN=sum)
+  # agg1 has 2 variables: group, num
+  
+  # order by quantity, largest quantity first
+  agg1 <- agg1[ order(-agg1[,2]), ]
+  
+  
+  # if the total quantity>0 and the flag of te largest value is 'E' or '' then use it
+  if (sum(quantity)>0  & (agg1[1,1] == "E" | agg1[1,1] == "" | agg1[1,1] == "I")) {
+    return (as.character(agg1[1,1]))
+  }
+  
+  # if there is a single "N" use it (takes precedence)
+  if (nrow(agg1[agg1[,1] == "N",])>0) {
+    return("N")
+  }
+  
+  # if there is one "M" use it
+  if (nrow(agg1[agg1[,1] == "M",])>0) {
+    return("M")
+  }
+  
+  # otherwise it's ' '
+  return("")
+}
+```
+
+The `expandYear` and `computeEnsemble` functions:
+
 
 ```
 #-- expandYear function ----
 # This function is sourced from this loca file instead of the proper package faoswsProcessing
 # because of recent updates not yet included in the CRAN version of the faoswsProcessing package.
 # This file should disappear once faoswsProcessing is up-to-date in the CRAN
-
 expandYear <- function (data, areaVar = "geographicAreaM49", elementVar = "measuredElement", 
                         itemVar = "measuredItemCPC", yearVar = "timePointYears", 
                         valueVar = "Value", obsflagVar = "flagObservationStatus", 
@@ -2981,7 +3821,6 @@ expandYear <- function (data, areaVar = "geographicAreaM49", elementVar = "measu
   expandedData
 }
 
-
 #-- computeEnsemble ----
 # This function is sourced from this loca file instead of the proper package faoswsImputation
 # because of recent updates not yet included in the CRAN version of the faoswsImputation package.
@@ -3011,6 +3850,8 @@ computeEnsemble <- function (fits, weights, errors)
   }
   ensemble
 }
+
+
 
 ```
 
@@ -3068,6 +3909,7 @@ from to
   }
   dat
 }
+
 ```
 
 The `export_imputation` function aims to create the second reactive table in the export tab. The first step is to aggregate export commodities to compute the commodity processed production. Aggregation is performed by: "geographicAreaM49_fi", "Scheda", "measuredItemISSCFC", "timePointYears", "Value_prod", "flagObservationStatus_prod", "flagMethod_prod". Then for each year the ratio between the aggregate export and the processed production data available is computed. Average values are computed for ratio, processed production and export and added to the table. The value calculated for the chosen missing figure depends on the variables: if neither a manual input nor the original data is available, the value is calculated multiplying the average aggregate export by the average ratio and the ratio is set equal to NA. If the value is not missing then it is shown in the table and the ratio for the imputation year is calculated with actual data. If a manual ratio is inserted, the aggregate export is multiplied by this ratio and the result is set as processed production estimate and the ratio is the manual ratio inserted. Afterwards, flags are inserted next to each figure and column and row names are set.
@@ -3189,6 +4031,7 @@ export_imputation <- function(datatab, sel_year, manual_ratio_exp_input = NULL,
   return(finaltab)
   
 }
+
 
 ```
 
@@ -3455,4 +4298,3 @@ method_imputation <- function(procprod, # Datasets
 }
 
 ```
-

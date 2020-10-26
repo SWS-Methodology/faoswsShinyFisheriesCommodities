@@ -87,13 +87,15 @@ fluidPage(
                                   uiOutput('out_btn_manual')),
                  fluidPage(
                    fluidRow(
-                     column(width = 8, 
+                     column(width = 6, 
                             uiOutput('out_btn_manual_remark'),
                             plotOutput('gg_methods')),
                      column(width = 6, 
+                            h4('Choose the approach to impute the value'),
+                            conditionalPanel("input.btn_approach != '6'",
                             actionBttn('btn_imputation', label = 'Impute value',
                                        style = "gradient",
-                                       color = "success"))
+                                       color = "success")))
                      )
                    )
                  ),
@@ -105,6 +107,14 @@ fluidPage(
                             style = "bordered"),
                  br(),
                  br(),
+                 actionBttn("add_export_mapping", 
+                            label = "Add to mapping",
+                            color = "danger",
+                            style = "bordered"),
+                 br(),
+                 br(),
+                 rHandsontableOutput('expAdd'),
+                 br(),
                  DT::dataTableOutput('check_export_mapping_data')
                  ),
         tabPanel("Save Primary Prod. Mapping", 
@@ -114,6 +124,14 @@ fluidPage(
                             color = "primary",
                             style = "bordered"),
                  br(),
+                 br(),
+                 actionBttn("add_prod_mapping", 
+                            label = "Add to mapping",
+                            color = "danger",
+                            style = "bordered"),
+                 br(),
+                 br(),
+                 rHandsontableOutput('prodAdd'),
                  br(),
                  DT::dataTableOutput('check_prod_mapping_data')
                  ),

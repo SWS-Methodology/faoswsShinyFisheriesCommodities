@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html >
+
 <head>
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Processed production data workflow | Migration of Fishery processed production Statistical Processes into the SWS</title>
-  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
-  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Migration of Fishery processed production Statistical Processes into the SWS</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data.">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Chapter 1 Processed production data workflow | Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta property="og:title" content="Migration of Fishery processed production Statistical Processes into the SWS" />
   <meta property="og:type" content="book" />
   
   
@@ -16,33 +18,30 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Processed production data workflow | Migration of Fishery processed production Statistical Processes into the SWS" />
+  <meta name="twitter:title" content="Migration of Fishery processed production Statistical Processes into the SWS" />
   
   <meta name="twitter:description" content="This online book describes the migration of the statistical processes performed by the FAO Fisheries and Aquaculture Department into the Corporate Statistical Working System (SWS) for processed produciton data." />
   
 
-<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)" />
+<meta name="author" content="Charlotte Taglioni (Statistician, ESSD - Methodological Innovation Team)">
 
 
-<meta name="date" content="2020-03-26" />
+<meta name="date" content="2020-10-21">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="Rawcode.html"/>
+<link rel="prev" href="index.html">
+<link rel="next" href="Rawcode.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
 
 
 
@@ -59,24 +58,13 @@
 <body>
 
 
-
   <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
     <div class="book-summary">
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="index.html#introduction"><strong>Introduction</strong></a><ul>
-<li><a href="index.html#migration-actors"><strong>Migration actors</strong></a></li>
-<li><a href="index.html#new-fias-methodology"><strong>New FIAS methodology</strong></a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Data Collection</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fias-processed-production-in-sws-proposed-workflow"><i class="fa fa-check"></i>FIAS processed production in SWS: proposed workflow</a></li>
-</ul></li>
-<li><a href="index.html#sws-resources"><strong>SWS resources</strong></a><ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-lists"><i class="fa fa-check"></i>Code lists</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#data-tables-and-datasets"><i class="fa fa-check"></i>Data tables and datasets</a></li>
-</ul></li>
-</ul></li>
+<li><a href="index.html#introduction"><strong>Introduction</strong></a></li>
 <li class="chapter" data-level="1" data-path="ProcProd.html"><a href="ProcProd.html"><i class="fa fa-check"></i><b>1</b> <strong>Processed production data workflow</strong></a><ul>
 <li class="chapter" data-level="1.1" data-path="ProcProd.html"><a href="ProcProd.html#data-collection-and-data-entry-processes"><i class="fa fa-check"></i><b>1.1</b> <strong>Data collection and data entry processes</strong></a></li>
 <li class="chapter" data-level="1.2" data-path="ProcProd.html"><a href="ProcProd.html#time-series-update"><i class="fa fa-check"></i><b>1.2</b> <strong>Time series update </strong></a></li>
@@ -95,27 +83,9 @@
 <li class="chapter" data-level="1.5.4" data-path="ProcProd.html"><a href="ProcProd.html#summary-and-check-mappings-tabs"><i class="fa fa-check"></i><b>1.5.4</b> Summary and check mappings tabs</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="Rawcode.html"><a href="Rawcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The raw processed production update R code</strong></a><ul>
-<li class="chapter" data-level="2.1" data-path="Rawcode.html"><a href="Rawcode.html#comparison-plugin-fi_comparison_quest_raw"><i class="fa fa-check"></i><b>2.1</b> <strong>Comparison plugin</strong> (‘<code>fi_comparison_quest_raw</code>’)</a></li>
-<li class="chapter" data-level="2.2" data-path="Rawcode.html"><a href="Rawcode.html#update-plugin-fi_update_raw_dt"><i class="fa fa-check"></i><b>2.2</b> <strong>Update plugin</strong> (‘<code>fi_update_raw_dt</code>’)</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>3</b> <strong>The Processed production imputation Shiny R code</strong></a><ul>
-<li class="chapter" data-level="3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#global.r-file"><i class="fa fa-check"></i><b>3.1</b> <strong>‘global.R’ file</strong></a></li>
-<li class="chapter" data-level="3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#ui.r-file"><i class="fa fa-check"></i><b>3.2</b> <strong>‘ui.R’ file</strong></a></li>
-<li class="chapter" data-level="3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#server.r-file"><i class="fa fa-check"></i><b>3.3</b> <strong>‘server.R’ file</strong></a><ul>
-<li class="chapter" data-level="3.3.1" data-path="ProcProdcode.html"><a href="ProcProdcode.html#export-approach-tab-1"><i class="fa fa-check"></i><b>3.3.1</b> Export approach tab</a></li>
-<li class="chapter" data-level="3.3.2" data-path="ProcProdcode.html"><a href="ProcProdcode.html#primary-production-approach-tab"><i class="fa fa-check"></i><b>3.3.2</b> Primary production approach tab</a></li>
-<li class="chapter" data-level="3.3.3" data-path="ProcProdcode.html"><a href="ProcProdcode.html#summary-tab"><i class="fa fa-check"></i><b>3.3.3</b> Summary tab</a></li>
-<li class="chapter" data-level="3.3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#update-mapping-process"><i class="fa fa-check"></i><b>3.3.4</b> Update mapping process</a></li>
-<li class="chapter" data-level="3.3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#imputing-new-values-and-saving-changes-into-the-sws"><i class="fa fa-check"></i><b>3.3.5</b> Imputing new values and saving changes into the SWS</a></li>
-</ul></li>
-<li class="chapter" data-level="3.4" data-path="ProcProdcode.html"><a href="ProcProdcode.html#aggregate-data-tab"><i class="fa fa-check"></i><b>3.4</b> <strong>Aggregate data tab</strong></a></li>
-<li class="chapter" data-level="3.5" data-path="ProcProdcode.html"><a href="ProcProdcode.html#functionsExp"><i class="fa fa-check"></i><b>3.5</b> <strong>‘external_functions.R’ file</strong></a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>4</b> <strong>The aggregation module</strong></a><ul>
-<li class="chapter" data-level="4.1" data-path="Aggregation.html"><a href="Aggregation.html#the-code"><i class="fa fa-check"></i><b>4.1</b> <strong>The code</strong></a></li>
-<li class="chapter" data-level="4.2" data-path="Aggregation.html"><a href="Aggregation.html#practical-tips-and-final-remarks"><i class="fa fa-check"></i><b>4.2</b> <strong>Practical tips and final remarks</strong></a></li>
-</ul></li>
+<li class="chapter" data-level="2" data-path="Rawcode.html"><a href="Rawcode.html"><i class="fa fa-check"></i><b>2</b> <strong>The raw processed production update R code</strong></a></li>
+<li class="chapter" data-level="3" data-path="ProcProdcode.html"><a href="ProcProdcode.html"><i class="fa fa-check"></i><b>3</b> <strong>The Processed production imputation Shiny R code</strong></a></li>
+<li class="chapter" data-level="4" data-path="Aggregation.html"><a href="Aggregation.html"><i class="fa fa-check"></i><b>4</b> <strong>The aggregation module</strong></a></li>
 </ul>
 
       </nav>
@@ -268,7 +238,80 @@ Figure 1.11:  Workflow description of the Shiny application.
 <p>Data tables have been chosen as data storage objects instead of datasets because of the semi-standardized codes contained in the questionnaires. In the SWS, data tables are more flexible than data sets and a higher number of information can be stored without restrictions. At the same time, an extra care is required for the same reason. Because the system cannot control the content, the user has to carefully check that the information inserted in the data table contains no error.</p>
 <p>All data are stored in data tables in the SWS. The questionnaire data are stored into the ‘<code>processed_prod_national_detail_quest</code>’ data table which has the same dimensions as the ‘<code>processed_prod_national_detail_raw</code>’ data table. There is the ‘<code>processed_prod_national_detail_compare</code>’ datatable for the <em>comparison</em> plugin and the ‘<code>processed_prod_national_detail_imputed</code>’ the Shiny application writes on. Once in the <em>imputed</em> data table, the semi-standardized data are standardized, aggregated and included in the Commodity dataset which uses ISSCFC codes. The questionnaire data are stored into the ‘<code>processed_prod_national_detail_quest</code>’ data table which has the same dimensions as the ‘<code>processed_prod_national_detail_raw</code>’ data table. The ‘<code>processed_prod_national_detail_compare</code>’ is a merge of the previous two by the geographic, time, element, ISSCFC and scheda dimension, therefore, apart from these dimensions all the other are the duplicated for the questionnaire and raw data tables.</p>
 <p>With the Shiny app the user performs the checking, validation and imputation process. The data tables used by the Shiny app for the processes are described below. The ‘<code>processed_prod_National_detail_raw</code>’ data table contains the whole time series for all countries. This implies that new data are appended every year to the same table. This way of storing data has been discussed with the technical unit and the structure of the <em>raw</em> data table has been chosen by the technical unit. The <em>imputed</em> data table copies the same structure with two additional columns (<em>measureditemnational</em> and <em>approach</em>).</p>
-<p>|<strong>processed_prod_national_detail_quest</strong>| | |<strong>processed_prod_national_detail_raw</strong>| | |:————————————:|—————————————————| | <em>Dimension id</em> | <em>Description</em> | | geographicaream49_fi | M49 standard country code | | measuredelement | Element code (<em>5510</em> production) | | timepointyears | Year of the data point | | nationalquantity | Quantity of production as communicated by the country | | nationalquantityunit | Unit of measure used by the country | | id_isscfc | internal FIAS code for the ISSCFC | | measureditemisscfc | ISSCFC code associated to the scheda | | nationalcode | country 12 digits product code (if present) | | nationaldescription | country product description (if present) | | remarks | FIAS notes | | quantitymt | quantity in metric tonnes (converted if necessary from <em>nationalquantity</em>)| | flagobservationstatus | SDMX observation flag | | flagmethod | SDMX method flag | | id_nationalcode | scheda code |</p>
+<table style="width:92%;">
+<colgroup>
+<col width="31%" />
+<col width="59%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">**processed_prod_national_detail_quest(or _raw)**</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><em>Dimension id</em></td>
+<td><em>Description</em></td>
+</tr>
+<tr class="even">
+<td align="center">geographicaream49_fi</td>
+<td>M49 standard country code</td>
+</tr>
+<tr class="odd">
+<td align="center">measuredelement</td>
+<td>Element code (<em>5510</em> production)</td>
+</tr>
+<tr class="even">
+<td align="center">timepointyears</td>
+<td>Year of the data point</td>
+</tr>
+<tr class="odd">
+<td align="center">nationalquantity</td>
+<td>Quantity of production as communicated by the country</td>
+</tr>
+<tr class="even">
+<td align="center">nationalquantityunit</td>
+<td>Unit of measure used by the country</td>
+</tr>
+<tr class="odd">
+<td align="center">id_isscfc</td>
+<td>internal FIAS code for the ISSCFC</td>
+</tr>
+<tr class="even">
+<td align="center">measureditemisscfc</td>
+<td>ISSCFC code associated to the scheda</td>
+</tr>
+<tr class="odd">
+<td align="center">nationalcode</td>
+<td>country 12 digits product code (if present)</td>
+</tr>
+<tr class="even">
+<td align="center">nationaldescription</td>
+<td>country product description (if present)</td>
+</tr>
+<tr class="odd">
+<td align="center">remarks</td>
+<td>FIAS notes</td>
+</tr>
+<tr class="even">
+<td align="center">quantitymt</td>
+<td>quantity in metric tonnes (converted if necessary from <em>nationalquantity</em>)</td>
+</tr>
+<tr class="odd">
+<td align="center">flagobservationstatus</td>
+<td>SDMX observation flag</td>
+</tr>
+<tr class="even">
+<td align="center">flagmethod</td>
+<td>SDMX method flag</td>
+</tr>
+<tr class="odd">
+<td align="center">id_nationalcode</td>
+<td>scheda code</td>
+</tr>
+</tbody>
+</table>
 <p>The ‘<code>processed_prod_National_detail_imputed</code>’ data table replicates the same structure of the <em>raw</em> data table with two additional columns (<em>measureditemnational</em> and <em>approach</em>):</p>
 <table>
 <thead>
@@ -464,7 +507,7 @@ Figure 1.11:  Workflow description of the Shiny application.
 <h2><span class="header-section-number">1.5</span> <strong>Application goal and structure</strong></h2>
 <p>The application is based on <code>shiny</code> R package and provides tools to visualize, check and impute fishery commodities production data. Briefly summarizing, the application proposes four different imputation options: ensemble model based approach, exports based approach, primary production based approach and the possibility to insert a manual imputation. The user can customize the three last approaches, whereas the ensemble model based approach is directly provided by the application using an internal R function. The imputation is performed by country, year and commodity.</p>
 <p>As starting point the user sets these parameters from the interactive menu on the left side and visualize data accordingly. Once the user has compared the different approaches and chosen the value to impute a validation button is available to impute the value directly in the <em>imputed</em> data table in the SWS (<code>processed_prod_national_detail_imputed</code>).</p>
-<p>The application has six working tabs, all sharing the same side menu where the user select data, plus an ‘About’ tab. The tab names are: ‘National mapping’, ‘Export approach’, ‘Primary Prod. approach’, ‘Summary’, ‘Check export approach mapping’, ‘Check prod approach mapping’ and ‘About’.</p>
+<p>The application has seven working tabs, all sharing the same side menu where the user select data, plus an ‘About’ tab. The tab names are: ‘National mapping’, ‘Export approach’, ‘Primary Prod. approach’, ‘Summary’, ‘Save Export Mapping’, ‘Save Primary Prod. Mapping’, ‘Data aggregates’ and ‘About’.</p>
 <p>The side menu has six fields to help the user select the data:</p>
 <ol style="list-style-type: lower-alpha">
 <li><strong>Country</strong>: with this button the user selects the country to analyze. The list includes all the countries in the M49 classification code list. Both the country name and code are shown and the user can look for the country taping either of them. If there are no data for the country selected the user would not be able to select anything else and a message will appear suggesting to choose another country, e.g. figure <a href="ProcProd.html#fig:nocountry">1.12</a>.</li>
@@ -646,7 +689,7 @@ Figure 1.20:  Shiny application, lower part of primary production approach tab.
 Figure 1.21:  Shiny application, summary tab.
 </p>
 </div>
-<p>There are then two checking tabs where the user can see the result of the mapping updates performed in the export and primary production tabs. This last step is necessary to ensure errors in the updates or unwanted updates are saved into the SWS and used for the next imputations. The tables shown in the app exactly reproduce the data tables stored in the SWS and can be seen in figures <a href="ProcProd.html#fig:cME">1.22</a> and <a href="ProcProd.html#fig:cMP">1.23</a>.</p>
+<p>There are then two checking tabs where the user can see the result of the mapping updates performed in the export and primary production tabs. This last step is necessary to ensure errors in the updates or unwanted updates are saved into the SWS and used for the next imputations. The tables shown in the app exactly reproduce the data tables stored in the SWS and can be seen in figures <a href="ProcProd.html#fig:cME">1.22</a> and <a href="ProcProd.html#fig:cMP">1.23</a>. In case links are available for the commodity selected they will be displayed in a modifiable tab at the top of the page. The purpose of this table is to allow the user to add mappings in case no link in shown in the Export/Primary Prod. approach tab. It is therefore a <strong>last resort tool</strong> to avoid changing the mapping table directly in SWS but if possible the user should always prefer to make changes in the Export/Primary Prod. approach tab.</p>
 <div class="figure"><span id="fig:cME"></span>
 <img src="img/ShinyExpMap.png" alt=" Shiny application, Check mapping export approach tab." width="100%" />
 <p class="caption">
@@ -683,30 +726,27 @@ Figure 1.24:  Shiny application, Check mapping prod approach tab.
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="Rawcode.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
-  </div>
+<a href="Rawcode.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
-gitbook.require(["gitbook"], function(gitbook) {
+require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,
 "facebook": true,
 "twitter": true,
-"linkedin": false,
+"google": false,
 "weibo": false,
-"instapaper": false,
+"instapper": false,
 "vk": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -714,14 +754,6 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
 "link": null,
 "text": null
 },
@@ -738,12 +770,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

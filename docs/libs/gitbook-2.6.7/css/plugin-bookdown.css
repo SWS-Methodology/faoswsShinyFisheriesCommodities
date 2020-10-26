@@ -84,16 +84,13 @@ span.search-highlight {
     border-bottom: none;
 }
 
-div.theorem, div.lemma, div.corollary, div.proposition, div.conjecture {
+div.theorem, div.lemma, div.corollary, div.proposition {
   font-style: italic;
 }
-span.theorem, span.lemma, span.corollary, span.proposition, span.conjecture {
+span.theorem, span.lemma, span.corollary, span.proposition {
   font-style: normal;
 }
 div.proof:after {
   content: "\25a2";
   float: right;
-}
-.header-section-number {
-  padding-right: .5em;
 }
